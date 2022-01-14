@@ -2,8 +2,7 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 
-@*@if (activate == true)
-{*@
+
     <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> REGISTRO</h2>
     <p>
@@ -184,22 +183,15 @@
         </div>
     </form>
 </div>
-@*}*@
-@code {
-    //private string ?user;
-    //private bool activate = false;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-    //    if (state.User.Claims.Any())
-    //    {
-    //        user = state.User.Identities.FirstOrDefault()?.Name;
-    //        activate = true;
-    //    }
-    //    else
-    //    {
-    //        navigationManager.NavigateTo("/account/signinactual?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
-    //    }
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if (!state.User.Claims.Any())
+        {
+            navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+        }
     }
 }
