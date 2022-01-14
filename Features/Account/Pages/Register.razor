@@ -45,7 +45,7 @@
     private bool showSignInError = false;
     private async Task RegisterUser()
     {
-        var user = userManager.FindByEmailAsync(registerAccountModel.Email).GetAwaiter().GetResult();
+        var user = await userManager.FindByEmailAsync(registerAccountModel.Email).ConfigureAwait(false);
         if (user != null)
         {
             showSignInError = true;
@@ -57,8 +57,6 @@
             navigationManager.NavigateTo("account/signin");
 
         }
-
-        return;
     }
 
     public class RegisterAccountModel
