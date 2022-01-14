@@ -1,25 +1,18 @@
 ﻿@using BlazorApp.Features.App.Pages.components
 @inherits LayoutComponentBase
-@*@Body*@
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider authenticationStateProvider
+
+@Body
 <ComponentMenu></ComponentMenu>
 
-@*@inject AuthenticationStateProvider authenticationStateProvider
-
-@if (activate == true)
-{
-     <ComponentMenu></ComponentMenu>
-}
 @code {
-    private string ?user;
-    private bool activate = false;
-
-    protected override async Task OnInitializedAsync()
+   protected override async Task OnInitializedAsync()
     {
         var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-        if (state.User.Claims.Any())
+        if (!state.User.Identity.IsAuthenticated)
         {
-            user = state.User.Identities.FirstOrDefault()?.Name;
-            activate = true;
+            NavigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(NavigationManager.Uri).PathAndQuery));
         }
     }
-}*@
+}
