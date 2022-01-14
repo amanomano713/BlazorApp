@@ -1,4 +1,4 @@
-﻿
+﻿@using BlazorApp.Components
 <Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
@@ -10,7 +10,7 @@
     <NotFound>
         <CascadingAuthenticationState>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p>Sorry, there's nothing at this address.</p>
+                <ComponentNotFound></ComponentNotFound>
             </LayoutView>
         </CascadingAuthenticationState>
     </NotFound>
