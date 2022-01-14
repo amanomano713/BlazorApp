@@ -2,10 +2,11 @@
 @inject NavigationManager navigationManager
 @if (activate == true)
 {
+
     <div class="top-row ps-3 navbar navbar-dark">
         <div class="buttons">
             <a href="/account/signout" class="button is-primary">
-                Sign out
+                <span class="h6">Desconectar:</span><span class="h7">@user</span>
             </a>
         </div>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -69,6 +70,7 @@
         }
         else
         {
+            user = state.User.Identities.FirstOrDefault()?.Name;
             activate = true;
 
         }

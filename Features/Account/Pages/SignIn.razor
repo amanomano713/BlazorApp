@@ -5,27 +5,27 @@
 @inject IDataProtectionProvider dataProtectionProvider
 
 <div class="container">
-    <h1 class="title">Sign in</h1>
+    <h1 class="title">Conectar</h1>
 
     <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="field">
-            <label class="label">E-mail</label>
-            <div class="control">
-                <InputText id="email" class="input" type="email" @bind-Value="@signInModel.Email"></InputText>
+            <label class="form-label"><span class="h4">Email</span></label>
+            <div class="form-group">
+                <InputText class="col-lg-5" id="email"  type="email" @bind-Value="@signInModel.Email"></InputText>
             </div>
         </div>
         <div class="field">
-            <label class="label">Password</label>
-            <div class="control">
-                <InputText id="password" class="input" type="password" @bind-Value="@signInModel.Password"></InputText>
+            <label class="form-label"><span class="h4">Password</span></label>
+            <div class="form-group">
+               <InputText class="col-md-3" id="password"  type="password" @bind-Value="@signInModel.Password"></InputText>
             </div>
         </div>
         <div class="field">
             <div class="control">
-                <button type="submit" class="button is-primary">Sign in</button>
+                <button type="submit" class="button is-primary">OK</button>
             </div>
         </div>
     </EditForm>
@@ -39,7 +39,7 @@
 
 </div>
 <div class="container">
-    <p>¿Aún no tienes cuenta? <a href="/account/register">Crear nueva cuenta</a></p>
+    <p class="h6">¿Aún no tienes cuenta? <a href="/account/register">Crear nueva cuenta</a></p>
 </div>
 @code {
 
@@ -84,10 +84,11 @@
         [Required(ErrorMessage = "Email es Obligatorio")]
         [StringLength(30, MinimumLength = 8,
                   ErrorMessage = "El Email debe tener entre 8 y 30 caracteres")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
+        [Required(ErrorMessage = "Password es Obligatorio")]
         [StringLength(10, MinimumLength = 6,
           ErrorMessage = "El Password debe tener entre 6 y 10 caracteres")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }
