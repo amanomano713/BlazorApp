@@ -1,0 +1,78 @@
+﻿@page "/account/register"
+@inject UserManager<IdentityUser> userManager
+@inject NavigationManager navigationManager
+<div class="container">
+    <h1 class="title">Register</h1>
+
+    <EditForm Model="@registerAccountModel" OnValidSubmit="@RegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="field">
+            <label class="label">E-mail</label>
+            <div class="control">
+                <InputText name="email" id="email" class="input" type="email" @bind-Value="@registerAccountModel.Email"></InputText>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+                <InputText id="password" class="input" type="password" @bind-Value="@registerAccountModel.Password"></InputText>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Confirm password</label>
+            <div class="control">
+                <InputText id="cpassword" class="input" type="password" @bind-Value="@registerAccountModel.ConfirmPassword"></InputText>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button type="submit" class="button is-primary">Register</button>
+            </div>
+        </div>
+    </EditForm>
+    @if (showSignInError)
+    {
+        <div class="notification is-danger">
+            Lo sentimos, nombre de usuario ya existe.
+        </div>
+    }
+</div>
+@code {
+
+    private RegisterAccountModel registerAccountModel = new RegisterAccountModel();
+    private bool showSignInError = false;
+    private async Task RegisterUser()
+    {
+        var user = userManager.FindByEmailAsync(registerAccountModel.Email).GetAwaiter().GetResult();
+        if (user != null)
+        {
+            showSignInError = true;
+        }
+        var result = await userManager.CreateAsync(new IdentityUser { UserName = registerAccountModel.Email, Email = registerAccountModel.Email, EmailConfirmed = true }, registerAccountModel.Password);
+
+        if (result.Succeeded)
+        {
+            navigationManager.NavigateTo("account/signin");
+
+        }
+
+        return;
+    }
+
+    public class RegisterAccountModel
+    {
+        [Required(ErrorMessage = "Email es Obligatorio.")]
+        [StringLength(40, MinimumLength = 10,
+                  ErrorMessage = "El Email debe tener entre 10 y 40 caracteres")]
+        public string Email { get; set; }
+        [Required(ErrorMessage = "Password es Obligatorio.")]
+        [StringLength(10, MinimumLength = 6,
+                  ErrorMessage = "El Password debe tener entre 6 y 10 caracteres")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "ConfirmPassword es Obligatorio.")]
+        [Compare(nameof(Password), ErrorMessage = "Password no coinciden.")]
+        public string ConfirmPassword { get; set; }
+    }
+}

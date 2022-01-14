@@ -1,0 +1,93 @@
+﻿@page "/account/signin"
+@inject UserManager<IdentityUser> userManager
+@inject SignInManager<IdentityUser> signInManager
+@inject NavigationManager navigationManager
+@inject IDataProtectionProvider dataProtectionProvider
+
+<div class="container">
+    <h1 class="title">Sign in</h1>
+
+    <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="field">
+            <label class="label">E-mail</label>
+            <div class="control">
+                <InputText id="email" class="input" type="email" @bind-Value="@signInModel.Email"></InputText>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+                <InputText id="password" class="input" type="password" @bind-Value="@signInModel.Password"></InputText>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button type="submit" class="button is-primary">Sign in</button>
+            </div>
+        </div>
+    </EditForm>
+
+    @if (showSignInError)
+    {
+        <div class="notification is-danger">
+            Lo sentimos, nombre de usuario o contraseña incorrectos
+        </div>
+    }
+
+</div>
+<div class="container">
+    <p>¿Aún no tienes cuenta? <a href="/account/register">Crear nueva cuenta</a></p>
+</div>
+@code {
+
+    private SignInModel signInModel = new SignInModel();
+    private bool showSignInError = false;
+
+    private async Task RegisterUser()
+    {
+        var user = await userManager.FindByEmailAsync(signInModel.Email);
+
+        if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
+        {
+            showSignInError = false;
+
+            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
+
+            var data = $"{user.Id}|{token}";
+
+            var parsedQuery = System.Web.HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+
+            var returnUrl = parsedQuery["returnUrl"];
+
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+            {
+                data += $"|{returnUrl}";
+            }
+
+            var protector = dataProtectionProvider.CreateProtector("SignIn");
+
+            var pdata = protector.Protect(data);
+
+            navigationManager.NavigateTo("/account/signinactual?t=" + pdata, forceLoad: true);
+        }
+        else
+        {
+            showSignInError = true;
+        }
+    }
+
+    public class SignInModel
+    {
+        [Required(ErrorMessage = "Email es Obligatorio")]
+        [StringLength(30, MinimumLength = 8,
+                  ErrorMessage = "El Email debe tener entre 8 y 30 caracteres")]
+        public string Email { get; set; }
+
+        [StringLength(10, MinimumLength = 6,
+          ErrorMessage = "El Password debe tener entre 6 y 10 caracteres")]
+        public string Password { get; set; }
+    }
+}

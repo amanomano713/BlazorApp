@@ -1,0 +1,205 @@
+﻿@page "/registro"
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+
+@*@if (activate == true)
+{*@
+    <div class="panel-body">
+    <h2><i class="icon-edit-sign teal"></i> REGISTRO</h2>
+    <p>
+        Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.
+    </p>
+    <hr>
+    <form action="#" role="form" id="form">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        First Name <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Insert your First Name" class="form-control" id="firstname" name="firstname">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        Last Name <span class="symbol required"></span>
+                    </label>
+                    <input type="text" placeholder="Insert your Last Name" class="form-control" id="lastname" name="lastname">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        Email Address <span class="symbol required"></span>
+                    </label>
+                    <input type="email" placeholder="Text Field" class="form-control" id="email" name="email">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        Password <span class="symbol required"></span>
+                    </label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        Confirm Password <span class="symbol required"></span>
+                    </label>
+                    <input type="password" class="form-control" id="password_again" name="password_again">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group connected-group">
+                    <label class="control-label">
+                        Date of Birth <span class="symbol required"></span>
+                    </label>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <select name="dd" id="dd" class="form-control">
+                                <option value="">DD</option>
+                                <option value="01">1</option>
+                                <option value="02">2</option>
+                                <option value="03">3</option>
+                                <option value="04">4</option>
+                                <option value="05">5</option>
+                                <option value="06">6</option>
+                                <option value="07">7</option>
+                                <option value="08">8</option>
+                                <option value="09">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                                <option value="26">26</option>
+                                <option value="27">27</option>
+                                <option value="28">28</option>
+                                <option value="29">29</option>
+                                <option value="30">30</option>
+                                <option value="31">31</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select name="mm" id="mm" class="form-control">
+                                <option value="">MM</option>
+                                <option value="01">1</option>
+                                <option value="02">2</option>
+                                <option value="03">3</option>
+                                <option value="04">4</option>
+                                <option value="05">5</option>
+                                <option value="06">6</option>
+                                <option value="07">7</option>
+                                <option value="08">8</option>
+                                <option value="09">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" placeholder="YYYY" id="yyyy" name="yyyy" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">
+                        Gender <span class="symbol required"></span>
+                    </label>
+                    <div>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="gender" id="gender_female">
+                            Female
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="gender" id="gender_male">
+                            Male
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Zip Code <span class="symbol required"></span>
+                            </label>
+                            <input class="form-control" type="text" name="zipcode" id="zipcode">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">
+                                City <span class="symbol required"></span>
+                            </label>
+                            <input class="form-control tooltips" type="text" data-original-title="We'll display it when you write reviews" data-rel="tooltip" title="" data-placement="top" name="city" id="city">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <hr>
+                    <label class="control-label">
+                        <strong>Signup for Clip-One Emails</strong> <span class="symbol required"></span>
+                    </label>
+                    <p>
+                        Would you like to review Clip-One emails?
+                    </p>
+                    <div>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="newsletter">
+                            No
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="newsletter">
+                            Yes
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <span class="symbol required"></span>Required Fields
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <p>
+                    Al hacer clic en REGISTRARSE, usted acepta la Política y los Términos y Condiciones.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-yellow btn-block" type="submit">
+                    Register <i class="icon-circle-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+@*}*@
+@code {
+    //private string ?user;
+    //private bool activate = false;
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+    //    if (state.User.Claims.Any())
+    //    {
+    //        user = state.User.Identities.FirstOrDefault()?.Name;
+    //        activate = true;
+    //    }
+    //    else
+    //    {
+    //        navigationManager.NavigateTo("/account/signinactual?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+    //    }
+    }
+}

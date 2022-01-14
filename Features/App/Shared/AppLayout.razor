@@ -1,0 +1,25 @@
+﻿@using BlazorApp.Features.App.Pages.components
+@inherits LayoutComponentBase
+@*@Body*@
+<ComponentMenu></ComponentMenu>
+
+@*@inject AuthenticationStateProvider authenticationStateProvider
+
+@if (activate == true)
+{
+     <ComponentMenu></ComponentMenu>
+}
+@code {
+    private string ?user;
+    private bool activate = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+        if (state.User.Claims.Any())
+        {
+            user = state.User.Identities.FirstOrDefault()?.Name;
+            activate = true;
+        }
+    }
+}*@
