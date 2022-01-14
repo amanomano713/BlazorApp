@@ -2,18 +2,12 @@
 @inject NavigationManager navigationManager
 @if (activate == true)
 {
-
-    <div class="top-row ps-3 navbar navbar-dark">
-        <div class="buttons">
-            <a href="/account/signout" class="button is-primary">
-                <span class="h6">Desconectar:</span><span class="h7">@user</span>
-            </a>
-        </div>
+    <div class="container navbar navbar-dark bg-primary">
+        <p class="label label-primary h6">@user <a class="btn btn-success h4" href="/account/signout">OK</a></p>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
-
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
