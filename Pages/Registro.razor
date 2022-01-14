@@ -24,12 +24,15 @@
                     </label>
                     <input type="text" placeholder="Inserta tu apellido" class="form-control" id="lastname" name="lastname">
                 </div>
+                <fieldset disabled>
                 <div class="form-group">
                     <label class="control-label">
                         Dirección de Correo Electrónico <span class="symbol required"></span>
                     </label>
-                    <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email">
+                    <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                 </div>
+                </fieldset>
+
                 <div class="form-group">
                     <label class="control-label">
                         Password <span class="symbol required"></span>
@@ -49,7 +52,6 @@
                         Fecha de nacimiento <span class="symbol required"></span>
                     </label>
                     <div class="row">
-@*                         <input type="password" class="form-control" id="password_again" name="password_again">*@
                          <input class="form-input"  type="date" >
                     </div>
                 </div> 
@@ -131,13 +133,17 @@
 </div>
 
 @code {
-
+    private string? email;
     protected override async Task OnInitializedAsync()
     {
         var state = await authenticationStateProvider.GetAuthenticationStateAsync();
         if (!state.User.Identity.IsAuthenticated)
         {
             navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+        }
+        else
+        {
+            email = state.User.Identities.FirstOrDefault().Name;
         }
     }
 }
