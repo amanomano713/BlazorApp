@@ -1,5 +1,6 @@
 using BlazorApp.Data;
 using BlazorApp.Features.Identity;
+using BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -40,6 +41,7 @@ namespace BlazorApp
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
+            services.AddScoped<ILocalStorageService, LocalStorageService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)

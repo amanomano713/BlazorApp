@@ -45,9 +45,11 @@
 
     private SignInModel signInModel = new SignInModel();
     private bool showSignInError = false;
+    private bool loading;
 
     private async Task RegisterUser()
     {
+  
         var user = await userManager.FindByEmailAsync(signInModel.Email);
 
         if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
@@ -72,10 +74,12 @@
             var pdata = protector.Protect(data);
 
             navigationManager.NavigateTo("/account/signinactual?t=" + pdata, forceLoad: true);
+
+
         }
         else
         {
-            showSignInError = true;
+             showSignInError = true;
         }
     }
 
