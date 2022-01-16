@@ -37,6 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataAcess\Infraestructure\Abstractions\" />
+    <Folder Include="DataAcess\Migrations\" />
     <Folder Include="Helpers\" />
     <Folder Include="Crypto\" />
   </ItemGroup>
