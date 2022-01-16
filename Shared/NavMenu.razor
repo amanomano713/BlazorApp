@@ -1,5 +1,6 @@
 ﻿@inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
+@inject IAccountService AccountService
 @if (activate == true)
 {
     <div class="container navbar navbar-dark bg-primary">
@@ -52,15 +53,18 @@
 
 @code {
 
+
     private string? user;
     private bool activate = false;
 
     protected override async Task OnInitializedAsync()
     {
         var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+
         if (!state.User.Identity.IsAuthenticated)
         {
             navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+
         }
         else
         {
@@ -68,6 +72,7 @@
             activate = true;
 
         }
+
     }
 
     private bool collapseNavMenu = true;

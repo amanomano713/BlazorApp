@@ -1,4 +1,5 @@
-﻿using Microsoft.JSInterop;
+﻿using BlazorApp.Models.Account;
+using Microsoft.JSInterop;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace BlazorApp.Services
 
     public interface ILocalStorageService
     {
-        Task<T> GetItem<T>(string key);
+        Task<String> GetItem<T>(string key);
         Task SetItem<T>(string key, T value);
         Task RemoveItem(string key);
     }
@@ -21,19 +22,19 @@ namespace BlazorApp.Services
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<T> GetItem<T>(string key)
+        public async Task<String> GetItem<T>(string key)
         {
-            var json = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
+            string value = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
 
-            if (json == null)
+            if (value == null)
                 return default;
 
-            return JsonSerializer.Deserialize<T>(json);
+            return value;
         }
 
         public async Task SetItem<T>(string key, T value)
         {
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, JsonSerializer.Serialize(value));
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
         }
 
         public async Task RemoveItem(string key)

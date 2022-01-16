@@ -42,6 +42,8 @@ namespace BlazorApp
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
             services.AddScoped<ILocalStorageService, LocalStorageService>();
+            services.AddScoped<IAccountService, AccountService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)

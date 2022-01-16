@@ -18,10 +18,18 @@ namespace BlazorApp.Features.Accounts.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpGet("account/signinactual")]
-        public async Task<IActionResult> SignInActual(string t)
+
+        [HttpGet("account/signinEmail")]
+        public async Task<IActionResult> signinEmail(string email)
         {
-            var data = _dataProtector.Unprotect(t);
+            return Redirect("/");
+        }
+
+        [HttpGet("account/signinactual")]
+        public async Task<IActionResult> SignInActual(string cadena)
+        {
+
+            var data = _dataProtector.Unprotect(cadena);
 
             var parts = data.Split('|');
 

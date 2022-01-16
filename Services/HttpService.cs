@@ -93,7 +93,7 @@ namespace BlazorApp.Services
 
         private async Task sendRequest(HttpRequestMessage request)
         {
-            await addJwtHeader(request);
+            //await addJwtHeader(request);
 
             // send request
             using var response = await _httpClient.SendAsync(request);
@@ -110,7 +110,7 @@ namespace BlazorApp.Services
 
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
-            await addJwtHeader(request);
+            //await addJwtHeader(request);
 
             // send request
             using var response = await _httpClient.SendAsync(request);
@@ -130,14 +130,14 @@ namespace BlazorApp.Services
             return await response.Content.ReadFromJsonAsync<T>(options);
         }
 
-        private async Task addJwtHeader(HttpRequestMessage request)
-        {
-            // add jwt auth header if user is logged in and request is to the api url
-            var user = await _localStorageService.GetItem<User>("user");
-            var isApiUrl = !request.RequestUri.IsAbsoluteUri;
-            if (user != null && isApiUrl)
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
-        }
+        //private async Task addJwtHeader(HttpRequestMessage request)
+        //{
+        //    // add jwt auth header if user is logged in and request is to the api url
+        //    var user = await _localStorageService.GetItem("user");
+        //    var isApiUrl = !request.RequestUri.IsAbsoluteUri;
+        //    if (user != null && isApiUrl)
+        //        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+        //}
 
         private async Task handleErrors(HttpResponseMessage response)
         {

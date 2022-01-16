@@ -1,6 +1,7 @@
 ﻿@page "/retiro"
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> RETIRO</h2>
     <p>
@@ -9,13 +10,30 @@
     <hr>
 </div>
 @code {
-
-    protected override async Task OnInitializedAsync()
+    private string? email;
+    private string _userKey = "key";
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-        if (!state.User.Identity.IsAuthenticated)
+        if (firstRender)
         {
-            navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+                else
+                {
+                    email = state.User.Identities.FirstOrDefault().Name;
+                }
+            }
+            else
+            {
+                email = emailStorage;
+            }
+            StateHasChanged();
         }
     }
 }
