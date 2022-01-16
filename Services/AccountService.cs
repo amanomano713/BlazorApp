@@ -24,6 +24,7 @@ namespace BlazorApp.Services
         private ILocalStorageService _localStorageService;
         private string _userKey = "key";
 
+
         public SignInModel User { get; private set; }
 
         //SignInModel IAccountService.User => throw new NotImplementedException();
@@ -37,6 +38,7 @@ namespace BlazorApp.Services
             //_httpService = httpService;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
+           
 
         }
 
@@ -56,6 +58,7 @@ namespace BlazorApp.Services
 
         public Task Register(AddUser model)
         {
+
             throw new NotImplementedException();
         }
 

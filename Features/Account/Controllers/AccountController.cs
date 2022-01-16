@@ -8,26 +8,32 @@ namespace BlazorApp.Features.Accounts.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager; 
         private readonly IDataProtector _dataProtector;
 
-        public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+
+        public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
             _signInManager = signInManager;
+
         }
 
 
         [HttpGet("account/signinEmail")]
         public async Task<IActionResult> signinEmail(string email)
         {
+
+            //_userDataRepository.Add(userData);
             return Redirect("/");
         }
 
         [HttpGet("account/signinactual")]
         public async Task<IActionResult> SignInActual(string cadena)
         {
+
 
             var data = _dataProtector.Unprotect(cadena);
 

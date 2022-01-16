@@ -19,7 +19,21 @@ namespace BlazorApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            services
+                .AddMemoryCache()
+                .AddDbContextPool<ApplicationDbContext>(optionsBuilder =>
+                {
+                    optionsBuilder
+                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x =>
+                        {
+                            x.MigrationsHistoryTable("MigrationsHistory", "EF");
+                            x.CommandTimeout(30);
+                        });
+                    optionsBuilder.EnableSensitiveDataLogging();
+                });
+
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 4;
@@ -43,6 +57,7 @@ namespace BlazorApp
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
+
 
         }
 
