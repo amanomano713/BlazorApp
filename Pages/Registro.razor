@@ -124,7 +124,7 @@
                     Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.
                 </p>
             </div>
-            @if (displayEdittUserToDB == false)
+            @if (displayEditUserToDB == false)
             {
                 <div class="col-md-4">
                     <button class="btn btn-yellow btn-block" type="submit">
@@ -132,7 +132,7 @@
                     </button>
                 </div>
             }
-            @if (displayEdittUserToDB == true)
+            @if (displayEditUserToDB == true)
             {
                 <div class="col-md-4">
                     <button class="btn btn-yellow btn-block" type="submit">
@@ -152,7 +152,7 @@
     private string _userKey = "key";
     bool displayValidationErrorMessages = false;
     bool displayUserAddedToDB = false;
-    bool displayEdittUserToDB = false;
+    bool displayEditUserToDB = false;
     bool displayUpdateUserToDB = false;
 
     protected override Task OnInitializedAsync()
@@ -227,7 +227,7 @@
 
                     displayUpdateUserToDB = true;
 
-                    displayEdittUserToDB = false;
+                    displayEditUserToDB = false;
                 }
                 else
                 {
