@@ -3,7 +3,6 @@ using BlazorApp.DataAcess.Bases;
 using BlazorApp.DataAcess.Infraestructure.Abstractions;
 using BlazorApp.Entities.User;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace BlazorApp.DataAcess.Infraestructure.Repositories
 {
@@ -26,34 +25,11 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
 
         public async Task<UserData> GetAsync(String id) => await _context.UserData.FirstOrDefaultAsync(item => item.Id == id);
 
-        public void Add(UserData entity)
+        public async Task<UserData> Add(UserData userdata)
         {
-            throw new NotImplementedException();
-        }
+            userdata.CreatedDate = DateTime.Now;
 
-        public void Update(UserData entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<UserData> IQueryableList(Expression<Func<UserData, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<UserData> Get(Expression<Func<UserData, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<UserData> AddAsync(UserData entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(UserData entity)
-        {
-            throw new NotImplementedException();
+            return _context.UserData.Add(userdata).Entity;
         }
     }
 }

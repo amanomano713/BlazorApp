@@ -1,4 +1,5 @@
 ﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
+using BlazorApp.Entities.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -27,9 +28,17 @@ namespace BlazorApp.Features.Accounts.Controllers
         public async Task<IActionResult> SignInActual(string cadena)
         {
 
-            string parsedGuid = System.Guid.Parse("39c3d33a-94df-4623-9318-b425be178606").ToString();
+            //string parsedGuid = System.Guid.Parse("39c3d33a-94df-4623-9318-b425be178606").ToString();
 
-            var result = _userDataRepository.GetAsync(parsedGuid).GetAwaiter().GetResult();
+            //var result = _userDataRepository.GetAsync(parsedGuid).GetAwaiter().GetResult();
+
+            //UserData userData = new UserData();
+
+            //userData.Id = parsedGuid;
+
+            //var result = _userDataRepository.Add(userData);
+
+            //await _userDataRepository.UnitOfWork.SaveChangesAsync();
 
             var data = _dataProtector.Unprotect(cadena);
 
