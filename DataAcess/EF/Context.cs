@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BlazorApp.Data.EF
 {
-    public class Context : DbContext, IUnitOfWork
+    public class Context : DbContext, IUnitOfWork 
     {
       
         private IDbContextTransaction _currentTransaction;
@@ -22,6 +22,7 @@ namespace BlazorApp.Data.EF
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserDataMappings());
+            base.OnModelCreating(builder);
         }
 
         public DbSet<UserData> UserData { get; set; }

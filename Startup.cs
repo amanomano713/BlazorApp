@@ -31,17 +31,6 @@ namespace BlazorApp
                     optionsBuilder.EnableSensitiveDataLogging();
                 });
 
-            //Connection DB
-            services.AddDbContext<Context>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x =>
-                {
-                    x.MigrationsHistoryTable("MigrationsHistory", "EF");
-                    x.CommandTimeout(30);
-                });
-                options.EnableSensitiveDataLogging();
-            });
-
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 4;
@@ -51,7 +40,18 @@ namespace BlazorApp
                 options.SignIn.RequireConfirmedEmail = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
+           .AddDefaultTokenProviders();
+
+            //Connection DB
+            services.AddDbContext<Context>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionDB"), x =>
+                {
+                    x.MigrationsHistoryTable("MigrationsHistory", "EF");
+                    x.CommandTimeout(30);
+                });
+                options.EnableSensitiveDataLogging();
+            });
 
             services.AddAuthorization(options =>
             {
@@ -78,7 +78,7 @@ namespace BlazorApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-               
+
             }
             else
             {
@@ -108,7 +108,7 @@ namespace BlazorApp
             using (var db = new ApplicationDbContext(identityDbContextOptions))
             {
                 db.Database.EnsureCreated();
-            }            
+            }
         }
     }
 }
