@@ -1,6 +1,6 @@
 ﻿using BlazorApp.DataAcess.Bases;
+using BlazorApp.DataAcess.EF.Configurations;
 using BlazorApp.Entities.User;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -15,9 +15,13 @@ namespace BlazorApp.Data.EF
 
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public Context(DbContextOptions<Context> options)
-            : base(options)
+        public Context(DbContextOptions<Context> options): base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.ApplyConfiguration(new UserDataMappings());
         }
 
         public DbSet<UserData> UserData { get; set; }

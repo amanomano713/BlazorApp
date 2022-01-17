@@ -1,7 +1,6 @@
-using BlazorApp.Data;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
-using BlazorApp.DataAcess.Bases;
+using BlazorApp.DataAcess.EF.Extensions;
 using BlazorApp.Features.Identity;
 using BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -23,19 +22,25 @@ namespace BlazorApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            //Connection IdentityUser
             services
                 .AddMemoryCache()
                 .AddDbContextPool<ApplicationDbContext>(optionsBuilder =>
                 {
-                    optionsBuilder
-                        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x =>
-                        {
-                            x.MigrationsHistoryTable("MigrationsHistory", "EF");
-                            x.CommandTimeout(30);
-                        });
+                    optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                     optionsBuilder.EnableSensitiveDataLogging();
                 });
+
+            //Connection DB
+            services.AddDbContext<Context>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), x =>
+                {
+                    x.MigrationsHistoryTable("MigrationsHistory", "EF");
+                    x.CommandTimeout(30);
+                });
+                options.EnableSensitiveDataLogging();
+            });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -56,14 +61,13 @@ namespace BlazorApp
             services.AddRazorPages();
             services.AddControllers();
             services.AddServerSideBlazor();
-            services.AddScoped<Func<Context>>((provider) => () => provider.GetService<Context>());
-            services.AddScoped<DbFactory>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
 
+            //Infraestructure services
+            services.AddInfraestrutureServices(Configuration);
 
         }
 

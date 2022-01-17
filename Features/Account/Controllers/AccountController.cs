@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,30 +11,25 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager; 
         private readonly IDataProtector _dataProtector;
-
+        private readonly IUserDataRepository  _userDataRepository;
 
         public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager, IUserDataRepository userDataRepository)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
             _signInManager = signInManager;
-
+            _userDataRepository = userDataRepository;
         }
 
-
-        [HttpGet("account/signinEmail")]
-        public async Task<IActionResult> signinEmail(string email)
-        {
-
-            //_userDataRepository.Add(userData);
-            return Redirect("/");
-        }
 
         [HttpGet("account/signinactual")]
         public async Task<IActionResult> SignInActual(string cadena)
         {
 
+            string parsedGuid = System.Guid.Parse("39c3d33a-94df-4623-9318-b425be178606").ToString();
+
+            var result = _userDataRepository.GetAsync(parsedGuid).GetAwaiter().GetResult();
 
             var data = _dataProtector.Unprotect(cadena);
 
