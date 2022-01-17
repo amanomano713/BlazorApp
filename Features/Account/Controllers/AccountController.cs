@@ -10,11 +10,11 @@ namespace BlazorApp.Features.Accounts.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager; 
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IDataProtector _dataProtector;
-        private readonly IUserDataRepository  _userDataRepository;
+        private readonly IUserDataRepository _userDataRepository;
 
-        public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager, 
+        public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager, IUserDataRepository userDataRepository)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
@@ -23,6 +23,15 @@ namespace BlazorApp.Features.Accounts.Controllers
             _userDataRepository = userDataRepository;
         }
 
+        [HttpPost("account/CreateUserData")]
+        public async Task<IActionResult> CreateUserData([FromBody] UserData user)
+        {
+            var result = _userDataRepository.Add(user);
+
+            await _userDataRepository.UnitOfWork.SaveChangesAsync();
+
+            return Redirect("/");
+        }
 
         [HttpGet("account/signinactual")]
         public async Task<IActionResult> SignInActual(string cadena)

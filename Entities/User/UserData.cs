@@ -11,5 +11,12 @@ namespace BlazorApp.Entities.User
         public String Id { get; set; }
         public string name { get; set; }
         public string surname { get; set; }
+        public DateTime dateOfbirth { get; set; }
+        public string city { get; set; }
+        public string zipcode { get; set; }
+        public string mobile { get; set; }
+        public string wallet { get; set; }
+        public string email { get; set; }
+
     }
 }

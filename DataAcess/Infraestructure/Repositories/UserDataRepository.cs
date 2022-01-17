@@ -23,13 +23,26 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
                 _context = context ?? throw new ArgumentNullException(nameof(context));   
         }
 
-        public async Task<UserData> GetAsync(String id) => await _context.UserData.FirstOrDefaultAsync(item => item.Id == id);
+        public async Task<UserData> GetAsync(String id) => await _context.UserData.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id);
 
-        public async Task<UserData> Add(UserData userdata)
+        public UserData Add(UserData userdata)
         {
             userdata.CreatedDate = DateTime.Now;
 
-            return _context.UserData.Add(userdata).Entity;
+            return  _context.UserData.Add(userdata).Entity;
+        }
+
+
+        public UserData Update(UserData userdata)
+        {
+            userdata.UpdatedDate = DateTime.Now;
+
+            return _context.UserData.Update(userdata).Entity;
+        }
+
+        public async Task<UserData> GetEmailAsync(string email)
+        {
+            return await _context.UserData.AsNoTracking().FirstOrDefaultAsync(item => item.email == email);
         }
     }
 }

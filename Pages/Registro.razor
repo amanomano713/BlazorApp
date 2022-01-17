@@ -1,9 +1,16 @@
 ﻿@page "/registro"
+@using AutoMapper
 @using BlazorApp.Components
+@using BlazorApp.DataAcess.Infraestructure.Abstractions
+@using BlazorApp.Entities.User
 @using BlazorApp.Models
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ILocalStorageService _localStorageService
 @inject NavigationManager navigationManager
+@inject IAccountService AccountService
+@inject IUserDataRepository UserDataRepository
+@inject IMapper mapper
+
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> REGISTRO</h2>
     <p>
@@ -42,7 +49,7 @@
                         <input type="date" class="form-input" id="department" @bind-value="@AccountModel.dateOfbirth" />
                     </div>
                 </div>
-                 <div class="form-group" style="margin-top:10px">
+                <div class="form-group" style="margin-top:10px">
                     <label class="control-label">
                         <label for="Mobile">Mobile #</label>
                     </label>
@@ -136,7 +143,7 @@
 </div>
 
 @code {
-    private UserDTO AccountModel = new UserDTO();
+    public UserDTO AccountModel = new UserDTO();
     EditContext context;
     private string? email;
     private string _userKey = "key";
@@ -172,18 +179,47 @@
             StateHasChanged();
         }
     }
-    private void SubmitEventHandler(EditContext context)
+    private async Task SubmitEventHandler(EditContext context)
     {
-        if (context.Validate())
+        try
         {
-            displayValidationErrorMessages = false;
-            displayUserAddedToDB = true;
+            if (context.Validate())
+            {
+
+                var UserDTO = AccountModel;
+
+                Guid id = Guid.NewGuid();
+
+                UserDTO.id =id.ToString();
+
+                UserDTO.email = email;
+
+                var userdata = mapper.Map<UserData>(UserDTO);
+
+                var result = UserDataRepository.Add(userdata);
+
+                await UserDataRepository.UnitOfWork.SaveChangesAsync();
+
+                displayValidationErrorMessages = false;
+
+                displayUserAddedToDB = true;
+
+            }
+            else
+            {
+                displayValidationErrorMessages = true;
+                displayUserAddedToDB = false;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            displayValidationErrorMessages = true;
-            displayUserAddedToDB = false;
+            //AlertService.Error(ex.Message);
+            StateHasChanged();
+
         }
+
+
     }
 
 }
+

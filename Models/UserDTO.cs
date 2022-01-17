@@ -4,6 +4,7 @@ namespace BlazorApp.Models
 {
     public class UserDTO
     {
+        public string id { get; set; }
         [Required(ErrorMessage = "Nombre es Obligatorio")]
         [StringLength(20, MinimumLength = 6, ErrorMessage = "Nombre no puede tener menos de 6 caracteres y más de 20 caracteres de longitud")]
         public string name { get; set; }
@@ -20,6 +21,8 @@ namespace BlazorApp.Models
 
         [Required(ErrorMessage = "Wallet BTC es Obligatorio")]
         public string wallet { get; set; }
+
+        public string email { get; set; }
 
     }
 }

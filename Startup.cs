@@ -1,6 +1,10 @@
+using AutoMapper;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
 using BlazorApp.DataAcess.EF.Extensions;
+using BlazorApp.DataAcess.Infraestructure.Abstractions;
+using BlazorApp.DataAcess.Infraestructure.Repositories;
+using BlazorApp.DataAcess.Mapper;
 using BlazorApp.Features.Identity;
 using BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -58,17 +62,34 @@ namespace BlazorApp
                 options.AddPolicy("RequireAdmin", c => c.RequireRole("Admin"));
             });
 
+            services.AddHttpClient();
             services.AddRazorPages();
             services.AddControllers();
             services.AddServerSideBlazor();
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+
+            // Auto Mapper Configurations
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
-            services.AddScoped<ILocalStorageService, LocalStorageService>();
-            services.AddScoped<IAccountService, AccountService>();
 
             //Infraestructure services
             services.AddInfraestrutureServices(Configuration);
 
+            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            }));
+
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
