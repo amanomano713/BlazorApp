@@ -79,21 +79,6 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label class="control-label">
-                        Género <span class="symbol required"></span>
-                    </label>
-                    <div>
-                        <label class="radio-inline">
-                            <input type="radio" class="grey" value="" name="gender" id="gender_female">
-                            Mujer
-                        </label>
-                        <label class="radio-inline">
-                            <input type="radio" class="grey" value="" name="gender" id="gender_male">
-                            Hombre
-                        </label>
-                    </div>
-                </div>
                 <div class="row" style="margin-top:10px">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -134,7 +119,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-8" style="margin-top:20px">
                 <p>
                     Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.
                 </p>
@@ -201,9 +186,8 @@
                 var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
                 if (UserData != null)
                 {
-                    AccountModel.id = Regex.Replace(UserData.Id, @"\s", "");
-                    AccountModel.name = Regex.Replace(UserData.name, @"\s", "");;
-                    AccountModel.surname =Regex.Replace(UserData.surname, @"\s", "");;
+                    AccountModel.id = UserData.Id;
+                    AccountModel.name = UserData.name.Trim();
                     AccountModel.city = UserData.city;
                     AccountModel.dateOfbirth = UserData.dateOfbirth;
                     AccountModel.email = UserData.email;
@@ -211,6 +195,7 @@
                     AccountModel.wallet = UserData.wallet;
                     AccountModel.zipcode = UserData.zipcode;
                     displayEdittUserToDB = true;
+                    AccountModel.surname = UserData.surname.Trim();
                 }
 
 
