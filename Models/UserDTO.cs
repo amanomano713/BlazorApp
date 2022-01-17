@@ -11,7 +11,7 @@ namespace BlazorApp.Models
         [StringLength(20, MinimumLength = 6, ErrorMessage = "Apellido no puede tener menos de 6 caracteres y más de 20 caracteres de longitud")]
         public string surname { get; set; }
         [Required(ErrorMessage = "Fecha de Nacimiento es Obligatorio")]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime dateOfbirth { get; set; }
         public string city { get; set; }
         public string zipcode { get; set; }
 

@@ -10,53 +10,105 @@
         Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.
     </p>
     <hr>
-    <EditForm Model="@AccountModel" OnSubmit="@SubmitEventHandler" >
+    <EditForm Model="@AccountModel" OnSubmit="@SubmitEventHandler">
         <DataAnnotationsValidator />
         <div class="row">
-            <div class="col-md-8">
-
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">
-                        <label for="firstName">Nombre #</label>
+                        <label for="Name">Nombre #</label>
                     </label>
-                    <input type="text" class="form-control" id="firstName" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
-                   @* <ValidationMessage For="@(()=>AccountModel.name)" />*@
+                    <input type="text" class="form-input" id="Name" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                    <ValidationMessage For="@(()=>AccountModel.name)" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">
-                        <label for="firstName">Appelido #</label>
+                        <label for="Surname">Appelido #</label>
                     </label>
-                    <input type="text" class="form-control" id="firstName" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
-                    @*<ValidationMessage For="@(()=>AccountModel.surname)" />*@
+                    <input type="text" class="form-input" id="Surname" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                    <ValidationMessage For="@(()=>AccountModel.surname)" />
                 </div>
                 <fieldset disabled>
                     <div class="form-group">
                         <label class="control-label">
-                            Dirección de Correo Electrónico #<span class="symbol required"></span>
+                            Dirección de Correo Electrónico <span class="symbol required"></span>
                         </label>
                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                     </div>
                 </fieldset>
-                <div class="row">
-                    <div class="col-md-8">
-                        <p>
-                            Al hacer clic en REGISTRARSE,acepta la Política y los Términos y Condiciones.
-                        </p>
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-yellow btn-block" type="submit">
-                            OK <i class="icon-circle-arrow-right"></i>
-                        </button>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-12">
+                        <label for="lastName">Fecha de Nacimiento #</label>
+                        <input type="date" class="form-input" id="department" @bind-value="@AccountModel.dateOfbirth" />
                     </div>
                 </div>
             </div>
-            @if (displayValidationErrorMessages)
-            {
-                <div class="col-md-4" style="margin-top:10px">
-                    <label>Mensajes de Error: </label>
-                    <ValidationSummary />
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">
+                        Género <span class="symbol required"></span>
+                    </label>
+                    <div>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="gender" id="gender_female">
+                            Mujer
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="gender" id="gender_male">
+                            Hombre
+                        </label>
+                    </div>
                 </div>
-            }
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Postal <span class="symbol required"></span>
+                            </label>
+                            <input class="form-control" type="text" name="zipcode" id="zipcode">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Ciudad <span class="symbol required"></span>
+                            </label>
+                            <input class="form-control tooltips" type="text" data-original-title="We'll display it when you write reviews" data-rel="tooltip" title="" data-placement="top" name="city" id="city">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <hr>
+                    <label class="control-label">
+                        <strong>Regístrese para recibir correos electrónicos de Clip-One</strong> <span class="symbol required"></span>
+                    </label>
+                    <p>
+                        ¿Te gustaría revisar los correos electrónicos de Clip-One?
+                    </p>
+                    <div>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="newsletter">
+                            No
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" class="grey" value="" name="newsletter">
+                            Yes
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <p>
+                    Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-yellow btn-block" type="submit">
+                    Register <i class="icon-circle-arrow-right"></i>
+                </button>
+            </div>
         </div>
     </EditForm>
 
@@ -108,7 +160,7 @@
     }
     private void SubmitEventHandler(EditContext context)
     {
-        if(context.Validate())
+        if (context.Validate())
         {
             displayValidationErrorMessages = false;
             displayUserAddedToDB = true;
@@ -119,5 +171,5 @@
             displayUserAddedToDB = false;
         }
     }
-    
+
 }
