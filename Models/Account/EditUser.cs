@@ -18,11 +18,11 @@ namespace BlazorApp.Models.Account
 
         public EditUser() { }
 
-        public EditUser(User user)
+        public EditUser(UserDTO user)
         {
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Username = user.Username;
+            //FirstName = user.FirstName;
+            //LastName = user.LastName;
+            //Username = user.Username;
         }
     }
 }

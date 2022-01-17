@@ -39,8 +39,6 @@
 
   <ItemGroup>
     <Folder Include="DataAcess\Migrations\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Crypto\" />
   </ItemGroup>
 
 </Project>
