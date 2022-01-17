@@ -1,4 +1,5 @@
 ﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
+using BlazorApp.DataAcess.Infraestructure.Queries;
 using BlazorApp.DataAcess.Infraestructure.Repositories;
 using BlazorApp.Features.Identity;
 using BlazorApp.Services;
@@ -15,8 +16,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IUserDataRepository, UserDataRepository>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
-
-
+            services.AddScoped<IUserDataQueries, UserDataQueries>();
 
         }
     }

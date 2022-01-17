@@ -10,8 +10,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Abstractions
 
         UserData Add(UserData userdata);
 
-        UserData Update(UserData userdata);
+        void Update(UserData userdata);
 
-        Task<UserData> GetEmailAsync(String email);
     }
 }

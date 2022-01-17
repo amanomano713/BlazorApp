@@ -23,31 +23,9 @@ namespace BlazorApp.Features.Accounts.Controllers
             _userDataRepository = userDataRepository;
         }
 
-        [HttpPost("account/CreateUserData")]
-        public async Task<IActionResult> CreateUserData([FromBody] UserData user)
-        {
-            var result = _userDataRepository.Add(user);
-
-            await _userDataRepository.UnitOfWork.SaveChangesAsync();
-
-            return Redirect("/");
-        }
-
         [HttpGet("account/signinactual")]
-        public async Task<IActionResult> SignInActual(string cadena)
+        public async Task<IActionResult> SignInActual(String cadena)
         {
-
-            //string parsedGuid = System.Guid.Parse("39c3d33a-94df-4623-9318-b425be178606").ToString();
-
-            //var result = _userDataRepository.GetAsync(parsedGuid).GetAwaiter().GetResult();
-
-            //UserData userData = new UserData();
-
-            //userData.Id = parsedGuid;
-
-            //var result = _userDataRepository.Add(userData);
-
-            //await _userDataRepository.UnitOfWork.SaveChangesAsync();
 
             var data = _dataProtector.Unprotect(cadena);
 

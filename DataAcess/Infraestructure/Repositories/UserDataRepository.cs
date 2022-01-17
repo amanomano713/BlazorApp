@@ -33,16 +33,12 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
         }
 
 
-        public UserData Update(UserData userdata)
+        public void Update(UserData userdata)
         {
             userdata.UpdatedDate = DateTime.Now;
 
-            return _context.UserData.Update(userdata).Entity;
+            _context.Entry(userdata).State = EntityState.Modified;
         }
 
-        public async Task<UserData> GetEmailAsync(string email)
-        {
-            return await _context.UserData.AsNoTracking().FirstOrDefaultAsync(item => item.email == email);
-        }
     }
 }

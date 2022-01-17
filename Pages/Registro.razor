@@ -4,11 +4,13 @@
 @using BlazorApp.DataAcess.Infraestructure.Abstractions
 @using BlazorApp.Entities.User
 @using BlazorApp.Models
+@using System.Text.RegularExpressions
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ILocalStorageService _localStorageService
 @inject NavigationManager navigationManager
 @inject IAccountService AccountService
 @inject IUserDataRepository UserDataRepository
+@inject IUserDataQueries UserDataQueries
 @inject IMapper mapper
 
 <div class="panel-body">
@@ -16,6 +18,18 @@
     <p>
         Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.
     </p>
+    @if (displayUserAddedToDB)
+    {
+        <div class="row bg-success text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Datos de Usuario agregado a la base de datos... </label>
+        </div>
+    }
+     @if (displayUpdateUserToDB)
+    {
+        <div class="row bg-success text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Actualización correcta de datos en la base de datos... </label>
+        </div>
+    }
     <hr>
     <EditForm Model="@AccountModel" OnSubmit="@SubmitEventHandler">
         <DataAnnotationsValidator />
@@ -125,20 +139,24 @@
                     Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.
                 </p>
             </div>
-            <div class="col-md-4">
-                <button class="btn btn-yellow btn-block" type="submit">
-                    OK <i class="icon-circle-arrow-right"></i>
-                </button>
-            </div>
+            @if (displayEdittUserToDB == false)
+            {
+                <div class="col-md-4">
+                    <button class="btn btn-yellow btn-block" type="submit">
+                        OK <i class="icon-circle-arrow-right"></i>
+                    </button>
+                </div>
+            }
+            @if (displayEdittUserToDB == true)
+            {
+                <div class="col-md-4">
+                    <button class="btn btn-yellow btn-block" type="submit">
+                        Actualizar <i class="icon-circle-arrow-right"></i>
+                    </button>
+                </div>
+            }
         </div>
     </EditForm>
-
-    @if (displayUserAddedToDB)
-    {
-        <div class="row bg-success text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Usuario agregado a la base de datos... </label>
-        </div>
-    }
 
 </div>
 
@@ -149,17 +167,22 @@
     private string _userKey = "key";
     bool displayValidationErrorMessages = false;
     bool displayUserAddedToDB = false;
+    bool displayEdittUserToDB = false;
+    bool displayUpdateUserToDB = false;
 
     protected override Task OnInitializedAsync()
     {
+
         context = new EditContext(AccountModel);
         return base.OnInitializedAsync();
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+
         if (firstRender)
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var state = await authenticationStateProvider.GetAuthenticationStateAsync();
@@ -174,8 +197,26 @@
             }
             else
             {
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    AccountModel.id = Regex.Replace(UserData.Id, @"\s", "");
+                    AccountModel.name = Regex.Replace(UserData.name, @"\s", "");;
+                    AccountModel.surname =Regex.Replace(UserData.surname, @"\s", "");;
+                    AccountModel.city = UserData.city;
+                    AccountModel.dateOfbirth = UserData.dateOfbirth;
+                    AccountModel.email = UserData.email;
+                    AccountModel.mobile = UserData.mobile;
+                    AccountModel.wallet = UserData.wallet;
+                    AccountModel.zipcode = UserData.zipcode;
+                    displayEdittUserToDB = true;
+                }
+
+
                 email = emailStorage;
             }
+
             StateHasChanged();
         }
     }
@@ -183,41 +224,65 @@
     {
         try
         {
+            var UserDTO = AccountModel;
+
             if (context.Validate())
             {
 
-                var UserDTO = AccountModel;
+                if (displayEdittUserToDB)
+                {
+                    //update user
+                    var userdata = mapper.Map<UserData>(UserDTO);
 
-                Guid id = Guid.NewGuid();
+                     UserDataRepository.Update(userdata);
 
-                UserDTO.id =id.ToString();
+                    await UserDataRepository.UnitOfWork.SaveEntitiesAsync();
 
-                UserDTO.email = email;
+                    displayValidationErrorMessages = false;
 
-                var userdata = mapper.Map<UserData>(UserDTO);
+                    displayUpdateUserToDB = true;
 
-                var result = UserDataRepository.Add(userdata);
+                    displayEdittUserToDB = false;
+                }
+                else
+                {
+                    //add user
 
-                await UserDataRepository.UnitOfWork.SaveChangesAsync();
+                    Guid id = Guid.NewGuid();
 
-                displayValidationErrorMessages = false;
+                    UserDTO.id = id.ToString();
 
-                displayUserAddedToDB = true;
+                    UserDTO.email = email;
+
+                    var userdata = mapper.Map<UserData>(UserDTO);
+
+                    var result = UserDataRepository.Add(userdata);
+
+                    await UserDataRepository.UnitOfWork.SaveChangesAsync();
+
+                    displayValidationErrorMessages = false;
+
+                    displayUserAddedToDB = true;
+
+                    displayEdittUserToDB = false;
+                }
 
             }
             else
             {
                 displayValidationErrorMessages = true;
                 displayUserAddedToDB = false;
+                displayEdittUserToDB = true;
             }
         }
         catch (Exception ex)
         {
             //AlertService.Error(ex.Message);
-            StateHasChanged();
+
 
         }
 
+        StateHasChanged();
 
     }
 
