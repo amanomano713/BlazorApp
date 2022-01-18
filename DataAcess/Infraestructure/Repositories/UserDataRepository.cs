@@ -33,11 +33,13 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
         }
 
 
-        public void Update(UserData userdata)
+        public void Update(UserData item)
         {
-            userdata.UpdatedDate = DateTime.Now;
+            _context.Attach(item);
+            
+            item.UpdatedDate = DateTime.Now;
 
-            _context.Entry(userdata).State = EntityState.Modified;
+            _context.Entry(item).State = EntityState.Modified;
         }
 
     }

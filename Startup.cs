@@ -2,15 +2,12 @@ using AutoMapper;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
 using BlazorApp.DataAcess.EF.Extensions;
-using BlazorApp.DataAcess.Infraestructure.Abstractions;
-using BlazorApp.DataAcess.Infraestructure.Repositories;
 using BlazorApp.DataAcess.Mapper;
-using BlazorApp.Features.Identity;
-using BlazorApp.Services;
-using Microsoft.AspNetCore.Components.Authorization;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace BlazorApp
 {
@@ -76,6 +73,8 @@ namespace BlazorApp
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
 
             //Infraestructure services
@@ -89,9 +88,10 @@ namespace BlazorApp
                     .AllowAnyHeader();
             }));
 
-            
+
         }
 
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);

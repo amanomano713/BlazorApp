@@ -22,7 +22,6 @@ namespace BlazorApp.Services
 
         public SignInModel User { get; private set; }
 
-        //SignInModel IAccountService.User => throw new NotImplementedException();
 
         public AccountService(
             IMapper mapper,
