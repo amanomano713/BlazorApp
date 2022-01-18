@@ -36,14 +36,14 @@
                     <label class="control-label">
                         <label for="Name">Nombre #</label>
                     </label>
-                    <input type="text" class="form-input" id="Name" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                    <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..."/>
                     <ValidationMessage For="@(()=>AccountModel.name)" />
                 </div>
                 <div class="form-group" style="margin-top:10px">
                     <label class="control-label">
                         <label for="Surname">Apellido #</label>
                     </label>
-                    <input type="text" class="form-input" id="Surname" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                    <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                     <ValidationMessage For="@(()=>AccountModel.surname)" />
                 </div>
                 <fieldset disabled>
@@ -57,21 +57,21 @@
                 <div class="row" style="margin-top:10px">
                     <div class="col-md-12">
                         <label for="lastName">Fecha de Nacimiento #</label>
-                        <input type="date" class="form-input" id="department" @bind-value="@AccountModel.dateOfbirth" />
+                        <input type="date" class="form-input" id="department" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                     </div>
                 </div>
                 <div class="form-group" style="margin-top:10px">
                     <label class="control-label">
                         <label for="Mobile">Mobile #</label>
                     </label>
-                    <input type="text" class="form-input" id="mobile" @bind-value="@AccountModel.mobile" placeholder="Insertar tu Celular o Móvil..." />
+                    <input type="text" class="form-input" id="mobile" @oninput="ValueChanged" @bind-value="@AccountModel.mobile" placeholder="Insertar tu Celular o Móvil..." />
                     <ValidationMessage For="@(()=>AccountModel.mobile)" />
                 </div>
                 <div class="form-group" style="margin-top:10px">
                     <label class="control-label">
                         <label for="Wallet">Wallet BTC #</label>
                     </label>
-                    <input type="text" class="form-input" id="wallet" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                    <input type="text" class="form-input" id="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                     <ValidationMessage For="@(()=>AccountModel.wallet)" />
                 </div>
             </div>
@@ -82,7 +82,7 @@
                             <label class="control-label">
                                 Postal <span class="symbol required"></span>
                             </label>
-                            <input class="form-input" type="text" name="zipcode" id="zipcode" @bind-value="@AccountModel.zipcode" placeholder="Insertar tu Código Postal...">
+                            <input class="form-input" type="text" name="zipcode" id="zipcode" @oninput="ValueChanged" @bind-value="@AccountModel.zipcode" placeholder="Insertar tu Código Postal...">
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -90,7 +90,7 @@
                             <label class="control-label">
                                 Ciudad <span class="symbol required"></span>
                             </label>
-                            <input type="text" class="form-input" name="city" id="city" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
+                            <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
                         </div>
                     </div>
                 </div>
@@ -143,6 +143,7 @@
 </div>
 
 @code {
+
     public UserDTO AccountModel = new UserDTO();
     EditContext context;
     private string? email;
@@ -152,11 +153,17 @@
     bool displayEditUserToDB = false;
     bool displayUpdateUserToDB = false;
     public UserDTO userData = new UserDTO();
+    bool OnFieldChanged = false;
 
-    protected override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        context = new EditContext(AccountModel);
-        return base.OnInitializedAsync();
+        context = new EditContext(AccountModel);    
+        base.OnInitialized();
+    }
+
+    private void ValueChanged(ChangeEventArgs args)
+    {
+        OnFieldChanged = true;
     }
 
     private async void SubmitCreate(EditContext context)
@@ -164,9 +171,8 @@
 
         if (displayEditUserToDB == true)
         {
-            if (context.Validate())
+            if (context.Validate() && OnFieldChanged == true)
             {
-
                 var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
 
                 var response = await mediator.Send(requestModel);
@@ -176,7 +182,6 @@
                 displayValidationErrorMessages = false;
 
                 displayUpdateUserToDB = true;
-
             }
             else
             {
@@ -185,7 +190,6 @@
                 displayEditUserToDB = true;
 
                 displayUpdateUserToDB = false;
-
             }
 
         }
@@ -207,8 +211,6 @@
                 displayValidationErrorMessages = false;
 
                 navigationManager.NavigateTo("Index");
-
-
             }
             else
             {
@@ -217,11 +219,8 @@
                 displayEditUserToDB = false;
 
                 displayUpdateUserToDB = false;
-
             }
-
         }
-
         StateHasChanged();
     }
 
@@ -259,12 +258,9 @@
                     AccountModel.zipcode = UserData.zipcode == null ? string.Empty : UserData.zipcode.Trim();
                     AccountModel.surname = UserData.surname.Trim();
                     displayEditUserToDB = true;
-
                 }
-
                 email = emailStorage;
             }
-
             StateHasChanged();
         }
     }
