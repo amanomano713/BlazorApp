@@ -21,12 +21,6 @@
     <p>
         Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.
     </p>
-    @if (displayUserAddedToDB == true)
-    {
-        <div class="row bg-success text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Datos de Usuario agregado a la base de datos... </label>
-        </div>
-    }
     @if (displayUpdateUserToDB == true)
     {
         <div class="row bg-success text-white" style="margin-top:10px; height:40px">
@@ -154,7 +148,7 @@
     private string? email;
     private string _userKey = "key";
     bool displayValidationErrorMessages = false;
-    bool displayUserAddedToDB = false;
+
     bool displayEditUserToDB = false;
     bool displayUpdateUserToDB = false;
     public UserDTO userData = new UserDTO();
@@ -181,7 +175,8 @@
 
                 displayValidationErrorMessages = false;
 
-                displayUserAddedToDB = true;
+                displayUpdateUserToDB = true;
+
             }
             else
             {
@@ -189,7 +184,8 @@
 
                 displayEditUserToDB = true;
 
-                displayUserAddedToDB = false;
+                displayUpdateUserToDB = false;
+
             }
 
         }
@@ -210,17 +206,17 @@
 
                 displayValidationErrorMessages = false;
 
-                displayUserAddedToDB = true;
+                navigationManager.NavigateTo("Index");
 
-                displayUpdateUserToDB = true;
 
-            }else
+            }
+            else
             {
                 displayValidationErrorMessages = true;
 
-                displayUserAddedToDB = false;
+                displayEditUserToDB = false;
 
-               displayEditUserToDB = true;
+                displayUpdateUserToDB = false;
 
             }
 
@@ -255,14 +251,15 @@
                 {
                     AccountModel.id = UserData.Id;
                     AccountModel.name = UserData.name.Trim();
-                    AccountModel.city = UserData.city.Trim();
+                    AccountModel.city = UserData.city == null ? string.Empty : UserData.city.Trim();
                     AccountModel.dateOfbirth = UserData.dateOfbirth;
                     AccountModel.email = UserData.email.Trim();
                     AccountModel.mobile = UserData.mobile.Trim();
                     AccountModel.wallet = UserData.wallet.Trim();
-                    AccountModel.zipcode = UserData.zipcode.Trim();
-                    displayEditUserToDB = true;
+                    AccountModel.zipcode = UserData.zipcode == null ? string.Empty : UserData.zipcode.Trim();
                     AccountModel.surname = UserData.surname.Trim();
+                    displayEditUserToDB = true;
+
                 }
 
                 email = emailStorage;
@@ -271,5 +268,4 @@
             StateHasChanged();
         }
     }
-    }
-
+}

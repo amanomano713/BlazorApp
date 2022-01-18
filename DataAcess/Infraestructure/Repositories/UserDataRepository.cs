@@ -28,14 +28,13 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
         public UserData Add(UserData userdata)
         {
             userdata.CreatedDate = DateTime.Now;
-
             return  _context.UserData.Add(userdata).Entity;
         }
 
 
         public async Task<UserData> Update(UserData item)
         {
-
+            item.UpdatedDate = DateTime.Now;
             var changedEntriesCopy = _context.ChangeTracker.Entries()
                     .Where(e => e.State == EntityState.Added ||
                                 e.State == EntityState.Modified ||
