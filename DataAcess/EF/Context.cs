@@ -1,23 +1,31 @@
 ﻿using BlazorApp.DataAcess.Bases;
 using BlazorApp.DataAcess.EF.Configurations;
+using BlazorApp.DataAcess.EF.Extensions;
 using BlazorApp.Entities.User;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 
 namespace BlazorApp.Data.EF
 {
-    public class Context : DbContext, IUnitOfWork 
+    public class Context : DbContext, IUnitOfWork
     {
-      
+        private readonly IMediator _mediator;
+
+        private readonly Context _context;
+
         private IDbContextTransaction _currentTransaction;
 
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
         public bool HasActiveTransaction => _currentTransaction != null;
 
-        public Context(DbContextOptions<Context> options): base(options)
+        public Context(DbContextOptions<Context> options) : base(options)
         {
+            _mediator = this.GetService<IMediator>() ?? throw new InvalidOperationException($"Dependency of type {nameof(IMediator)} was not found.");
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -34,11 +42,14 @@ namespace BlazorApp.Data.EF
         }
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
+            await _mediator.DispatchDomainEventsAsync(this);
+
             _ = await base.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
+        
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             if (_currentTransaction != null) return null;

@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using System.Reflection;
 
 namespace BlazorApp
@@ -30,6 +31,7 @@ namespace BlazorApp
                 {
                     optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                     optionsBuilder.EnableSensitiveDataLogging();
+
                 });
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -45,14 +47,13 @@ namespace BlazorApp
 
             //Connection DB
             services.AddDbContext<Context>(options =>
-            {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionDB"), x =>
+            options.UseLazyLoadingProxies(false)
+            .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning))
+            .UseSqlServer(Configuration.GetConnectionString("DefaultConnectionDB"), x =>
                 {
                     x.MigrationsHistoryTable("MigrationsHistory", "EF");
                     x.CommandTimeout(30);
-                });
-                options.EnableSensitiveDataLogging();
-            });
+                }));
 
             services.AddAuthorization(options =>
             {

@@ -10,7 +10,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Abstractions
 
         UserData Add(UserData userdata);
 
-        void Update(UserData userdata);
+        Task<UserData> Update(UserData userdata);
 
     }
 }

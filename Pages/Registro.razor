@@ -188,8 +188,10 @@
                 displayValidationErrorMessages = true;
 
                 displayEditUserToDB = true;
+
+                displayUserAddedToDB = false;
             }
-            displayUserAddedToDB = false;
+
         }
 
         if (displayEditUserToDB == false)
@@ -218,11 +220,11 @@
 
                 displayUserAddedToDB = false;
 
+               displayEditUserToDB = true;
+
             }
-                displayEditUserToDB = true;
+
         }
-
-
 
         StateHasChanged();
     }
@@ -253,12 +255,12 @@
                 {
                     AccountModel.id = UserData.Id;
                     AccountModel.name = UserData.name.Trim();
-                    AccountModel.city = UserData.city;
+                    AccountModel.city = UserData.city.Trim();
                     AccountModel.dateOfbirth = UserData.dateOfbirth;
-                    AccountModel.email = UserData.email;
-                    AccountModel.mobile = UserData.mobile;
-                    AccountModel.wallet = UserData.wallet;
-                    AccountModel.zipcode = UserData.zipcode;
+                    AccountModel.email = UserData.email.Trim();
+                    AccountModel.mobile = UserData.mobile.Trim();
+                    AccountModel.wallet = UserData.wallet.Trim();
+                    AccountModel.zipcode = UserData.zipcode.Trim();
                     displayEditUserToDB = true;
                     AccountModel.surname = UserData.surname.Trim();
                 }

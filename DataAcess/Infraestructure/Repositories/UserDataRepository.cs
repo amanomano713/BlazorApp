@@ -33,13 +33,23 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
         }
 
 
-        public void Update(UserData item)
+        public async Task<UserData> Update(UserData item)
         {
-            _context.Attach(item);
-            
-            item.UpdatedDate = DateTime.Now;
+
+            var changedEntriesCopy = _context.ChangeTracker.Entries()
+                    .Where(e => e.State == EntityState.Added ||
+                                e.State == EntityState.Modified ||
+                                e.State == EntityState.Deleted)
+                    .ToList();
+
+            foreach (var entry in changedEntriesCopy)
+                entry.State = EntityState.Detached;
 
             _context.Entry(item).State = EntityState.Modified;
+
+            var result = _context.UserData.Update(item).Entity;
+
+            return result;
         }
 
     }

@@ -7,9 +7,7 @@ namespace BlazorApp.Handlers
 
         protected readonly IMapper _mapper;
 
-        public BaseCommandHandler(
-
-            IMapper mapper)
+        public BaseCommandHandler(IMapper mapper)
         {
             _mapper = mapper;
         }
