@@ -6,7 +6,6 @@ html, body {
     background-repeat: no-repeat;
     background-size: cover;*/
 }
-
 h1:focus {
     outline: none;
 }
@@ -65,3 +64,13 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+.welcome {
+    background-image: url('../Images/Bitcoin.jpg');
+    height: 500%;
+    width: 200%;
+    position: fixed;
+    margin-top: -98px;
+    Half the height margin-left: -275px;
+    Half the width
+}
