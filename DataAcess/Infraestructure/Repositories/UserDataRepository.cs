@@ -25,16 +25,23 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
 
         public async Task<UserData> GetAsync(String id) => await _context.UserData.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id);
 
-        public UserData Add(UserData userdata)
+        public UserData Add(UserData item)
         {
-            userdata.CreatedDate = DateTime.Now;
-            return  _context.UserData.Add(userdata).Entity;
+            if (typeof(IAuditEntity).IsAssignableFrom(typeof(UserData)))
+            {
+                ((IAuditEntity)item).CreatedDate = DateTime.Now;
+            }
+            return  _context.UserData.Add(item).Entity;
         }
 
 
         public async Task<UserData> Update(UserData item)
         {
-            item.UpdatedDate = DateTime.Now;
+            if (typeof(IAuditEntity).IsAssignableFrom(typeof(UserData)))
+            {
+                ((IAuditEntity)item).UpdatedDate = DateTime.Now;
+            }
+
             var changedEntriesCopy = _context.ChangeTracker.Entries()
                     .Where(e => e.State == EntityState.Added ||
                                 e.State == EntityState.Modified ||
