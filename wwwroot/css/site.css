@@ -1,7 +1,10 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
-
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', 'Open Sans', sans-serif;
+    /*font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;*/
+    /*    background-image: url(../Images/Bitcoin.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;*/
 }
 
 h1:focus {

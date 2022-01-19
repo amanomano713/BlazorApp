@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @*No cambiar el order de llamada*@
+    @*No cambiar el order*@
     <meta charset="utf-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="~/"/>
-     <link href="lib/bulma/css/bulma.css" rel="stylesheet" />
+    <link href="lib/bulma/css/bulma.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="BlazorApp.styles.css" rel="stylesheet" />
@@ -15,8 +15,7 @@
     <link rel="stylesheet" href="dist/spectre-exp.min.css" />
     <link rel="stylesheet" href="dist/spectre-icons.min.css" />
 </head>
-<body>
-
+<body style="background-image: url(../Images/Bitcoin.jpg)">
     <app>
         @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
     </app>

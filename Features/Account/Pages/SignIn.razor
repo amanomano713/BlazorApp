@@ -16,13 +16,13 @@
         <div class="field">
             <label class="form-label"><span class="h4">Email</span></label>
             <div class="form-group">
-                <InputText class="col-lg-5" id="email"  type="email" @bind-Value="@signInModel.Email"></InputText>
+                <InputText class="col-lg-5" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
             </div>
         </div>
         <div class="field">
             <label class="form-label"><span class="h4">Password</span></label>
             <div class="form-group">
-               <InputText class="col-md-3" id="password"  type="password" @bind-Value="@signInModel.Password"></InputText>
+                <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
             </div>
         </div>
         <div class="field">
@@ -38,11 +38,12 @@
             Lo sentimos, nombre de usuario o contraseña incorrectos.
         </div>
     }
-
 </div>
 <div class="container">
     <p class="h6">¿Aún no tienes cuenta? <a href="/account/register">Crear nueva cuenta</a></p>
 </div>
+
+
 @code {
 
     private SignInModel signInModel = new SignInModel();
@@ -75,7 +76,7 @@
             var protector = dataProtectionProvider.CreateProtector("SignIn");
 
             var pdata = protector.Protect(data);
-            
+
             //guardo el email en el localStorage
 
             await AccountService.Login(signInModel);
@@ -85,9 +86,9 @@
         }
         else
         {
-             showSignInError = true;
+            showSignInError = true;
         }
     }
 
-    
+
 }
