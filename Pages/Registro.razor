@@ -20,7 +20,7 @@
 @*    <img src="/Images/Bitcoin.jpg" asp-append-version="true" width="1200px" />*@
     <h2><i class="icon-edit-sign teal"></i> REGISTRO</h2>
     <p>
-        Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.
+       <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
     </p>
     @if (displayUpdateUserToDB == true)
     {
@@ -35,62 +35,52 @@
             <div class="col-md-6">
                 <div class="form-group" style="margin-top:10px">
                     <label class="control-label">
-                        <label for="Name">Nombre #</label>
+                        <strong style="color:black;font-size:medium">Nombre #</strong>
                     </label>
                     <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..."/>
                     <ValidationMessage For="@(()=>AccountModel.name)" />
                 </div>
                 <div class="form-group" style="margin-top:10px">
-                    <label class="control-label">
-                        <label for="Surname">Apellido #</label>
-                    </label>
+                        <strong style="color:black;font-size:medium">Apellido #</strong>
                     <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                     <ValidationMessage For="@(()=>AccountModel.surname)" />
                 </div>
                 <fieldset disabled>
                     <div class="form-group" style="margin-top:10px">
-                        <label class="control-label">
-                            Dirección de Correo Electrónico # <span class="symbol required"></span>
-                        </label>
+                             <strong style="color:black;font-size:medium">Dirección de Correo Electrónico # </strong>
                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                     </div>
                 </fieldset>
                 <div class="row" style="margin-top:10px">
                     <div class="col-md-12">
-                        <label for="lastName">Fecha de Nacimiento #</label>
+                        <strong style="color:black;font-size:medium">Fecha de Nacimiento #</strong>
                         <input type="date" class="form-input" id="department" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                     </div>
                 </div>
                 <div class="form-group" style="margin-top:10px">
-                    <label class="control-label">
-                        <label for="Mobile">Mobile #</label>
-                    </label>
+                    <strong style="color:black;font-size:medium">Mobile #</strong>
                     <input type="text" class="form-input" id="mobile" @oninput="ValueChanged" @bind-value="@AccountModel.mobile" placeholder="Insertar tu Celular o Móvil..." />
                     <ValidationMessage For="@(()=>AccountModel.mobile)" />
                 </div>
                 <div class="form-group" style="margin-top:10px">
-                    <label class="control-label">
-                        <label for="Wallet">Wallet BTC #</label>
-                    </label>
+                        <strong style="color:black;font-size:medium">Wallet BTC #</strong>
                     <input type="text" class="form-input" id="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                     <ValidationMessage For="@(()=>AccountModel.wallet)" />
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="row" style="margin-top:10px">
-                    <div class="col-md-4">
+@*                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">
                                 Postal <span class="symbol required"></span>
                             </label>
                             <input class="form-input" type="text" name="zipcode" id="zipcode" @oninput="ValueChanged" @bind-value="@AccountModel.zipcode" placeholder="Insertar tu Código Postal...">
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label class="control-label">
-                                Ciudad <span class="symbol required"></span>
-                            </label>
+                                <strong style="color:black;font-size:medium">Ciudad</strong>
                             <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
                         </div>
                     </div>
@@ -119,7 +109,7 @@
         <div class="row">
             <div class="col-md-8" style="margin-top:20px">
                 <p>
-                    Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.
+                     <strong style="color:black;font-size:large">Al hacer clic en REGISTRARSE, acepta la Política y los Términos y Condiciones.</strong>
                 </p>
             </div>
             @if (displayEditUserToDB == false)
