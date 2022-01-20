@@ -24,16 +24,11 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
                           ,[name]
                           ,[surname]
                           ,[city]
-                          ,[zipcode]
                           ,[mobile]
                           ,[dateOfbirth]
                           ,[wallet]
-                          ,[sexo]
-                          ,[correo]
                           ,[email]
                           ,[CreatedDate]
-                          ,[UpdatedBy]
-                          ,[CreatedBy]
                           ,[UpdatedDate]
                     FROM UserData WHERE email=@email"
                    , new { email = email }

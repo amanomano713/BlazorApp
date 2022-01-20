@@ -7,7 +7,7 @@ namespace BlazorApp.Entities.User
     [Table("UserData")]
     [Index(nameof(Id), IsUnique = true)]
  
-    public class UserData    //:  AuditEntity<String>
+    public class UserData : Audited
     {
         public String Id { get; set; }
         public string? name { get; set; }

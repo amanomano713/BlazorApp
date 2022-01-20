@@ -44,12 +44,38 @@ namespace BlazorApp.Data.EF
         {
             await _mediator.DispatchDomainEventsAsync(this);
 
+            Audit();
+
             _ = await base.SaveChangesAsync(cancellationToken);
 
             return true;
         }
 
-        
+
+        private void Audit()
+        {
+            foreach (var item in ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added && e.Entity is Audited))
+            {
+                // New added audited entity must have creation and modification info
+                var entity = item.Entity as Audited;
+#pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
+                entity.CreatedDate = DateTime.UtcNow;
+#pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
+            }
+
+            foreach (var item in ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Modified && e.Entity is Audited))
+            {
+                // Modified audited entities must update modification info only
+                var entity = item.Entity as Audited;
+#pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
+                entity.UpdatedDate = DateTime.UtcNow;
+#pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
+
+            }
+        }
+
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             if (_currentTransaction != null) return null;
