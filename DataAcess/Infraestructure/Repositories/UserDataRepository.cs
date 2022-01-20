@@ -9,7 +9,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
     public class UserDataRepository : SqlRepository<UserData>, IUserDataRepository
     {
 
-        public IUnitOfWork UnitOfWork
+        public new IUnitOfWork UnitOfWork
         {
             get
             {
