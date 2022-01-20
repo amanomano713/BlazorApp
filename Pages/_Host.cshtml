@@ -23,8 +23,21 @@
     <app>
         @(await Html.RenderComponentAsync<App>(RenderMode.ServerPrerendered))
     </app>
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
     <script src="_framework/blazor.server.js"></script>
-
+    <script src="lib/jquery-1.9.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/IMask.js"></script>
+    <script src="js/main.js"></script>
+    <script src="lib/script/custom.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,62 @@
+﻿@using BlazorApp.Models
+@inject ILocalStorageService _localStorageService
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject IUserDataQueries UserDataQueries
+<div class="row">
+    <div class="col-md-4">
+        <fieldset disabled>
+            <div class="form-group" style="margin-top:10px">
+                <label class="control-label">
+                    <strong style="color:black;font-size:x-large">Nombre #</strong>
+                </label>
+                <input type="text" class="form-input" id="Name" @bind-value="@AccountModel.name" />
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-md-4">
+        <fieldset disabled>
+            <div class="form-group" style="margin-top:10px">
+                <strong style="color:black;font-size:x-large">Apellido #</strong>
+                <input type="text" class="form-input" id="Surname" @bind-value="@AccountModel.surname" />
+            </div>
+        </fieldset>
+    </div>
+</div>
+@code {
+
+    private string _userKey = "key";
+
+    public UserDTO AccountModel = new UserDTO();
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+      
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+
+        if (firstRender)
+        {
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+            }
+            else
+            {
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    AccountModel.id = UserData.Id;
+                    AccountModel.name = UserData.name.Trim();
+                    AccountModel.surname = UserData.surname.Trim();
+                }
+            }
+
+            StateHasChanged();
+        }
+    }
+}

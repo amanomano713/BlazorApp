@@ -1,11 +1,58 @@
 ﻿@page "/"
+@using Microsoft.JSInterop;
 <div class="panel-bod">
-    <h2><i class="icon-edit-sign teal" ></i> HOME</h2>
-    <p >
-         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+    <h2><i class="icon-edit-sign teal"></i> HOME</h2>
+    <p>
+        <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
     <hr>
 </div>
+<TempleateUser></TempleateUser>
+<div class="row">
+    <div class="col-md-4">
+        <fieldset disabled>
+            <div class="form-group" style="margin-top:10px">
+                <strong style="color:black;font-size:x-large">Disponible #</strong>
+                <input type="text" class="form-input" id="available" @bind-value="@available" />
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-md-4">
+        <fieldset disabled>
+            <div class="form-group" style="margin-top:10px">
+                <strong style="color:black;font-size:x-large">Paquetes #</strong>
+                <input type="text" class="form-input" id="packages" @bind-value="@packages" />
+            </div>
+        </fieldset>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <fieldset disabled>
+                <div class="form-group" style="margin-top:10px">
+                    <strong style="color:black;font-size:x-large">Código #</strong>
+                    <input type="text" class="form-input" id="codigo" @bind-value="@codigo" />
+                </div>
+            </fieldset>
+        </div>
+        <div class="col-md-4">
+            <fieldset disabled>
+                <div class="form-group" style="margin-top:10px">
+                    <strong style="color:black;font-size:x-large">Wallet BTC #</strong>
+                    <input type="text" class="form-input" id="wallet" @bind-value="@wallet" />
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+@code {
+    
+    private IJSRuntime _jsRuntime;
+    private int available = 1000;
+    private int packages = 1000;
+    private string wallet = "000000000000000";
+    private string codigo = "000000000000000";
 
 
 
+     
+}
