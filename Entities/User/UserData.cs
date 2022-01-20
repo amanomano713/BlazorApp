@@ -6,19 +6,17 @@ namespace BlazorApp.Entities.User
 {
     [Table("UserData")]
     [Index(nameof(Id), IsUnique = true)]
-    [Index(nameof(email), IsUnique = true)]
  
-    public class UserData:  AuditEntity<String>
+    public class UserData    //:  AuditEntity<String>
     {
         public String Id { get; set; }
-        public string name { get; set; }
-        public string surname { get; set; }
+        public string? name { get; set; }
+        public string? surname { get; set; }
         public DateTime dateOfbirth { get; set; }
-        public string city { get; set; }
-        public string zipcode { get; set; }
-        public string mobile { get; set; }
-        public string wallet { get; set; }
-        public string email { get; set; }
+        public string? city { get; set; }
+        public string? mobile { get; set; }
+        public string? wallet { get; set; }
+        public string? email { get; set; }
 
     }
 }

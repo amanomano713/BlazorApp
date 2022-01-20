@@ -18,6 +18,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserDataQueries, UserDataQueries>();
 
+
         }
     }
 }

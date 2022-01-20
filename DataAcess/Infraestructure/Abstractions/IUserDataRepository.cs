@@ -6,11 +6,9 @@ namespace BlazorApp.DataAcess.Infraestructure.Abstractions
     public interface IUserDataRepository : IRepository<UserData> 
     {
 
-        Task<UserData> GetAsync(String id);
-
         UserData Add(UserData userdata);
 
-        Task<UserData> Update(UserData userdata);
+        Task Update(UserData userdata);
 
     }
 }

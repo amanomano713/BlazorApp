@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using BlazorApp.Data.EF;
 using BlazorApp.DataAcess.Infraestructure.Abstractions;
+using BlazorApp.DataAcess.Infraestructure.Repositories;
 using BlazorApp.Entities.User;
 using BlazorApp.Handlers.Commands;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.Handlers.User
 {
@@ -17,7 +16,7 @@ namespace BlazorApp.Handlers.User
             IMapper mapper) : base( mapper)
         {
             _userDataRepository = userDataRepository ?? throw new ArgumentNullException(nameof(userDataRepository));
-            //_context = context ?? throw new ArgumentNullException( nameof(context));
+
         }
 
         public async Task<UserData> Handle(UpdateUserDataCommand request, CancellationToken cancellationToken)
@@ -25,7 +24,7 @@ namespace BlazorApp.Handlers.User
 
             var userdata = _mapper.Map<UserData>(request);
 
-            var result = _userDataRepository.Update(userdata);
+            await _userDataRepository.Update(userdata);
 
             await _userDataRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

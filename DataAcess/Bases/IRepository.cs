@@ -2,7 +2,7 @@
 
 namespace BlazorApp.DataAcess.Bases
 {
-    public interface IRepository<T> where T : class
+    public interface IRepository<T> 
     {
         IUnitOfWork UnitOfWork { get; }
     }

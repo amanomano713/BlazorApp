@@ -6,9 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BlazorApp.DataAcess.Infraestructure.Repositories
 {
-    public class UserDataRepository :  IUserDataRepository
+    public class UserDataRepository : SqlRepository<UserData>, IUserDataRepository
     {
-        private readonly Context _context;
 
         public IUnitOfWork UnitOfWork
         {
@@ -18,45 +17,47 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
             }
         }
 
-
-        public UserDataRepository(Context context) {
-                _context = context ?? throw new ArgumentNullException(nameof(context));   
+        private readonly Context _context;
+        public UserDataRepository(Context context)
+            : base(context)
+        {
+            _context = context;
         }
 
-        public async Task<UserData> GetAsync(String id) => await _context.UserData.AsNoTracking().FirstOrDefaultAsync(item => item.Id == id);
-
+#pragma warning disable CS0114 // El miembro oculta el miembro heredado. Falta una contraseña de invalidación
+        public  IQueryable<UserData> GetAll()
+#pragma warning restore CS0114 // El miembro oculta el miembro heredado. Falta una contraseña de invalidación
+        {
+            return DbSet;
+        }
         public UserData Add(UserData item)
         {
-            if (typeof(IAuditEntity).IsAssignableFrom(typeof(UserData)))
-            {
-                ((IAuditEntity)item).CreatedDate = DateTime.Now;
-            }
             return  _context.UserData.Add(item).Entity;
         }
 
-
-        public async Task<UserData> Update(UserData item)
+        public async Task Update(UserData item)
         {
-            if (typeof(IAuditEntity).IsAssignableFrom(typeof(UserData)))
+
+             var entry = _context.Entry(item);
+            if (entry.State == EntityState.Detached)
             {
-                ((IAuditEntity)item).UpdatedDate = DateTime.Now;
+                var attachedOrder = await GetById(item.Id);
+                if (attachedOrder != null)
+                {
+                    _context.Entry(attachedOrder).CurrentValues.SetValues(item);
+                }
+                else
+                {
+                    entry.State = EntityState.Modified;
+                }
             }
-
-            var changedEntriesCopy = _context.ChangeTracker.Entries()
-                    .Where(e => e.State == EntityState.Added ||
-                                e.State == EntityState.Modified ||
-                                e.State == EntityState.Deleted)
-                    .ToList();
-
-            foreach (var entry in changedEntriesCopy)
-                entry.State = EntityState.Detached;
-
-            _context.Entry(item).State = EntityState.Modified;
-
-            var result = _context.UserData.Update(item).Entity;
-
-            return result;
         }
 
+        public override async Task<UserData> GetById(string id)
+        {
+#pragma warning disable CS8603 // Posible tipo de valor devuelto de referencia nulo
+            return await GetAll().SingleOrDefaultAsync(c => c.Id == id);
+#pragma warning restore CS8603 // Posible tipo de valor devuelto de referencia nulo
+        }
     }
 }
