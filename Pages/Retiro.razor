@@ -2,16 +2,77 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
+@using Microsoft.JSInterop;
+@inject IUserDataQueries UserDataQueries
+
 <div class="panel-body">
-    <h2><i class="icon-edit-sign teal"></i> RETIRO</h2>
+    <h2><i class="icon-edit-sign teal"></i> RETIRO </h2>
     <p>
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
     <hr>
+    <EditForm Model="@RetiroModel" OnSubmit="@SubmitRetiro">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-md-4">
+                <fieldset disabled>
+                    <div class="form-group" style="margin-top:10px">
+                        <h1><strong style="color:black;font-size:x-large">Wallet</strong></h1>
+                        <input type="text" class="form-input" id="available" @bind-value="@RetiroModel.Wallet" />
+                        <ValidationMessage For="@(()=>RetiroModel.Wallet)" />
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-4">
+                <fieldset disabled>
+                    <div class="form-group" style="margin-top:10px">
+                        <h1><strong style="color:black;font-size:x-large">Disponible</strong></h1>
+                        <input type="text" class="form-input" id="available" @bind-value="@RetiroModel.Saldo" />
+                        <ValidationMessage For="@(()=>RetiroModel.Saldo)" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group" style="margin-top:10px">
+                    <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
+                    <input type="text" class="form-input" id="packages" @bind-value="@RetiroModel.Retiro" />
+                    <ValidationMessage For="@(()=>RetiroModel.Retiro)" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+    <div class="row">
+        <div class="col-md-8" style="margin-top:80px">
+            <p>
+                <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
+            </p>
+        </div>
+        <div class="col-md-4" style="margin-top:80px">
+            <button class="btn btn-yellow btn-block" type="submit">
+                OK <i class="icon-circle-arrow-right"></i>
+            </button>
+        </div>
+    </div>
 </div>
+
 @code {
+
+    public RetiroDTO RetiroModel = new RetiroDTO();
+    private int saldo = 1000;
     private string? email;
     private string _userKey = "key";
+    private IJSRuntime _jsRuntime;
+    private string wallet;
+
+
+
+    private async void SubmitRetiro(EditContext context)
+    {
+
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -31,7 +92,14 @@
             }
             else
             {
-                email = emailStorage;
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    RetiroModel.Id = UserData.Id;
+                    RetiroModel.Wallet = UserData.wallet.Trim();
+                    RetiroModel.Saldo = saldo;
+                    wallet = UserData.wallet.Trim();
+                }
             }
             StateHasChanged();
         }

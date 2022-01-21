@@ -114,7 +114,7 @@
     public UserDTO userData = new UserDTO();
     bool OnFieldChanged = false;
 
-
+    private IJSRuntime _jsRuntime;
     protected override void OnInitialized()
     {
         context = new EditContext(AccountModel);    

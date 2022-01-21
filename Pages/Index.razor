@@ -1,5 +1,10 @@
 ﻿@page "/"
 @using Microsoft.JSInterop;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager navigationManager
+@inject IUserDataQueries UserDataQueries
+
 <div class="panel-bod">
     <h2><i class="icon-edit-sign teal"></i> HOME</h2>
     <p>
@@ -46,13 +51,40 @@
 </div>
 @code {
     
+    private string _userKey = "key";
     private IJSRuntime _jsRuntime;
     private int available = 1000;
     private int packages = 1000;
-    private string wallet = "000000000000000";
-    private string codigo = "000000000000000";
+    private string? wallet ;
+    private string? codigo ;
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 
+        if (firstRender)
+        {
 
-     
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+            }
+            else
+            {
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    codigo = UserData.Id;
+                    wallet = UserData.wallet.Trim();
+                }
+            }
+
+            StateHasChanged();
+        }
+    }
 }
