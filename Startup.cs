@@ -25,14 +25,8 @@ namespace BlazorApp
         {
 
             //Connection IdentityUser
-            services
-                .AddMemoryCache()
-                .AddDbContextPool<ApplicationDbContext>(optionsBuilder =>
-                {
-                    optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
-                    optionsBuilder.EnableSensitiveDataLogging();
-
-                });
+            services.AddDbContext<ApplicationDbContext>(options =>
+                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -43,17 +37,12 @@ namespace BlazorApp
                 options.SignIn.RequireConfirmedEmail = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
-           .AddDefaultTokenProviders();
+              .AddDefaultTokenProviders();
 
             //Connection DB
             services.AddDbContext<Context>(options =>
-            options.UseLazyLoadingProxies(false)
-            .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.DetachedLazyLoadingWarning))
-            .UseSqlServer(Configuration.GetConnectionString("DefaultConnectionDB"), x =>
-                {
-                    x.MigrationsHistoryTable("MigrationsHistory", "EF");
-                    x.CommandTimeout(30);
-                }));
+                options.UseLazyLoadingProxies(false)
+                   .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient); 
 
             services.AddAuthorization(options =>
             {
@@ -72,6 +61,7 @@ namespace BlazorApp
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
+
             services.AddSingleton(mapper);
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
@@ -92,7 +82,7 @@ namespace BlazorApp
 
         }
 
-        
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);

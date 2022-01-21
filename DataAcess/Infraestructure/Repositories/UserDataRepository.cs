@@ -32,6 +32,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Repositories
         }
         public UserData Add(UserData item)
         {
+
             return  _context.UserData.Add(item).Entity;
         }
 
