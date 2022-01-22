@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
+//Desarrollador: Ing.Armando Rodrigues
 namespace BlazorApp
 {
     public class Program
