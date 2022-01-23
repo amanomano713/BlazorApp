@@ -14,19 +14,20 @@ namespace BlazorApp
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
+        public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Configuration = configuration;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
 
             //Connection IdentityUser
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -42,7 +43,9 @@ namespace BlazorApp
             //Connection DB
             services.AddDbContext<Context>(options =>
                 options.UseLazyLoadingProxies(false)
-                   .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient); 
+                   .UseSqlServer(_configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+
+            services.AddApplicationInsightsTelemetry(); 
 
             services.AddAuthorization(options =>
             {
@@ -69,7 +72,7 @@ namespace BlazorApp
             services.Configure<RazorPagesOptions>(options => options.RootDirectory = "/Pages");
 
             //Infraestructure services
-            services.AddInfraestrutureServices(Configuration);
+            services.AddInfraestrutureServices(_configuration);
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
             {
@@ -79,10 +82,7 @@ namespace BlazorApp
                     .AllowAnyHeader();
             }));
 
-
         }
-
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
