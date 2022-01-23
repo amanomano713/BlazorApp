@@ -11,7 +11,8 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
 
         public UserDataQueries(IConfiguration configuration)
         {
-            _connectionString = configuration["ConnectionStrings:DefaultConnection"];
+            //_connectionString = configuration["ConnectionStrings:DefaultConnection"];
+            _connectionString = configuration["DefaultConnection"]; 
         }
         public async Task<UserData> GetUserDataAsync(string email)
         {

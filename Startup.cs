@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Azure;
 using System.Reflection;
 
 namespace BlazorApp
@@ -25,9 +25,12 @@ namespace BlazorApp
         public void ConfigureServices(IServiceCollection services)
         {
 
+            var connectionDB = _configuration["DefaultConnectionDB"];
+
+
             //Connection IdentityUser
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Transient);
+                 options.UseSqlServer(connectionDB),ServiceLifetime.Transient);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -40,10 +43,12 @@ namespace BlazorApp
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 
+            var connection = _configuration["DefaultConnection"];
+
             //Connection DB
             services.AddDbContext<Context>(options =>
                 options.UseLazyLoadingProxies(false)
-                   .UseSqlServer(_configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Transient);
+                   .UseSqlServer(connection), ServiceLifetime.Transient);
 
             services.AddApplicationInsightsTelemetry(); 
 
@@ -81,6 +86,8 @@ namespace BlazorApp
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
+
+            
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)

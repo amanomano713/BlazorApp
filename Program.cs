@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 
 //Desarrollador: Ing.Armando Rodrigues
 namespace BlazorApp
@@ -13,9 +11,19 @@ namespace BlazorApp
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                var root = config.Build();
+                config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", 
+                    root["KeyVault:ClientId"],
+                    root["KeyVault:ClientSecret"]);
+            })
+             .ConfigureWebHostDefaults(webBuilder =>
+             {
+                 webBuilder.UseStartup<Startup>();
+             });
     }
 }
+
+
+
