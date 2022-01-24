@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using System.Reflection;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 namespace BlazorApp
 {
@@ -24,13 +27,21 @@ namespace BlazorApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services
+              .AddBlazorise(options =>
+              {
+                  options.ChangeTextOnKeyPress = true; // optional
+              })
+              .AddBootstrapProviders()
+              .AddFontAwesomeIcons();
+
 
             var connectionDB = _configuration["DefaultConnectionDB"];
 
 
             //Connection IdentityUser
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(connectionDB),ServiceLifetime.Transient);
+                 options.UseSqlServer(connectionDB), ServiceLifetime.Transient);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -50,7 +61,7 @@ namespace BlazorApp
                 options.UseLazyLoadingProxies(false)
                    .UseSqlServer(connection), ServiceLifetime.Transient);
 
-            services.AddApplicationInsightsTelemetry(); 
+            services.AddApplicationInsightsTelemetry();
 
             services.AddAuthorization(options =>
             {
@@ -87,7 +98,7 @@ namespace BlazorApp
                     .AllowAnyHeader();
             }));
 
-            
+
 
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)

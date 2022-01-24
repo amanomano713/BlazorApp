@@ -10598,7 +10598,7 @@ label.panel-block:hover {
 }
 
 .welcome {
-    background-image: url('../Bitcoin.ico');
+    background-image: url('../Bitcoin.jpg');
     height: 500%;
     width: 200%;
     position: fixed;

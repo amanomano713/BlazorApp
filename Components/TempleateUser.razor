@@ -3,35 +3,37 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject IUserDataQueries UserDataQueries
+@using Blazorise;
+
 <div class="row">
     <div class="col-md-4">
-        <fieldset disabled>
-            <div class="form-group" style="margin-top:10px">
-                <label class="control-label">
-                    <strong style="color:black;font-size:x-large">Nombre #</strong>
-                </label>
-                <input type="text" class="form-input" id="Name" @bind-value="@AccountModel.name" />
-            </div>
-        </fieldset>
+        <div class="form-group" style="margin-top:10px">
+            <label class="control-label">
+                <strong style="color:black;font-size:x-large">Nombre #</strong>
+            </label>
+            <InputMask id="name" name="name" disabled @bind-Value="@name" class="form-control" />
+        </div>
     </div>
     <div class="col-md-4">
-        <fieldset disabled>
-            <div class="form-group" style="margin-top:10px">
+        <div class="form-group" style="margin-top:10px">
+            <label class="control-label">
                 <strong style="color:black;font-size:x-large">Apellido #</strong>
-                <input type="text" class="form-input" id="Surname" @bind-value="@AccountModel.surname" />
-            </div>
-        </fieldset>
+            </label>
+            <InputMask class="form-control" disabled id="surname" name="surname" @bind-value="@surname" />
+        </div>
     </div>
 </div>
 @code {
 
     private string _userKey = "key";
+    private string? name;
+    private string? surname;
 
-    public UserDTO AccountModel = new UserDTO();
-    
+    public UserDTO Account = new UserDTO();
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-      
+
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 
         if (firstRender)
@@ -50,9 +52,8 @@
                 var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
                 if (UserData != null)
                 {
-                    AccountModel.id = UserData.Id;
-                    AccountModel.name = UserData.name.Trim();
-                    AccountModel.surname = UserData.surname.Trim();
+                    name = UserData.name.Trim();
+                    surname = UserData.surname.Trim();
                 }
             }
 
