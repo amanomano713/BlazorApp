@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Azure;
 using System.Reflection;
 using Blazorise;
 using Blazorise.Bootstrap;
