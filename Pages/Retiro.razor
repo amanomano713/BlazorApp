@@ -38,7 +38,7 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
-                    <InputMask id="retiro" name="retiro" @bind-value="@retiro" class="form-control" Mask="9999.99" DecimalSeparator="." />
+                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.Retiro"  @oninput="ValueChanged" class="form-control" Mask="9999.99" DecimalSeparator="." />
                     <ValidationMessage For="@(()=>RetiroModel.Retiro)" />
                 </div>
             </div>
@@ -120,6 +120,7 @@
                 {
                     RetiroModel.Id = UserData.Id;
                     RetiroModel.Wallet = UserData.wallet.Trim();
+                    
                     //Se envia el retiro a esta variable
                     wallet = UserData.wallet.Trim();
                 }
