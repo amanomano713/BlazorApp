@@ -20,7 +20,7 @@
             <strong style="color:black;font-size:x-large">Disponible #</strong>
             <InputMask name="available" disabled @bind-Value="@available" class="form-control"  />
         </div>
-        <div class="form-group" style="margin-top:10px">
+        <div class="form-group" style="margin-top:20px">
             <strong style="color:black;font-size:x-large">Paquetes #</strong>
             <InputMask name="packages" disabled @bind-Value="@packages" class="form-control"  />
         </div>
@@ -30,11 +30,11 @@
     <div class="col-md-6">
         <div class="form-group" style="margin-top:10px">
             <strong style="color:black;font-size:x-large">Wallet BTC #</strong>
-            <InputMask name="packages" disabled @bind-Value="@wallet" class="form-control"  />
+            <InputMask name="wallet" disabled @bind-Value="@wallet" class="form-control"  />
         </div>
-        <div class="form-group" style="margin-top:10px">
+        <div class="form-group" style="margin-top:20px">
             <strong style="color:black;font-size:x-large">Código #</strong>
-            <InputMask name="packages" disabled @bind-Value="@codigo" class="form-control"  />
+            <InputMask name="codigo" disabled @bind-Value="@codigo" class="form-control"  />
         </div>
     </div>
 </div>
@@ -44,8 +44,8 @@
     public UserDTO AccountModel = new UserDTO();
     private string _userKey = "key";
     private IJSRuntime _jsRuntime;
-    private string available="1000.40" ;
-    private string packages="1000.40"  ;
+    private string available="1000.40";
+    private string packages="1000.40";
     private string? wallet;
     private string? codigo;
 

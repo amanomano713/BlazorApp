@@ -12,65 +12,88 @@
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
     <hr>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group" style="margin-top:10px">
-                <h1><strong style="color:black;font-size:x-large">Wallet</strong></h1>
-                <InputMask name="available" disabled @bind-Value="@RetiroModel.Wallet" class="form-control" />
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <fieldset disabled>
+    <EditForm Model="@RetiroModel" OnSubmit="@SubmitRetiro">
+        <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group" style="margin-top:10px">
-                    <h1><strong style="color:black;font-size:x-large">Disponible</strong></h1>
-                    <InputMask name="saldo" disabled @bind-Value="@saldo" class="form-control" />
+                    <h1><strong style="color:black;font-size:x-large">Wallet</strong></h1>
+                    <InputMask id="wallet " name="wallet" disabled @bind-Value="@RetiroModel.Wallet" class="form-control" />
                 </div>
-            </fieldset>
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-4">
-            <div class="form-group" style="margin-top:10px">
-                <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
-                <InputMask name="retiro" @bind-value="@retiro" class="form-control" Mask="9999.99" DecimalSeparator="." />
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-8" style="margin-top:80px">
-            <p>
-                <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
-            </p>
+        <div class="row">
+            <div class="col-md-4">
+                <fieldset disabled>
+                    <div class="form-group" style="margin-top:10px">
+                        <h1><strong style="color:black;font-size:x-large">Disponible</strong></h1>
+                        <InputMask id="saldo" name="saldo" disabled @bind-Value="@saldo" class="form-control" />
+                    </div>
+                </fieldset>
+            </div>
         </div>
-        <div class="col-md-4" style="margin-top:80px">
-            <button class="btn btn-yellow btn-block" type="submit">
-                Retirar <i class="icon-circle-arrow-right"></i>
-            </button>
-        </div>
-    </div>
 
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group" style="margin-top:10px">
+                    <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
+                    <InputMask id="retiro" name="retiro" @bind-value="@retiro" class="form-control" Mask="9999.99" DecimalSeparator="." />
+                    <ValidationMessage For="@(()=>RetiroModel.Retiro)" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8" style="margin-top:80px">
+                <p>
+                    <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
+                </p>
+            </div>
+            <div class="col-md-4" style="margin-top:80px">
+                <button class="btn btn-yellow btn-block" type="submit">
+                    Retirar <i class="icon-circle-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </EditForm>
 </div>
 
 @code {
 
+    //Obtener el saldo y servicio de retiro
+
+    EditContext? context;
+    bool displayValidationErrorMessages = false;
     public RetiroDTO RetiroModel = new RetiroDTO();
     private string saldo = "1000";
     private string? email;
     private string _userKey = "key";
-    private IJSRuntime _jsRuntime;
-    private string wallet;
-    private string retiro = "0";
+    private IJSRuntime? _jsRuntime;
+    private string? wallet;
+    private string retiro = string.Empty;
+    bool OnFieldChanged = false;
 
+    protected override void OnInitialized()
+    {
+        context = new EditContext(RetiroModel);
+        base.OnInitialized();
+    }
+
+    private void ValueChanged(ChangeEventArgs args)
+    {
+        OnFieldChanged = true;
+    }
 
     private async void SubmitRetiro(EditContext context)
     {
-
+        if (context.Validate() && OnFieldChanged == true)
+        {
+            displayValidationErrorMessages = false;
+        }
+        else
+        {
+            displayValidationErrorMessages = true;
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -97,6 +120,7 @@
                 {
                     RetiroModel.Id = UserData.Id;
                     RetiroModel.Wallet = UserData.wallet.Trim();
+                    //Se envia el retiro a esta variable
                     wallet = UserData.wallet.Trim();
                 }
             }
