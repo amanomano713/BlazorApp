@@ -31,10 +31,17 @@ namespace BlazorApp.Data.EF
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserDataMappings());
+            builder.ApplyConfiguration(new PackagesMappings());
+            builder.ApplyConfiguration(new TransferMappings());
+            builder.ApplyConfiguration(new WithdrawalMappings());
             base.OnModelCreating(builder);
         }
 
         public DbSet<UserData> UserData { get; set; }
+        public DbSet<Packages> Packages { get; set; }
+        public DbSet<Transfer> Transfer { get; set; }
+        public DbSet<Withdrawal> Withdrawal { get; set; }
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

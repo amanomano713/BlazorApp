@@ -1,5 +1,4 @@
 ﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
-using BlazorApp.DataAcess.Infraestructure.KeyVaultManager;
 using BlazorApp.DataAcess.Infraestructure.Queries;
 using BlazorApp.DataAcess.Infraestructure.Repositories;
 using BlazorApp.Features.Identity;
