@@ -3,13 +3,16 @@ function mensaje(element) {
     alert(element);
 }
 
-async function CreatePackages(id,cod) {
+async function CreatePackages(id, cod) {
+
+    var _id = id;
+    var _cod = cod;
 
     $.ajax({
         url: '/account/createpackages',
         type: "POST",
         async: true,
-        data: jQuery.param({ Id: id, CodPackage: cod }),
+        data: jQuery.param({ parameter1: _id, parameter2:_cod }),
         dataType: "json",
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {

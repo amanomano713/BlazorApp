@@ -23,6 +23,10 @@ namespace BlazorApp.DataAcess.Mapper
 
             CreateMap<CreateUserDataCommand, UserDTO>();
             CreateMap<UserDTO, CreateUserDataCommand>();
+
+            CreateMap<CreatePackagesCommand, PackageDTO>();
+            CreateMap<PackageDTO, CreatePackagesCommand>();
+
         }
     }
 }

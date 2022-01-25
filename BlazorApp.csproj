@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="Features\Account\Shared\ResourcePackages.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
   </ItemGroup>
@@ -55,6 +59,10 @@
 
   <ItemGroup>
     <Folder Include="DataAcess\Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Features\Account\Shared\ResourcePackages.resx" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

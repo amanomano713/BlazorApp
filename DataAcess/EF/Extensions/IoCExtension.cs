@@ -17,7 +17,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserDataQueries, UserDataQueries>();
-            //services.AddScoped<IKeyVaultManager, KeyVaultManager>();
+            services.AddScoped<IPackagesRepository, PackagesRepository>();
 
 
         }
