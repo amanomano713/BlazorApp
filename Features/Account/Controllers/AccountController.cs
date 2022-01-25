@@ -1,5 +1,6 @@
 ﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
 using BlazorApp.Entities.User;
+using BlazorApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,12 @@ namespace BlazorApp.Features.Accounts.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _userDataRepository = userDataRepository;
+        }
+
+        [HttpPost("account/createpackages")]
+        public IActionResult Createpackages(string Id, string CodPackage)
+        {
+            return this.Json(new { result = 0 });
         }
 
         [HttpGet("account/signinactual")]
