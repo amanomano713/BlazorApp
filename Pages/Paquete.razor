@@ -13,23 +13,24 @@
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
     <hr>
-    <div class="modal" id="modal-id" >
-    <a href="#close" class="modal-overlay" aria-label="Close"></a>
-    <div class="modal-container">
-        <div class="modal-header">
-            <a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
-            <div class="modal-title h5">Modal title</div>
-        </div>
-        <div class="modal-body">
-            <div class="content">
-                <!-- content here -->
+    <div class="modal" id="modal-id">
+        <a href="#close" class="modal-overlay" aria-label="Close"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                <div class="modal-title h5">Compra de Paquete</div>
             </div>
-        </div>
-        <div class="modal-footer">
-            ...
+            <div class="modal-body">
+                <div class="content">
+                    <strong style="color:black;font-size:medium">Proceso de Compra del Paquete:@paquete Exitosa.</strong>
+
+                </div>
+            </div>
+            @*        <div class="modal-footer">
+                ...
+                </div>*@
         </div>
     </div>
-</div>
 </div>
 
 
@@ -178,7 +179,7 @@
 
     private string? _idCod = "10010";
     private string? _idCod20 = "10020";
-
+    public string? paquete;
     private async Task CreatePackaqes(string? _idCod)
     {
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
@@ -188,6 +189,7 @@
         {
             id = UserData.Id;
         }
+        paquete = _idCod;
         await JS.InvokeVoidAsync("CreatePackages", _idCod, id);
 
         StateHasChanged();

@@ -36,7 +36,7 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Transferir #</strong></h1>
-                    <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" @oninput="ValueChanged" class="form-control" data-mask="0000" placeholder="Insertar el monto a transferir..."/>
+                    <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" @oninput="ValueChanged"  class="form-control" Mask="9999.99" DecimalSeparator="." />
                     <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
                 </div>
             </div>
