@@ -34,7 +34,7 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
 
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        var emailStorage = await _localStorageService.GetItem<string>(_userKey);
 
         if (firstRender)
         {

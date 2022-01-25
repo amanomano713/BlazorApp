@@ -4,7 +4,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Abstractions
 {
     public interface IUserDataQueries
     {
-        public Task<UserData> GetUserDataAsync(String email);
+        public Task<UserData> GetUserDataAsync(string email);
 
     }
 }
