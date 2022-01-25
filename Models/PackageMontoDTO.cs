@@ -1,8 +1,7 @@
 ﻿namespace BlazorApp.Models
 {
-    public class PackageDTO
-    {
-        public string? Id { get; set; }
+    public class PackageMontoDTO 
+    { 
         public string? CodPackage { get; set; }
         public float Monto { get; set; }
     }

@@ -16,7 +16,7 @@ async function CreatePackages(id, cod) {
         dataType: "json",
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            if (data.result == 0) {
+            if (data.result == 1) {
                 $('div#modal-id').removeClass('modal').addClass('modal active')
             } else {
                 $('div#modal-id').removeClass('modal active').addClass('modal')

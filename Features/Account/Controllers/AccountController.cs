@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Globalization;
+using System.Reflection;
 using System.Resources;
 
 namespace BlazorApp.Features.Accounts.Controllers
@@ -23,7 +25,7 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly IMediator _mediator;
 
         public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager, IUserDataRepository userDataRepository, 
+            SignInManager<IdentityUser> signInManager, IUserDataRepository userDataRepository,
             IMapper mapper, IMediator mediator)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
@@ -37,38 +39,39 @@ namespace BlazorApp.Features.Accounts.Controllers
         [HttpPost("account/createpackages")]
         public async Task<IActionResult> Createpackages(string parameter1, string parameter2)
         {
+        
+                var packageMontos = new List<PackageMontoDTO>()
+                {
+                    new PackageMontoDTO() { CodPackage = "Pack10", Monto = 10},
+                    new PackageMontoDTO() { CodPackage = "Pack20", Monto = 20},
+                    new PackageMontoDTO() { CodPackage = "Pack50", Monto = 50}
+
+                };
+
+#pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
+            var monto = packageMontos.FirstOrDefault(x => x.CodPackage == parameter1).Monto;
+#pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
+
             var packageDTO = new PackageDTO
-            { 
-               Id = parameter2,
-               CodPackage = parameter1,
-               Monto = CodPackMonto(parameter1)
+            {
+                Id = parameter2,
+                CodPackage = parameter1,
+                Monto = monto
             };
 
             var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
 
             var response = await _mediator.Send(requestModel);
 
-            return this.Json(new { result = 0 });
+            var Ok = 0;
+
+            if (response!=null)
+            {
+                Ok = 1;
+            }
+
+            return this.Json(new { result = Ok });
         }
-
-        private string CodPackMonto(string CodPackage)
-        {
-            var valor = string.Empty;
-            //ResourceReader resource = new ResourceReader("ResourcePackages.resx");
-
-
-            //foreach (DictionaryEntry entry in resource)
-            //{
-            //    if (entry.Key == CodPackage)
-            //    {
-            //        string resourceKey = entry.Key.ToString();
-            //        object value = entry.Value;
-            //        break;
-            //    }
-            //}
-
-            return valor;
-        } 
 
         [HttpGet("account/signinactual")]
         public async Task<IActionResult> SignInActual(String cadena)
