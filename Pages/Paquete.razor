@@ -79,7 +79,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod50)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod200)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -131,7 +131,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod500)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -147,7 +147,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod1000)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -163,7 +163,7 @@
                 Paquete Estrella 10$.
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary">Comprar</button>
+                 <button @onclick="async () => await CreatePackaqes(this._idCod1500)" class="btn btn-primary">Comprar</button>
             </div>
         </div>
     </div>
@@ -174,11 +174,18 @@
 @code {
     private string? email;
     private string _userKey = "key";
-    private string? id;
+    private string? Id;
     private bool result;
 
-    private string? _idCod = "Pack10";
-    private string? _idCod20 = "Pack20";
+    private string? _idCod    = "Pack10";
+    private string? _idCod20  = "Pack20";
+    private string? _idCod50  = "Pack50";
+    private string? _idCod100 = "Pack100";
+    private string? _idCod200 = "Pack200";
+    private string? _idCod500 = "Pack500";
+    private string? _idCod1000 = "Pack1000";
+    private string? _idCod1500 = "Pack1500";
+
     public string? paquete;
     private async Task CreatePackaqes(string? _idCod)
     {
@@ -187,10 +194,17 @@
         var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
         if (UserData != null)
         {
-            id = UserData.Id;
+            Id = UserData.Id;
         }
         paquete = _idCod;
-        await JS.InvokeVoidAsync("CreatePackages", _idCod, id);
+
+        var cadena = Id + "|" +_idCod;
+
+        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+        var result = clave.Encriptacion(cadena);
+
+        await JS.InvokeVoidAsync("CreatePackages", result);
 
         StateHasChanged();
     }

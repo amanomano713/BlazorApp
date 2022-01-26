@@ -19,6 +19,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IUserDataQueries, UserDataQueries>();
             services.AddScoped<IPackagesRepository, PackagesRepository>();
             services.AddScoped<ITransferRepository, TransferRepository>();
+            services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
 
 
         }

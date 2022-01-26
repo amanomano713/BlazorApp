@@ -30,6 +30,15 @@ namespace BlazorApp.DataAcess.Mapper
             CreateMap<CreatePackagesCommand, Packages>();
             CreateMap<Packages, CreatePackagesCommand>();
 
+            CreateMap<CreateWithdrawalCommand, Withdrawal>();
+            CreateMap<Withdrawal, CreateWithdrawalCommand>();
+
+            CreateMap<CreateTransferCommand, Transfer>();
+            CreateMap<Transfer, CreateTransferCommand>();
+
+            CreateMap<CreateTransferCommand, TransferDTO>();
+            CreateMap<TransferDTO, CreateTransferCommand>();
+
         }
     }
 }
