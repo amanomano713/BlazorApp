@@ -1,0 +1,2 @@
+﻿ Add-Migration MyMigration -context Context
+ update-database -Context YourContext

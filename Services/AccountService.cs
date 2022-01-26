@@ -37,15 +37,41 @@ namespace BlazorApp.Services
 
         public async Task Login(SignInModel model)
         {
-            string? User = model.Email;
+            Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+            string? UserEmail = model.Email;
+
             var email = await _localStorageService.GetItem<string>(_userKey);
-            if (User == email) return;
-            await _localStorageService.SetItem(_userKey, User);
+
+            if (!string.IsNullOrEmpty(email)) {
+
+                if (email.Contains("@")) 
+                {
+                    await _localStorageService.SetItem(_userKey, UserEmail);
+                    return;
+                }
+                else
+                {
+                    var result = clave.DesEncriptacion(email);
+
+                    if (UserEmail != result)
+                    {
+
+                        await _localStorageService.SetItem(_userKey, UserEmail);
+                    };
+                }                
+            }
+            else
+            {
+
+                await _localStorageService.SetItem(_userKey, UserEmail);
+            } 
+
         }
 
         public async Task<string> GetItem()
         {
-           var result =  await _localStorageService.GetItem<string>(_userKey);
+            var result =  await _localStorageService.GetItem<string>(_userKey);
 
             return result;
         }

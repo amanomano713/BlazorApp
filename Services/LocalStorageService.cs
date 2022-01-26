@@ -22,19 +22,29 @@ namespace BlazorApp.Services
             _jsRuntime = jsRuntime;
         }
 
-        public async Task<String> GetItem<T>(string key)
+        public async Task<string> GetItem<T>(string key)
         {
+            Encryptor.encriptador clave = new Encryptor.encriptador();
+
             string value = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", key);
 
             if (value == null)
                 return default;
 
-            return value;
+            var result = clave.DesEncriptacion(value);
+
+            return result;
         }
 
         public async Task SetItem<T>(string key, T value)
         {
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
+            Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+            string? Keyvalue = value.ToString();
+
+            Keyvalue = clave.Encriptacion(Keyvalue);
+
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, Keyvalue);
         }
 
         public async Task RemoveItem(string key)
