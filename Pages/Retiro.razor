@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
 @using Microsoft.JSInterop;
+@inject IJSRuntime JS;
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
 
@@ -11,29 +12,33 @@
     <p>
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
+    @if (displayErrorRetiro == true)
+    {
+        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Error el monto a retirar no puede ser mayor al saldo disponible... </label>
+        </div>
+    }
     <hr>
     <EditForm Model="@RetiroModel" OnSubmit="@SubmitRetiro">
         <DataAnnotationsValidator />
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group" style="margin-top:10px">
-                    <h1><strong style="color:black;font-size:x-large">Wallet</strong></h1>
+                    <h1><strong style="color:black;font-size:x-large">Wallet #</strong></h1>
                     <InputMask id="wallet " name="wallet" disabled @bind-Value="@RetiroModel.Wallet" class="form-control" />
                 </div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-4">
                 <fieldset disabled>
                     <div class="form-group" style="margin-top:10px">
-                        <h1><strong style="color:black;font-size:x-large">Disponible</strong></h1>
+                        <h1><strong style="color:black;font-size:x-large">Saldo Disponible #</strong></h1>
                         <InputMask id="saldo" name="saldo" disabled @bind-Value="@saldo" class="form-control" />
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
@@ -59,16 +64,15 @@
 </div>
 
 @code {
-
     //Obtener el saldo y servicio de retiro
 
+    bool displayErrorRetiro = false;
     EditContext? context;
     bool displayValidationErrorMessages = false;
     public RetiroDTO RetiroModel = new RetiroDTO();
     private string saldo = "1000";
     private string? email;
     private string _userKey = "key";
-    private IJSRuntime? _jsRuntime;
     private string? wallet;
     private string retiro = string.Empty;
     bool OnFieldChanged = false;
@@ -88,6 +92,22 @@
     {
         if (context.Validate() && OnFieldChanged == true)
         {
+            string? Montoaretirar = RetiroModel.Retiro.Replace("_",string.Empty);
+
+            var MontoRetiro = Convert.ToInt64(Montoaretirar);
+
+            var SaldoDispo  = Convert.ToInt64(saldo);
+
+            if (MontoRetiro > SaldoDispo )
+            {
+
+            }
+            else
+            {
+                
+
+            }
+
             displayValidationErrorMessages = false;
         }
         else

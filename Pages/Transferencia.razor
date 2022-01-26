@@ -27,7 +27,7 @@
             <label class="p-2">Error Afiliado no existe en la base de datos... </label>
         </div>
     }
-     @if (displayErrorNoValida == true)
+    @if (displayErrorNoValida == true)
     {
         <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
             <label class="p-2">Error Transferencia No valida... </label>
@@ -39,13 +39,15 @@
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">Compra de Paquete</div>
+                <div class="modal-title h5">Transferencia Interna</div>
             </div>
             <div class="modal-body">
                 <div class="content">
-                    <strong style="color:black;font-size:medium">Proceso de Compra del Paquete: Exitosa.</strong>
-
+                    <strong style="color:black;font-size:medium">Código Afiliado:  @Afiliado</strong>
                 </div>
+            </div>
+            <div class="modal-footer">
+                Transferencia exitosa.
             </div>
         </div>
     </div>
@@ -113,7 +115,6 @@
     public TransferirDTO TransferirModel = new TransferirDTO();
     private string? email;
     private string _userKey = "key";
-    private IJSRuntime? _jsRuntime;
 
     EditContext? context;
     private string? Id;
@@ -130,7 +131,7 @@
     private async void SubmitTransferir(EditContext context)
     {
 
-        string? Montoatransferir = TransferirModel.Transferir.Replace("_",string.Empty);
+        string? Montoatransferir = TransferirModel.Transferir.Replace("_", string.Empty);
 
         var Monto = System.Convert.ToInt32(TransferirModel.Saldo);
 
@@ -149,8 +150,8 @@
 
             if (context.Validate())
             {
-                string? afiliado = TransferirModel.Afiliado;
-                var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(afiliado);
+                Afiliado = TransferirModel.Afiliado;
+                var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(Afiliado);
                 if (TransferData == null)
                 {
                     displayErrorAfiliado = true;
@@ -163,7 +164,7 @@
 
                     if (UserData != null)
                     {
-                        if (UserData.Id == afiliado)
+                        if (UserData.Id == Afiliado)
                         {
                             displayErrorAfiliado = false;
                             displayErrorTransfer = false;
@@ -171,15 +172,16 @@
                         }
                         else
                         {
-                            var transferData = new TransfDTO{
-                                 Id = UserData.Id,
-                                 Afiliado = afiliado,
-                                 Monto = Montoatransferir
-                            };
+                            var transferData = new TransfDTO
+                                {
+                                    Id = UserData.Id,
+                                    Afiliado = Afiliado,
+                                    Monto = Montoatransferir
+                                };
 
                             await CreateTransfer(transferData);
                         }
-                    }                    
+                    }
                 }
             }
             else
@@ -190,7 +192,7 @@
                 displayErrorNoValida = false;
             }
 
-               StateHasChanged();
+            StateHasChanged();
         }
 
     }

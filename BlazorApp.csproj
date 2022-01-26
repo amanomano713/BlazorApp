@@ -12,6 +12,14 @@
 	  <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;612;618</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;612;618</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Content Remove="Pages\Index.cshtml" />
     <Content Remove="Pages\_Layout.cshtml" />
