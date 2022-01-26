@@ -1,10 +1,11 @@
 ﻿
-function mensaje(element) {
+async function mensaje(element) {
     alert(element);
 }
 
 async function CreatePackages(cadena) {
 
+    /*alert(cadena);*/
 
     $.ajax({
         url: '/account/createpackages',
@@ -26,8 +27,7 @@ async function CreatePackages(cadena) {
 
 async function CreateTransfer(cadena) {
 
-
-    alert(cadena);
+ /*   alert(cadena);*/
 
     $.ajax({
         url: '/account/createtransfer',

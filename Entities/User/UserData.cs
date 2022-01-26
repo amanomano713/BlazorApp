@@ -9,7 +9,7 @@ namespace BlazorApp.Entities.User
  
     public class UserData : Audited
     {
-        public string? Id { get; set; }
+        public string Id { get; set; }
         public string? name { get; set; }
         public string? surname { get; set; }
         public DateTime dateOfbirth { get; set; }

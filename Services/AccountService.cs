@@ -38,14 +38,14 @@ namespace BlazorApp.Services
         public async Task Login(SignInModel model)
         {
             string? User = model.Email;
-            var email = await _localStorageService.GetItem<String>(_userKey);
+            var email = await _localStorageService.GetItem<string>(_userKey);
             if (User == email) return;
             await _localStorageService.SetItem(_userKey, User);
         }
 
-        public async Task<String> GetItem()
+        public async Task<string> GetItem()
         {
-           var result =  await _localStorageService.GetItem<String>(_userKey);
+           var result =  await _localStorageService.GetItem<string>(_userKey);
 
             return result;
         }

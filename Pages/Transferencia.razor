@@ -7,12 +7,32 @@
 @inject IJSRuntime JS;
 @using Blazorise;
 @using BlazorApp.Encryptor;
+@inject IAfiliadoDataQueries AfiliadoDataQueries
 
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h2>
     <p>
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
+    @if (displayErrorTransfer == true)
+    {
+        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Error el Monto a transferir no puede ser mayor al saldo disponible... </label>
+        </div>
+    }
+
+    @if (displayErrorAfiliado == true)
+    {
+        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Error Afiliado no existe en la base de datos... </label>
+        </div>
+    }
+     @if (displayErrorNoValida == true)
+    {
+        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">Error Transferencia No valida... </label>
+        </div>
+    }
     <hr>
     <div class="modal" id="modal-id">
         <a href="#close" class="modal-overlay" aria-label="Close"></a>
@@ -34,8 +54,8 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group" style="margin-top:10px">
-                    <h1><strong style="color:black;font-size:x-large">Wallet</strong></h1>
-                    <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Wallet" class="form-control" />
+                    <h1><strong style="color:black;font-size:x-large">Código Afiliado #</strong></h1>
+                    <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Id" class="form-control" />
                 </div>
             </div>
         </div>
@@ -43,7 +63,7 @@
             <div class="col-md-4">
                 <fieldset disabled>
                     <div class="form-group" style="margin-top:10px">
-                        <h1><strong style="color:black;font-size:x-large">Disponible</strong></h1>
+                        <h1><strong style="color:black;font-size:x-large">Saldo #</strong></h1>
                         <Blazorise.InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
                     </div>
                 </fieldset>
@@ -53,7 +73,7 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Transferir #</strong></h1>
-                    <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="999"  class="form-control" />
+                    <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="9999" class="form-control" />
                     <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
                 </div>
             </div>
@@ -86,16 +106,20 @@
 
     //Obtener el saldo y servicio de transferencia
 
+    bool displayErrorNoValida = false;
+    bool displayErrorAfiliado = false;
+    bool displayErrorTransfer = false;
     bool displayValidationErrorMessages = false;
     public TransferirDTO TransferirModel = new TransferirDTO();
     private string? email;
     private string _userKey = "key";
     private IJSRuntime? _jsRuntime;
-    private string? wallet;
+
     EditContext? context;
     private string? Id;
     private string? Afiliado;
     private string? Montotransfer;
+
 
     protected override void OnInitialized()
     {
@@ -105,36 +129,89 @@
 
     private async void SubmitTransferir(EditContext context)
     {
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-        UserDTO userData = new UserDTO();
 
-        if (context.Validate() )
+        string? Montoatransferir = TransferirModel.Transferir.Replace("_",string.Empty);
+
+        var Monto = System.Convert.ToInt32(TransferirModel.Saldo);
+
+        var Transferir = System.Convert.ToInt32(Montoatransferir);
+
+        if (Transferir > Monto)
         {
-            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-            if (UserData != null)
-            {
-                Id = UserData.Id;
-                Afiliado = TransferirModel.Afiliado;
-                Montotransfer = TransferirModel.Transferir;
-            }
-
-            displayValidationErrorMessages = false;
-
-            var cadena = Id + "|"+Afiliado+"|"+Montotransfer;
-
-            BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
-
-            var result = clave.Encriptacion(cadena);
-
-            await JS.InvokeVoidAsync("CreateTransfer", result);
-
-            StateHasChanged();
-
+            displayErrorNoValida = false;
+            displayErrorAfiliado = false;
+            displayErrorTransfer = true;
         }
         else
         {
-            displayValidationErrorMessages = true;
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            UserDTO userData = new UserDTO();
+
+            if (context.Validate())
+            {
+                string? afiliado = TransferirModel.Afiliado;
+                var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(afiliado);
+                if (TransferData == null)
+                {
+                    displayErrorAfiliado = true;
+                    displayErrorTransfer = false;
+                    displayErrorNoValida = false;
+                }
+                else
+                {
+                    var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+
+                    if (UserData != null)
+                    {
+                        if (UserData.Id == afiliado)
+                        {
+                            displayErrorAfiliado = false;
+                            displayErrorTransfer = false;
+                            displayErrorNoValida = true;
+                        }
+                        else
+                        {
+                            var transferData = new TransfDTO{
+                                 Id = UserData.Id,
+                                 Afiliado = afiliado,
+                                 Monto = Montoatransferir
+                            };
+
+                            await CreateTransfer(transferData);
+                        }
+                    }                    
+                }
+            }
+            else
+            {
+                displayValidationErrorMessages = true;
+                displayErrorTransfer = false;
+                displayErrorAfiliado = false;
+                displayErrorNoValida = false;
+            }
+
+               StateHasChanged();
         }
+
+    }
+
+    private async Task CreateTransfer(TransfDTO transfData)
+    {
+        displayValidationErrorMessages = false;
+
+        var cadena = transfData.Id + "|" + transfData.Afiliado + "|" + transfData.Monto;
+
+        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+        var result = clave.Encriptacion(cadena);
+
+        await JS.InvokeVoidAsync("CreateTransfer", result);
+
+        displayErrorTransfer = false;
+
+        displayErrorAfiliado = false;
+
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -161,7 +238,7 @@
                 {
                     TransferirModel.Id = UserData.Id;
                     TransferirModel.Wallet = UserData.wallet.Trim();
-                    TransferirModel.Saldo = "3000";
+                    TransferirModel.Saldo = "300";
                 }
             }
             StateHasChanged();
