@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-               Retiro exitoso.
+                Retiro exitoso.
             </div>
         </div>
     </div>
@@ -60,21 +60,23 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
-                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro"  class="form-control" Mask="9999" />
+                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro" class="form-control" Mask="9999" />
                     <ValidationMessage For="@(()=>RetiroModel.MontoRetiro)" />
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-8" style="margin-top:80px">
-                <p>
-                    <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
-                </p>
-            </div>
-            <div class="col-md-4" style="margin-top:80px">
+            <div class="col-md-4" style="margin-top:20px">
                 <button class="btn btn-yellow btn-block" type="submit">
                     Retirar <i class="icon-circle-arrow-right"></i>
                 </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8" style="margin-top:80px">
+                <p>
+                  <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
+                </p>
             </div>
         </div>
     </EditForm>
@@ -100,23 +102,23 @@
         base.OnInitialized();
     }
 
-    private async void SubmitRetiro(EditContext context)
+
+    private async Task SubmitRetiro(EditContext context)
     {
         if (context.Validate())
         {
-            string? Montoaretirar = RetiroModel.MontoRetiro.Replace("_",string.Empty);
+            string? Montoaretirar = RetiroModel.MontoRetiro.Replace("_", string.Empty);
 
             var MontoRetiro = Convert.ToInt64(Montoaretirar);
 
-            var SaldoDispo  = Convert.ToInt64(saldo);
+            var SaldoDispo = Convert.ToInt64(saldo);
 
-            if (MontoRetiro > SaldoDispo )
+            if (MontoRetiro > SaldoDispo)
             {
                 displayErrorRetiro = true;
             }
             else
             {
-
                 wallet = RetiroModel.Wallet;
                 RetiroModel.MontoRetiro = Montoaretirar;
                 await CreateRetiro(RetiroModel);
@@ -132,7 +134,7 @@
 
     private async Task CreateRetiro(RetiroDTO retiroDTO)
     {
-     
+
         displayValidationErrorMessages = false;
 
         var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
@@ -172,7 +174,7 @@
                 {
                     RetiroModel.Id = UserData.Id;
                     RetiroModel.Wallet = UserData.wallet.Trim();
-                    
+
                     //Se envia el retiro a esta variable
                     wallet = UserData.wallet.Trim();
                 }
