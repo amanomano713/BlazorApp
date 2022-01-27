@@ -43,7 +43,7 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
-                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.Retiro"  @oninput="ValueChanged" class="form-control" Mask="9999.99" DecimalSeparator="." />
+                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.Retiro"  class="form-control" Mask="9999" />
                     <ValidationMessage For="@(()=>RetiroModel.Retiro)" />
                 </div>
             </div>
@@ -75,7 +75,7 @@
     private string _userKey = "key";
     private string? wallet;
     private string retiro = string.Empty;
-    bool OnFieldChanged = false;
+
 
     protected override void OnInitialized()
     {
@@ -83,14 +83,9 @@
         base.OnInitialized();
     }
 
-    private void ValueChanged(ChangeEventArgs args)
-    {
-        OnFieldChanged = true;
-    }
-
     private async void SubmitRetiro(EditContext context)
     {
-        if (context.Validate() && OnFieldChanged == true)
+        if (context.Validate())
         {
             string? Montoaretirar = RetiroModel.Retiro.Replace("_",string.Empty);
 
@@ -100,7 +95,7 @@
 
             if (MontoRetiro > SaldoDispo )
             {
-
+                displayErrorRetiro = true;
             }
             else
             {
