@@ -65,8 +65,8 @@ namespace BlazorApp.Services
             }
             else
             {
-                await _localStorageService.SetItemToken(_userKey, UserEmail);
-                await _localStorageService.SetItem(_access, model.Token);
+                await _localStorageService.SetItem(_userKey, UserEmail);
+                await _localStorageService.SetItemToken(_access, model.Token);
             } 
 
         }
