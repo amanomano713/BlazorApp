@@ -42,8 +42,9 @@ namespace BlazorApp.Encryptor
 						using (CryptoStream encryptor = new CryptoStream(encryptedStream, encryptTransform, CryptoStreamMode.Write))
 						{
 							encryptor.Write(utfData, 0, utfData.Length);
-							encryptor.Flush();
-							encryptor.Close();
+							//encryptor.Flush();
+							//encryptor.Close();
+							encryptor.FlushFinalBlock();
 
 							byte[] encryptBytes = encryptedStream.ToArray();
 							encryptedString = Convert.ToBase64String(encryptBytes);
