@@ -5,9 +5,10 @@ namespace BlazorApp.Services
 
     public interface ILocalStorageService
     {
-        Task<String> GetItem<T>(string key);
+        Task<string> GetItem<T>(string key);
         Task SetItem<T>(string key, T value);
         Task RemoveItem(string key);
+        Task SetItemToken<T>(string key, T value);
     }
 
     public class LocalStorageService : ILocalStorageService
@@ -47,6 +48,11 @@ namespace BlazorApp.Services
         public async Task RemoveItem(string key)
         {
             await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", key);
+        }
+
+        public async Task SetItemToken<T>(string key, T value)
+        {
+            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
         }
     }
 }

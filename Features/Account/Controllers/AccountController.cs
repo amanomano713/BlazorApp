@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BlazorApp.Handlers.Commands;
 using BlazorApp.Models;
+using BlazorApp.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.DataProtection;
@@ -16,46 +17,78 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly IDataProtector _dataProtector;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private ILocalStorageService _localStorageService;
+        private string _userKey = "key";
 
         public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IMapper mapper, IMediator mediator)
+            IMapper mapper, IMediator mediator, ILocalStorageService localStorageService)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _mediator = mediator;
+            _localStorageService = localStorageService; 
         }
 
+        /// <summary>
+        /// validate token
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> validatetoken()
+        {
+            Request.Headers.TryGetValue("Authorization", out var Bearer);
+
+            var token = Bearer.ToString().Replace("Bearer", string.Empty).Replace("key", string.Empty);
+
+            var parts = token.Split('|');
+
+            Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+            var KeyEmail = clave.DesEncriptacion(parts[1]);
+
+            var identityUser = await _userManager.FindByEmailAsync(KeyEmail);
+
+            var isTokenValid = await _userManager.VerifyUserTokenAsync(identityUser, TokenOptions.DefaultProvider, "SignIn", parts[0]);
+
+            return isTokenValid;
+        }
 
         [HttpPost("account/createretiro")]
         public async Task<IActionResult> CreateRetiro(string param1)
         {
-            Encryptor.encriptador clave = new Encryptor.encriptador();
 
-            var data = clave.DesEncriptacion(param1);
-
-            var parts = data.Split('|');
+            var val = await validatetoken();
 
             var Ok = 0;
 
-            var Withdrawal = System.Convert.ToInt64(parts[2]);
+            Encryptor.encriptador clave = new Encryptor.encriptador();
 
-            var withdrawalDTO = new WithdrawalDTO
+            if (val == true)
             {
-                Id = parts[0],
-                Wallet = parts[1],
-                Monto = Withdrawal
-            };
+                var data = clave.DesEncriptacion(param1);
 
-            var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+                var parts = data.Split('|');
 
-            var response = await _mediator.Send(requestModel);
+                var Withdrawal = System.Convert.ToInt64(parts[2]);
 
-            if (response != null)
-            {
-                Ok = 1;
+                var withdrawalDTO = new WithdrawalDTO
+                {
+                    Id = parts[0],
+                    Wallet = parts[1],
+                    Monto = Withdrawal
+                };
+
+                var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+
+                var response = await _mediator.Send(requestModel);
+                
+                if (response != null)
+                {
+                    Ok = 1;
+                }
+
             }
 
             return this.Json(new { result = Ok });
@@ -65,28 +98,35 @@ namespace BlazorApp.Features.Accounts.Controllers
         [HttpPost("account/createtransfer")]
         public async Task<IActionResult> CreateTransfer(string param1)
         {
-            Encryptor.encriptador clave = new Encryptor.encriptador();
-
-            var data = clave.DesEncriptacion(param1);
-
-            var parts = data.Split('|');
+            
+            var val = await validatetoken();
 
             var Ok = 0;
 
-            var transferDTO = new TransferDTO
+            Encryptor.encriptador clave = new Encryptor.encriptador();
+
+            if (val == true)
             {
-                Id = parts[0],
-                Afiliado = parts[1],
-                Monto = System.Convert.ToInt32(parts[2])
-            };
 
-            var requestModel = _mapper.Map<CreateTransferCommand>(transferDTO);
+                var data = clave.DesEncriptacion(param1);
 
-            var response = await _mediator.Send(requestModel);
+                var parts = data.Split('|');
 
-            if (response != null)
-            {
-                Ok = 1;
+                var transferDTO = new TransferDTO
+                {
+                    Id = parts[0],
+                    Afiliado = parts[1],
+                    Monto = System.Convert.ToInt32(parts[2])
+                };
+
+                var requestModel = _mapper.Map<CreateTransferCommand>(transferDTO);
+
+                var response = await _mediator.Send(requestModel);
+
+                if (response != null)
+                {
+                    Ok = 1;
+                }
             }
 
             return this.Json(new { result = Ok });
@@ -95,13 +135,20 @@ namespace BlazorApp.Features.Accounts.Controllers
         [HttpPost("account/createpackages")]
         public async Task<IActionResult> Createpackages(string parameter1)
         {
+            var val = await validatetoken();
+
+            var Ok = 0;
+
             Encryptor.encriptador clave = new Encryptor.encriptador();
 
-            var data = clave.DesEncriptacion(parameter1);
+            if (val == true)
+            {
 
-            var parts = data.Split('|');
+                var data = clave.DesEncriptacion(parameter1);
 
-            var packageMontos = new List<PackageMontoDTO>()
+                var parts = data.Split('|');
+
+                var packageMontos = new List<PackageMontoDTO>()
                 {
                     new PackageMontoDTO() { CodPackage = "Pack10", Monto = 10},
                     new PackageMontoDTO() { CodPackage = "Pack20", Monto = 20},
@@ -114,25 +161,24 @@ namespace BlazorApp.Features.Accounts.Controllers
                 };
 
 #pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
-            var monto = packageMontos.FirstOrDefault(x => x.CodPackage == parts[1]).Monto;
+                var monto = packageMontos.FirstOrDefault(x => x.CodPackage == parts[1]).Monto;
 #pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
 
-            var packageDTO = new PackageDTO
-            {
-                Id = parts[0],
-                CodPackage = parts[1],
-                Monto = monto
-            };
+                var packageDTO = new PackageDTO
+                {
+                    Id = parts[0],
+                    CodPackage = parts[1],
+                    Monto = monto
+                };
 
-            var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
+                var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
 
-            var response = await _mediator.Send(requestModel);
+                var response = await _mediator.Send(requestModel);
 
-            var Ok = 0;
-
-            if (response != null)
-            {
-                Ok = 1;
+                if (response != null)
+                {
+                    Ok = 1;
+                }
             }
 
             return this.Json(new { result = Ok });

@@ -18,6 +18,7 @@ namespace BlazorApp.Services
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
         private string _userKey = "key";
+        private string _access = "access_token";
 
 
         public SignInModel User { get; private set; }
@@ -47,6 +48,7 @@ namespace BlazorApp.Services
 
                 if (email.Contains("@")) 
                 {
+                    await _localStorageService.SetItemToken(_access, model.Token);
                     await _localStorageService.SetItem(_userKey, UserEmail);
                     return;
                 }
@@ -56,15 +58,15 @@ namespace BlazorApp.Services
 
                     if (UserEmail != result)
                     {
-
+                        await _localStorageService.SetItemToken(_access, model.Token);
                         await _localStorageService.SetItem(_userKey, UserEmail);
                     };
                 }                
             }
             else
             {
-
-                await _localStorageService.SetItem(_userKey, UserEmail);
+                await _localStorageService.SetItemToken(_userKey, UserEmail);
+                await _localStorageService.SetItem(_access, model.Token);
             } 
 
         }

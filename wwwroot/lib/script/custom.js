@@ -3,13 +3,22 @@ async function mensaje(element) {
     alert(element);
 }
 
+var token = localStorage.getItem("access_token");
+var key = localStorage.getItem("key");
+
+var Bearer = 'Bearer' + token +'|'+ 'key' + key;
 
 async function CreateRetiro(cadena) {
 
-    /*alert(cadena);*/
+/*    var token = localStorage.getItem("access_token");*/
+
+/*    alert(localStorage.getItem("access_token"));*/
+
+/*    var Bearer = 'Bearer ' + token;*/
 
     $.ajax({
         url: '/account/createretiro',
+        headers: { 'Authorization': Bearer },
         type: "POST",
         async: true,
         data: jQuery.param({ param1: cadena }),
@@ -32,6 +41,7 @@ async function CreatePackages(cadena) {
 
     $.ajax({
         url: '/account/createpackages',
+        headers: { 'Authorization': Bearer },
         type: "POST",
         async: true,
         data: jQuery.param({ parameter1: cadena }),
@@ -54,6 +64,7 @@ async function CreateTransfer(cadena) {
 
     $.ajax({
         url: '/account/createtransfer',
+        headers: { 'Authorization': Bearer },
         type: "POST",
         async: true,
         data: jQuery.param({ param1:cadena }),

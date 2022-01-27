@@ -13,5 +13,7 @@ namespace BlazorApp.Models
         [StringLength(10, MinimumLength = 6,
           ErrorMessage = "El Password debe tener entre 6 y 10 caracteres")]
         public string? Password { get; set; }
+
+        public string Token { get; set; }
     }
 }

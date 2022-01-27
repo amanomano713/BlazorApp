@@ -48,9 +48,7 @@
 
     private SignInModel signInModel = new SignInModel();
     private bool showSignInError = false;
-    private bool loading;
-    private string _userKey = "key";
-
+   
     private async Task RegisterUser()
     {
 
@@ -78,6 +76,8 @@
             var pdata = protector.Protect(data);
 
             //guardo el email en el localStorage
+
+            signInModel.Token = token;
 
             await AccountService.Login(signInModel);
 
