@@ -29,6 +29,39 @@ namespace BlazorApp.Features.Accounts.Controllers
         }
 
 
+        [HttpPost("account/createretiro")]
+        public async Task<IActionResult> CreateRetiro(string param1)
+        {
+            Encryptor.encriptador clave = new Encryptor.encriptador();
+
+            var data = clave.DesEncriptacion(param1);
+
+            var parts = data.Split('|');
+
+            var Ok = 0;
+
+            var Withdrawal = System.Convert.ToInt64(parts[2]);
+
+            var withdrawalDTO = new WithdrawalDTO
+            {
+                Id = parts[0],
+                Wallet = parts[1],
+                Monto = Withdrawal
+            };
+
+            var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+
+            var response = await _mediator.Send(requestModel);
+
+            if (response != null)
+            {
+                Ok = 1;
+            }
+
+            return this.Json(new { result = Ok });
+        }
+
+
         [HttpPost("account/createtransfer")]
         public async Task<IActionResult> CreateTransfer(string param1)
         {

@@ -5,7 +5,7 @@ namespace BlazorApp.Models
     public class RetiroDTO
     {
         [Required(ErrorMessage = "Monto a retirar es Obligatorio")]
-        public string? Retiro { get; set; }
+        public string? MontoRetiro { get; set; }
 
         public string? Wallet { get; set; }
 

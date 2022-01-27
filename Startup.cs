@@ -37,7 +37,10 @@ namespace BlazorApp
 
             var connectionDB = _configuration["DefaultConnectionDB"];
 
-
+            //ServiceLifetime.Transient
+            //ServiceLifetime.Scoped
+            //ServiceLifetime.Singleton
+            
             //Connection IdentityUser
             services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(connectionDB), ServiceLifetime.Transient);
@@ -97,8 +100,6 @@ namespace BlazorApp
                     .AllowAnyHeader();
             }));
 
-
-
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
@@ -134,6 +135,7 @@ namespace BlazorApp
 
         private static void EnsureTestUsers(DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
+            //create bda identity
             using (var db = new ApplicationDbContext(identityDbContextOptions))
             {
                 db.Database.EnsureCreated();

@@ -1,7 +1,4 @@
-﻿using BlazorApp.Models.Account;
-using Microsoft.JSInterop;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using Microsoft.JSInterop;
 
 namespace BlazorApp.Services
 {

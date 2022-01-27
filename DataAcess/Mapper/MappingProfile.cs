@@ -39,6 +39,9 @@ namespace BlazorApp.DataAcess.Mapper
             CreateMap<CreateTransferCommand, TransferDTO>();
             CreateMap<TransferDTO, CreateTransferCommand>();
 
+            CreateMap<CreateWithdrawalCommand, WithdrawalDTO>();
+            CreateMap<WithdrawalDTO, CreateWithdrawalCommand>();
+
         }
     }
 }

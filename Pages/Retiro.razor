@@ -19,6 +19,23 @@
         </div>
     }
     <hr>
+    <div class="modal" id="modal-id">
+        <a href="#close" class="modal-overlay" aria-label="Close"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                <div class="modal-title h5">Retiro</div>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <strong style="color:black;font-size:medium">Wallet:  @wallet</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+               Retiro exitoso.
+            </div>
+        </div>
+    </div>
     <EditForm Model="@RetiroModel" OnSubmit="@SubmitRetiro">
         <DataAnnotationsValidator />
         <div class="row">
@@ -43,8 +60,8 @@
             <div class="col-md-4">
                 <div class="form-group" style="margin-top:10px">
                     <h1><strong style="color:black;font-size:x-large">Monto a Retirar #</strong></h1>
-                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.Retiro"  class="form-control" Mask="9999" />
-                    <ValidationMessage For="@(()=>RetiroModel.Retiro)" />
+                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro"  class="form-control" Mask="9999" />
+                    <ValidationMessage For="@(()=>RetiroModel.MontoRetiro)" />
                 </div>
             </div>
         </div>
@@ -87,7 +104,7 @@
     {
         if (context.Validate())
         {
-            string? Montoaretirar = RetiroModel.Retiro.Replace("_",string.Empty);
+            string? Montoaretirar = RetiroModel.MontoRetiro.Replace("_",string.Empty);
 
             var MontoRetiro = Convert.ToInt64(Montoaretirar);
 
@@ -99,8 +116,10 @@
             }
             else
             {
-                
 
+                wallet = RetiroModel.Wallet;
+                RetiroModel.MontoRetiro = Montoaretirar;
+                await CreateRetiro(RetiroModel);
             }
 
             displayValidationErrorMessages = false;
@@ -109,6 +128,24 @@
         {
             displayValidationErrorMessages = true;
         }
+    }
+
+    private async Task CreateRetiro(RetiroDTO retiroDTO)
+    {
+     
+        displayValidationErrorMessages = false;
+
+        var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
+
+        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
+
+        cadena = clave.Encriptacion(cadena);
+
+        await JS.InvokeVoidAsync("CreateRetiro", cadena);
+
+        displayErrorRetiro = false;
+
+        StateHasChanged();
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
