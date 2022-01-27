@@ -119,8 +119,8 @@
     EditContext? context;
     private string? Id;
     private string? Afiliado;
-    private string? Montotransfer;
-
+    private string? Montotransferencia;
+    private float MontoTransfer;
 
     protected override void OnInitialized()
     {
@@ -128,73 +128,102 @@
         base.OnInitialized();
     }
 
+    private float validateMonto()
+    {
+        float Montoresult = 0;
+
+        string? Montotransferencia = TransferirModel.Transferir.Replace("_", string.Empty);
+        
+        if (String.IsNullOrEmpty(Montotransferencia)==false)
+        {
+
+            var MontoSaldo = System.Convert.ToInt32(TransferirModel.Saldo);
+
+            var MontoTransfer = System.Convert.ToInt32(Montotransferencia);
+
+            if (MontoTransfer > MontoSaldo)
+            {
+                displayErrorNoValida = false;
+                displayErrorAfiliado = false;
+                displayErrorTransfer = true;
+                Montoresult = 0;
+            }
+            else
+            {
+                Montoresult = MontoTransfer;
+            }
+        }
+
+        return Montoresult;
+    }
+
+    private async Task<bool> validateAfiliado()
+    {
+        var result = true;
+
+        Afiliado = TransferirModel.Afiliado;
+        var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(Afiliado);
+        if (TransferData == null)
+        {
+            displayErrorAfiliado = true;
+            displayErrorTransfer = false;
+            displayErrorNoValida = false;
+            result = false;
+        }
+
+        return result;
+
+    }
+
     private async void SubmitTransferir(EditContext context)
     {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        UserDTO userData = new UserDTO();
 
-        string? Montoatransferir = TransferirModel.Transferir.Replace("_", string.Empty);
-
-        var Monto = System.Convert.ToInt32(TransferirModel.Saldo);
-
-        var Transferir = System.Convert.ToInt32(Montoatransferir);
-
-        if (Transferir > Monto)
+        if (context.Validate())
         {
-            displayErrorNoValida = false;
-            displayErrorAfiliado = false;
-            displayErrorTransfer = true;
-        }
-        else
-        {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-            UserDTO userData = new UserDTO();
+            var resultAfiliado = await validateAfiliado();
 
-            if (context.Validate())
+            var resultMonto = validateMonto();
+
+            if (resultAfiliado==true && resultMonto!=0)
             {
-                Afiliado = TransferirModel.Afiliado;
-                var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(Afiliado);
-                if (TransferData == null)
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
                 {
-                    displayErrorAfiliado = true;
-                    displayErrorTransfer = false;
-                    displayErrorNoValida = false;
-                }
-                else
-                {
-                    var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-
-                    if (UserData != null)
+                    if (UserData.Id == Afiliado)
                     {
-                        if (UserData.Id == Afiliado)
-                        {
-                            displayErrorAfiliado = false;
-                            displayErrorTransfer = false;
-                            displayErrorNoValida = true;
-                        }
-                        else
-                        {
-                            var transferData = new TransfDTO
-                                {
-                                    Id = UserData.Id,
-                                    Afiliado = Afiliado,
-                                    Monto = Montoatransferir
-                                };
+                        displayErrorAfiliado = false;
+                        displayErrorTransfer = false;
+                        displayErrorNoValida = true;
+                    }
+                    else
+                    {
+                        var transferData = new TransfDTO
+                           {
+                               Id = UserData.Id,
+                               Afiliado = Afiliado,
+                               Monto = resultMonto.ToString()
+                           };
 
-                            await CreateTransfer(transferData);
-                        }
+                        await CreateTransfer(transferData);
                     }
                 }
             }
             else
             {
-                displayValidationErrorMessages = true;
-                displayErrorTransfer = false;
-                displayErrorAfiliado = false;
-                displayErrorNoValida = false;
+                 displayErrorNoValida = false;
             }
-
-            StateHasChanged();
+        }
+        else
+        {
+            displayValidationErrorMessages = true;
+            displayErrorTransfer = false;
+            displayErrorAfiliado = false;
+            displayErrorNoValida = false;
         }
 
+        StateHasChanged();
     }
 
     private async Task CreateTransfer(TransfDTO transfData)
