@@ -40,7 +40,7 @@ namespace BlazorApp.Services
         {
             string? Keyvalue = value.ToString();
 
-            Keyvalue = _IEncryptor.Decryption(Keyvalue);
+            Keyvalue = _IEncryptor.EnCryption(Keyvalue);
 
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, Keyvalue);
         }
