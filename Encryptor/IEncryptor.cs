@@ -2,9 +2,9 @@
 {
     public interface IEncryptor
     {
-        public string Encriptacion(string? input);
+        string EnCryption(string? input);
 
-        public string DesEncriptacion(string? input);
+        string Decryption(string? input);
 
     }
 }

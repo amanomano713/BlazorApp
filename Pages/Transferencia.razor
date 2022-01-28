@@ -8,6 +8,7 @@
 @using Blazorise;
 @using BlazorApp.Encryptor;
 @inject IAfiliadoDataQueries AfiliadoDataQueries
+@inject IEncryptor IEncryptor
 
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h2>
@@ -232,9 +233,7 @@
 
         var cadena = transfData.Id + "|" + transfData.Afiliado + "|" + transfData.Monto;
 
-        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
-
-        var result = clave.Encriptacion(cadena);
+        var result = IEncryptor.EnCryption(cadena);
 
         await JS.InvokeVoidAsync("CreateTransfer", result);
 

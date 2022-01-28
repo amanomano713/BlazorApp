@@ -2,9 +2,10 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
+@using BlazorApp.Encryptor
 @using Microsoft.JSInterop
 @inject IJSRuntime JS
-
+@inject IEncryptor IEncryptor
 @inject IUserDataQueries UserDataQueries
 
 <div class="panel-body">
@@ -200,9 +201,7 @@
 
         var cadena = Id + "|" +_idCod;
 
-        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
-
-        var result = clave.Encriptacion(cadena);
+        var result = IEncryptor.EnCryption(cadena);
 
         await JS.InvokeVoidAsync("CreatePackages", result);
 
