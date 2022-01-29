@@ -18,6 +18,8 @@ namespace BlazorApp
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IConfiguration _configuration;
+        private ILogger<Startup> ILogger { get; set; }
+
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
@@ -26,6 +28,10 @@ namespace BlazorApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            var logger = GetLogger(loggerFactory);
+            LogConfiguration(logger);
+
             services
               .AddBlazorise(options =>
               {
@@ -133,6 +139,24 @@ namespace BlazorApp
             });
         }
 
+        private ILogger<Startup> GetLogger(ILoggerFactory loggerFactory)
+        {
+            if (ILogger != null)
+            {
+                return ILogger;
+            }
+
+            ILogger = loggerFactory.CreateLogger<Startup>();
+
+            return ILogger;
+        }
+
+        private void LogConfiguration(ILogger<Startup> logger)
+        {
+            var root = (IConfigurationRoot)_configuration;
+            var debugView = root.GetDebugView();
+            logger.LogInformation($"\n//////////////////////////////////////////////////////////////////////////////////////////////////\n//                                   Tracing Configuration                                      //\n//////////////////////////////////////////////////////////////////////////////////////////////////\n\n{debugView}\n\n//////////////////////////////////////////////////////////////////////////////////////////////////\n//                                          END                                                 //\n//////////////////////////////////////////////////////////////////////////////////////////////////");
+        }
         private static void EnsureTestUsers(DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //create bda identity

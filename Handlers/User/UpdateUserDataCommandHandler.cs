@@ -13,7 +13,7 @@ namespace BlazorApp.Handlers.User
 
         public UpdateUserDataCommandHandler(
             IUserDataRepository userDataRepository,
-            IMapper mapper, ILogger logger) : base( mapper, logger)
+            IMapper mapper, ILogger<UpdateUserDataCommandHandler> logger) : base( mapper, logger)
         {
             _userDataRepository = userDataRepository ?? throw new ArgumentNullException(nameof(userDataRepository));
 

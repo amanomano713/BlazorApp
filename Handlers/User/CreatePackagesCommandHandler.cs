@@ -13,7 +13,7 @@ namespace BlazorApp.Handlers.User
         private readonly IPackagesRepository _packagesDataRepository;
         public CreatePackagesCommandHandler(
             IMapper mapper,
-            ILogger logger,
+            ILogger<CreatePackagesCommandHandler> logger,
             IPackagesRepository packagesDataRepository) : base(mapper,logger)
         {
             _packagesDataRepository = packagesDataRepository ?? throw new ArgumentNullException(nameof(packagesDataRepository));
