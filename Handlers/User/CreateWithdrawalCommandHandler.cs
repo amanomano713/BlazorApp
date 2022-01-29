@@ -11,7 +11,8 @@ namespace BlazorApp.Handlers.User
         private readonly IWithdrawalRepository _withdrawalDataRepository;
         public CreateWithdrawalCommandHandler(
             IMapper mapper,
-            IWithdrawalRepository withdrawalDataRepository) : base(mapper)
+            ILogger logger,
+            IWithdrawalRepository withdrawalDataRepository) : base(mapper, logger)
         {
             _withdrawalDataRepository = withdrawalDataRepository ?? throw new ArgumentNullException(nameof(withdrawalDataRepository));
         }

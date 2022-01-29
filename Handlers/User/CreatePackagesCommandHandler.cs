@@ -13,7 +13,8 @@ namespace BlazorApp.Handlers.User
         private readonly IPackagesRepository _packagesDataRepository;
         public CreatePackagesCommandHandler(
             IMapper mapper,
-            IPackagesRepository packagesDataRepository) : base(mapper)
+            ILogger logger,
+            IPackagesRepository packagesDataRepository) : base(mapper,logger)
         {
             _packagesDataRepository = packagesDataRepository ?? throw new ArgumentNullException(nameof(packagesDataRepository));
         }
@@ -30,6 +31,8 @@ namespace BlazorApp.Handlers.User
 
             }
             await _packagesDataRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            _logger.LogInformation("Create Packages this is a information message...");
 
             return packages;
         }

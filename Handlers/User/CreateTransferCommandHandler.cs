@@ -11,7 +11,8 @@ namespace BlazorApp.Handlers.User
         private readonly ITransferRepository _transferRepository;
         public CreateTransferCommandHandler(
             IMapper mapper,
-            ITransferRepository transferRepository) : base(mapper)
+            ILogger logger,
+            ITransferRepository transferRepository) : base(mapper, logger)
         {
             _transferRepository = transferRepository ?? throw new ArgumentNullException(nameof(transferRepository));
         }

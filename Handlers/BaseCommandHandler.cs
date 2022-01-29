@@ -6,10 +6,12 @@ namespace BlazorApp.Handlers
     {
 
         protected readonly IMapper _mapper;
+        protected readonly ILogger _logger;
 
-        public BaseCommandHandler(IMapper mapper)
+        public BaseCommandHandler(IMapper mapper, ILogger logger)
         {
             _mapper = mapper;
+            _logger = logger;
         }
     }
 }
