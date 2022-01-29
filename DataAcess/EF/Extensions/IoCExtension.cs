@@ -23,6 +23,8 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
             services.AddScoped<IEncryptor, Encryption>();
+            services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
+
         }
     }
 }

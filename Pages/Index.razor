@@ -5,6 +5,8 @@
 @inject NavigationManager navigationManager
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
+@inject IPackageMontoDataQueries PackageMontoDataQueries
+
 
 <div class="panel-bod">
     <h2><i class="icon-edit-sign teal"></i> HOME</h2>
@@ -72,6 +74,12 @@
                 {
                     codigo = UserData.Id;
                     wallet = UserData.wallet.Trim();
+                }
+
+                var packagesTotal = await PackageMontoDataQueries.TotalPackageDataAsync(UserData.Id);
+                if (packagesTotal != null)
+                {
+                    packages = packagesTotal.PackMonto.ToString();
                 }
             }
 
