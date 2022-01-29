@@ -23,6 +23,12 @@
             <label class="p-2">Actualización correcta de datos en la base de datos... </label>
         </div>
     }
+    @if (displayYearValidate == true)
+    {
+        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+            <label class="p-2">El año es inválido. </label>
+        </div>
+    }
     <hr>
     <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
         <DataAnnotationsValidator />
@@ -45,15 +51,17 @@
                         <strong style="color:black;font-size:large">Dirección de Correo Electrónico # </strong>
                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                     </div>
-                </fieldset>
+                </fieldset> 
                 <div class="form-group" style="margin-top:5px">
-                    <strong style="color:black;font-size:large">Pais-Ciudad</strong>
+                    <strong style="color:black;font-size:large">Pais-Ciudad #</strong>
                     <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
                 </div>
                 <div class="row" style="margin-top:5px">
                     <div class="col-md-12">
                         <strong style="color:black;font-size:large">Fecha de Nacimiento #</strong>
                         <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                    
+@*                        <DateEdit TValue="DateTime?" Date="@selectedDate"  />*@
                     </div>
                 </div>
                 <div class="form-group" style="margin-top:10px">
@@ -106,13 +114,15 @@
 </div>
 
 @code {
-
+    bool displayYearValidate = false;
+    int yearValidate = 1942;
     BlazorInputMask.InputMask? mask { get; set; }
     public UserDTO AccountModel = new UserDTO();
     EditContext? context;
     private string? email;
     private string _userKey = "key";
     bool displayValidationErrorMessages = false;
+    DateTime selectedDate = DateTime.Now;
 
     bool displayEditUserToDB = false;
     bool displayUpdateUserToDB = false;
@@ -133,20 +143,35 @@
 
     private async void SubmitCreate(EditContext context)
     {
+        var year = AccountModel.dateOfbirth.Year;
 
         if (displayEditUserToDB == true)
         {
             if (context.Validate() && OnFieldChanged == true)
             {
-                var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
 
-                var response = await mediator.Send(requestModel);
+                if (year >= yearValidate)
+                {
+                     var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
 
-                var result = response;
+                     var response = await mediator.Send(requestModel);
 
-                displayValidationErrorMessages = false;
+                     var result = response;
 
-                displayUpdateUserToDB = true;
+                     displayValidationErrorMessages = false;
+
+                     displayUpdateUserToDB = true;
+                }
+                else
+                {
+                    displayYearValidate = true;
+                    
+                    displayValidationErrorMessages = false;
+
+                    displayEditUserToDB = true;
+
+                    displayUpdateUserToDB = false;
+                }
             }
             else
             {
@@ -163,19 +188,32 @@
         {
             if (context.Validate())
             {
-                Guid id = Guid.NewGuid();
+                if (year >= yearValidate)
+                {
+                    Guid id = Guid.NewGuid();
 
-                AccountModel.id = id.ToString();
+                    AccountModel.id = id.ToString();
 
-                AccountModel.email = email;
+                    AccountModel.email = email;
 
-                var requestModel = mapper.Map<CreateUserDataCommand>(AccountModel);
+                    var requestModel = mapper.Map<CreateUserDataCommand>(AccountModel);
 
-                var response = await mediator.Send(requestModel);
+                    var response = await mediator.Send(requestModel);
 
-                displayValidationErrorMessages = false;
+                    displayValidationErrorMessages = false;
 
-                navigationManager.NavigateTo("Index");
+                    navigationManager.NavigateTo("Index");
+                }
+                else
+                {
+                    displayYearValidate = true;
+
+                    displayValidationErrorMessages = false;
+
+                    displayEditUserToDB = false;
+
+                    displayUpdateUserToDB = false;
+                }
             }
             else
             {
@@ -185,7 +223,9 @@
 
                 displayUpdateUserToDB = false;
             }
+        
         }
+
         StateHasChanged();
     }
 
@@ -223,6 +263,7 @@
                     AccountModel.mobile = UserData.mobile.Trim();
                     AccountModel.wallet = UserData.wallet.Trim();
                     AccountModel.surname = UserData.surname.Trim();
+                    selectedDate = AccountModel.dateOfbirth;
                     displayEditUserToDB = true;
                 }
                 email = emailStorage;

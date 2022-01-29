@@ -171,13 +171,20 @@ namespace BlazorApp.Features.Accounts.Controllers
                     Monto = monto
                 };
 
-                var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
+                try {
 
-                var response = await _mediator.Send(requestModel);
+                    var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
 
-                if (response != null)
+                    var response = await _mediator.Send(requestModel);
+
+                    if (response != null)
+                    {
+                        Ok = 1;
+                    }
+                }
+                catch (Exception e)
                 {
-                    Ok = 1;
+                    Ok = 2;
                 }
             }
 

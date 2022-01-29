@@ -23,16 +23,11 @@
             <div class="modal-body">
                 <div class="content">
                     <strong style="color:black;font-size:medium">Proceso de Compra del Paquete:@paquete Exitosa.</strong>
-
                 </div>
             </div>
-            @*        <div class="modal-footer">
-                ...
-                </div>*@
         </div>
     </div>
 </div>
-
 
 <div class="row col-md-12">
     <div class="col-md-2">
@@ -172,21 +167,23 @@
 
 
 @code {
+    
     private string? email;
     private string _userKey = "key";
     private string? Id;
     private bool result;
 
-    private string? _idCod    = "Pack10";
-    private string? _idCod20  = "Pack20";
-    private string? _idCod50  = "Pack50";
-    private string? _idCod100 = "Pack100";
-    private string? _idCod200 = "Pack200";
-    private string? _idCod500 = "Pack500";
+    private string? _idCod     = "Pack10";
+    private string? _idCod20   = "Pack20";
+    private string? _idCod50   = "Pack50";
+    private string? _idCod100  = "Pack100";
+    private string? _idCod200  = "Pack200";
+    private string? _idCod500  = "Pack500";
     private string? _idCod1000 = "Pack1000";
     private string? _idCod1500 = "Pack1500";
 
     public string? paquete;
+
     private async Task CreatePackaqes(string? _idCod)
     {
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
@@ -196,6 +193,7 @@
         {
             Id = UserData.Id;
         }
+
         paquete = _idCod;
 
         var cadena = Id + "|" +_idCod;
