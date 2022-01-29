@@ -2,10 +2,12 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
+@using BlazorApp.Encryptor
 @using Microsoft.JSInterop;
 @inject IJSRuntime JS;
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
+@inject IEncryptor IEncryptor
 
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> RETIRO </h2>
@@ -139,9 +141,7 @@
 
         var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
 
-        BlazorApp.Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
-
-        cadena = clave.Encriptacion(cadena);
+        cadena =  IEncryptor.EnCryption(cadena);;
 
         await JS.InvokeVoidAsync("CreateRetiro", cadena);
 

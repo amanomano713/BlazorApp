@@ -1,6 +1,7 @@
 ﻿using BlazorApp.DataAcess.Infraestructure.Abstractions;
 using BlazorApp.DataAcess.Infraestructure.Queries;
 using BlazorApp.DataAcess.Infraestructure.Repositories;
+using BlazorApp.Encryptor;
 using BlazorApp.Features.Identity;
 using BlazorApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -21,6 +22,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<ITransferRepository, TransferRepository>();
             services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
+            services.AddScoped<IEncryptor, Encryption>();
         }
     }
 }

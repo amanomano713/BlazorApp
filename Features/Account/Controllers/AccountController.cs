@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlazorApp.Encryptor;
 using BlazorApp.Handlers.Commands;
 using BlazorApp.Models;
 using BlazorApp.Services;
@@ -17,19 +18,22 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly IDataProtector _dataProtector;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        private ILocalStorageService _localStorageService;
+        private readonly ILocalStorageService _localStorageService;
         private string _userKey = "key";
+        private readonly IEncryptor _IEncryptor;
 
         public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IMapper mapper, IMediator mediator, ILocalStorageService localStorageService)
+            IMapper mapper, IMediator mediator, 
+            ILocalStorageService localStorageService, IEncryptor IEncryptor)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _mediator = mediator;
-            _localStorageService = localStorageService; 
+            _localStorageService = localStorageService;
+            _IEncryptor = IEncryptor;
         }
 
         /// <summary>
@@ -44,9 +48,7 @@ namespace BlazorApp.Features.Accounts.Controllers
 
             var parts = token.Split('|');
 
-            Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
-
-            var KeyEmail = clave.DesEncriptacion(parts[1]);
+            var KeyEmail = _IEncryptor.Decryption(parts[1]);
 
             var identityUser = await _userManager.FindByEmailAsync(KeyEmail);
 
@@ -63,11 +65,9 @@ namespace BlazorApp.Features.Accounts.Controllers
 
             var Ok = 0;
 
-            Encryptor.encriptador clave = new Encryptor.encriptador();
-
             if (val == true)
             {
-                var data = clave.DesEncriptacion(param1);
+                var data = _IEncryptor.Decryption(param1);
 
                 var parts = data.Split('|');
 
@@ -103,12 +103,10 @@ namespace BlazorApp.Features.Accounts.Controllers
 
             var Ok = 0;
 
-            Encryptor.encriptador clave = new Encryptor.encriptador();
-
             if (val == true)
             {
 
-                var data = clave.DesEncriptacion(param1);
+                var data = _IEncryptor.Decryption(param1);
 
                 var parts = data.Split('|');
 
@@ -139,12 +137,11 @@ namespace BlazorApp.Features.Accounts.Controllers
 
             var Ok = 0;
 
-            Encryptor.encriptador clave = new Encryptor.encriptador();
 
             if (val == true)
             {
 
-                var data = clave.DesEncriptacion(parameter1);
+                var data = _IEncryptor.Decryption(parameter1);
 
                 var parts = data.Split('|');
 

@@ -1,4 +1,5 @@
 using AutoMapper;
+using BlazorApp.Encryptor;
 using BlazorApp.Models;
 using Microsoft.AspNetCore.Components;
 
@@ -19,7 +20,7 @@ namespace BlazorApp.Services
         private ILocalStorageService _localStorageService;
         private string _userKey = "key";
         private string _access = "access_token";
-
+        private readonly IEncryptor _IEncryptor;
 
         public SignInModel User { get; private set; }
 
@@ -27,18 +28,19 @@ namespace BlazorApp.Services
         public AccountService(
             IMapper mapper,
             NavigationManager navigationManager,
-            ILocalStorageService localStorageService
+            ILocalStorageService localStorageService,
+            IEncryptor IEncryptor
         ) {
             _mapper = mapper;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
+            _IEncryptor = IEncryptor;
 
         }
 
 
         public async Task Login(SignInModel model)
         {
-            Encryptor.encriptador clave = new BlazorApp.Encryptor.encriptador();
 
             string? UserEmail = model.Email;
 
@@ -54,7 +56,7 @@ namespace BlazorApp.Services
                 }
                 else
                 {
-                    var result = clave.DesEncriptacion(email);
+                    var result = _IEncryptor.Decryption(email);
 
                     if (UserEmail != result)
                     {

@@ -3,24 +3,26 @@ using System.Text;
 
 namespace BlazorApp.Encryptor
 {
-	public class encriptador
+	public class Encryption : IEncryptor
 	{
 
 		#region "Estructura y variables privadas"
 
 
-		internal const string Claveencriptacion = "CLAVEENCRIPTACION";
-		#endregion
+		internal const string password = "CLAVEENCRIPTACION";
+        #endregion
 
-		#region "Funciones de ecriptación y desencriptación"
+        #region "Funciones de ecriptación y desencriptación"
 
-		/// <summary> 
-		/// Encriptacion
-		/// </summary> 
-		/// <param name="input">String to encrypt</param> 
-		/// <returns>Encrypted string</returns> 
-		public string Encriptacion(string input, string password = "CLAVEENCRIPTACION")
-		{
+        /// <summary> 
+        /// Encriptacion
+        /// </summary> 
+        /// <param name="input">String to encrypt</param> 
+        /// <returns>Encrypted string</returns> 
+#pragma warning disable CS8767 // La nulabilidad de los tipos de referencia del tipo de parámetro no coincide con el miembro implementado de forma implícita (posiblemente debido a los atributos de nulabilidad).
+        public string EnCryption(string? input)
+#pragma warning restore CS8767 // La nulabilidad de los tipos de referencia del tipo de parámetro no coincide con el miembro implementado de forma implícita (posiblemente debido a los atributos de nulabilidad).
+        {
 
 			byte[] utfData = System.Text.UTF8Encoding.UTF8.GetBytes(input);
 			byte[] saltBytes = Encoding.UTF8.GetBytes(password);
@@ -57,13 +59,15 @@ namespace BlazorApp.Encryptor
 
 		}
 
-		/// <summary> 
-		/// DesEncriptacion a string 
-		/// </summary> 
-		/// <param name="input">Input string in base 64 format</param> 
-		/// <returns>Decrypted string</returns> 
-		public string DesEncriptacion(string input, string password = "CLAVEENCRIPTACION")
-		{
+        /// <summary> 
+        /// DesEncriptacion a string 
+        /// </summary> 
+        /// <param name="input">Input string in base 64 format</param> 
+        /// <returns>Decrypted string</returns> 
+#pragma warning disable CS8767 // La nulabilidad de los tipos de referencia del tipo de parámetro no coincide con el miembro implementado de forma implícita (posiblemente debido a los atributos de nulabilidad).
+        public string Decryption(string input)
+#pragma warning restore CS8767 // La nulabilidad de los tipos de referencia del tipo de parámetro no coincide con el miembro implementado de forma implícita (posiblemente debido a los atributos de nulabilidad).
+        {
 
 			byte[] encryptedBytes = Convert.FromBase64String(input);
 			byte[] saltBytes = Encoding.UTF8.GetBytes(password);
@@ -96,7 +100,8 @@ namespace BlazorApp.Encryptor
 
 		}
 
-		#endregion
 
-	}
+        #endregion
+
+    }
 }
