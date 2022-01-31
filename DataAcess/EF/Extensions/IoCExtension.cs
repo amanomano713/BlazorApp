@@ -3,7 +3,9 @@ using BlazorApp.DataAcess.Infraestructure.Queries;
 using BlazorApp.DataAcess.Infraestructure.Repositories;
 using BlazorApp.Encryptor;
 using BlazorApp.Features.Identity;
+using BlazorApp.Messages;
 using BlazorApp.Services;
+using MassTransit;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -13,6 +15,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
     {
         public static void AddInfraestrutureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddScoped<IUserDataRepository, UserDataRepository>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
@@ -24,6 +27,8 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
             services.AddScoped<IEncryptor, Encryption>();
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
+            services.AddScoped<IMessagesProcessor, MessagesProcessor>();
+
 
         }
     }

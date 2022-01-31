@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BlazorApp.Encryptor;
 using BlazorApp.Handlers.Commands;
+using BlazorApp.Messages;
 using BlazorApp.Models;
 using BlazorApp.Services;
 using MediatR;
@@ -21,11 +22,14 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly ILocalStorageService _localStorageService;
         private string _userKey = "key";
         private readonly IEncryptor _IEncryptor;
-
-        public AccountController(IDataProtectionProvider dataProtectionProvider, UserManager<IdentityUser> userManager,
+        private readonly IMessagesProcessor _messagesProcessor;
+        public AccountController(IDataProtectionProvider dataProtectionProvider,
+            UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IMapper mapper, IMediator mediator, 
-            ILocalStorageService localStorageService, IEncryptor IEncryptor)
+            IMapper mapper, IMediator mediator,
+            ILocalStorageService localStorageService,
+            IEncryptor IEncryptor,
+            IMessagesProcessor messagesProcessor)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
@@ -34,6 +38,7 @@ namespace BlazorApp.Features.Accounts.Controllers
             _mediator = mediator;
             _localStorageService = localStorageService;
             _IEncryptor = IEncryptor;
+            _messagesProcessor = messagesProcessor;
         }
 
         /// <summary>
@@ -42,6 +47,7 @@ namespace BlazorApp.Features.Accounts.Controllers
         /// <returns></returns>
         private async Task<bool> validatetoken()
         {
+           
             Request.Headers.TryGetValue("Authorization", out var Bearer);
 
             var token = Bearer.ToString().Replace("Bearer", string.Empty).Replace("key", string.Empty);
@@ -83,9 +89,10 @@ namespace BlazorApp.Features.Accounts.Controllers
                 var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
 
                 var response = await _mediator.Send(requestModel);
-                
+
                 if (response != null)
                 {
+                    //var result = await _messagesProcessor.ServiceBusReceiver();
                     Ok = 1;
                 }
 
@@ -98,7 +105,7 @@ namespace BlazorApp.Features.Accounts.Controllers
         [HttpPost("account/createtransfer")]
         public async Task<IActionResult> CreateTransfer(string param1)
         {
-            
+
             var val = await validatetoken();
 
             var Ok = 0;
@@ -168,7 +175,8 @@ namespace BlazorApp.Features.Accounts.Controllers
                     Monto = monto
                 };
 
-                try {
+                try
+                {
 
                     var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
 

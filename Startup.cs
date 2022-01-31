@@ -1,3 +1,4 @@
+using MassTransit;
 using AutoMapper;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
@@ -11,6 +12,10 @@ using System.Reflection;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using NLog.Config;
+using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlazorApp
 {
@@ -69,12 +74,38 @@ namespace BlazorApp
                 options.UseLazyLoadingProxies(false)
                    .UseSqlServer(connection), ServiceLifetime.Transient);
 
-            services.AddApplicationInsightsTelemetry();
+            ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
+
+            services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
+                options.EnableAdaptiveSampling = false;
+            });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdmin", c => c.RequireRole("Admin"));
             });
+
+            // create the bus using Azure Service bus
+            //var azureServiceBus = Bus.Factory.CreateUsingAzureServiceBus(busFactoryConfig =>
+            //{
+            //    busFactoryConfig.Host(_configuration["Masstransit:AzureServiceBusConnectionString"], hostConfig =>
+            //    {
+            //        // This is optional, but you can specify the protocol to use.
+            //        hostConfig.TransportType = TransportType.AmqpWebSockets;
+            //    });
+            //});
+
+            // Add MassTransit
+            //services.AddMassTransit(config =>
+            //{
+            //    config.AddBus(provider => azureServiceBus);
+            //});
+
+            //services.AddSingleton<IPublishEndpoint>(azureServiceBus);
+            //services.AddSingleton<ISendEndpointProvider>(azureServiceBus);
+            //services.AddSingleton<IBus>(azureServiceBus);
 
             services.AddHttpClient();
             services.AddRazorPages();
