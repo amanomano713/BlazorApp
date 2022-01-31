@@ -97,6 +97,10 @@ namespace BlazorApp.Features.Accounts.Controllers
                 }
 
             }
+            else
+            {
+                Ok = 2;
+            }
 
             return this.Json(new { result = Ok });
         }
@@ -133,6 +137,10 @@ namespace BlazorApp.Features.Accounts.Controllers
                     Ok = 1;
                 }
             }
+            else
+            {
+                Ok = 2;
+            }
 
             return this.Json(new { result = Ok });
         }
@@ -143,7 +151,6 @@ namespace BlazorApp.Features.Accounts.Controllers
             var val = await validatetoken();
 
             var Ok = 0;
-
 
             if (val == true)
             {
@@ -189,8 +196,12 @@ namespace BlazorApp.Features.Accounts.Controllers
                 }
                 catch (Exception e)
                 {
-                    Ok = 2;
+                    Ok = 3;
                 }
+            }
+            else
+            {
+                Ok = 2;
             }
 
             return this.Json(new { result = Ok });

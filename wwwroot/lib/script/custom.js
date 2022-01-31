@@ -27,8 +27,13 @@ async function CreateRetiro(cadena) {
         success: function (data) {
             if (data.result == 1) {
                 $('div#modal-id').removeClass('modal').addClass('modal active')
-            } else {
+            } else if (data.result == 2){
                 $('div#modal-id').removeClass('modal active').addClass('modal')
+                $('div#modalSesion-id').removeClass('modal').addClass('modal active')
+            }
+            else{
+                $('div#modal-id').removeClass('modal active').addClass('modal')
+                $('div#modalSesion-id').removeClass('modal active').addClass('modal')
             }
         }
     });

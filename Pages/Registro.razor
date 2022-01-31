@@ -129,14 +129,15 @@
         public string MyTextField { get; set; }
     }
 
-    static string[] Countries = { "España", "Portugal"};
+    static string[] Countries = { "España", "Portugal","USA","Brasil","Colombia","Peru","Chile","Ecuador","Argentina","Venezuela"};
     IEnumerable<MySelectModel> myDdlData = Enumerable.Range( 1, Countries.Length ).Select( x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x } );
 
-    int selectedListValue { get; set; } = 1;
+    int selectedListValue { get; set; }
 
     void MyListValueChangedHandler( int newValue )
     {
         selectedListValue = newValue;
+        OnFieldChanged = true;
         StateHasChanged();
     }
 
@@ -179,7 +180,7 @@
 
                 if (year >= yearValidate)
                 {
-                    var pais = selectedListValue;
+                    AccountModel.city = selectedListValue.ToString();
 
                     var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
 
@@ -225,6 +226,8 @@
 
                     AccountModel.email = email;
 
+                    AccountModel.city = selectedListValue.ToString();
+
                     var requestModel = mapper.Map<CreateUserDataCommand>(AccountModel);
 
                     var response = await mediator.Send(requestModel);
@@ -264,7 +267,6 @@
 
         if (firstRender)
         {
-            //await JsRuntime.InvokeVoidAsync("Mascara","phone-mask");
 
             if (string.IsNullOrEmpty(emailStorage))
             {
@@ -286,7 +288,7 @@
                 {
                     AccountModel.id = UserData.Id;
                     AccountModel.name = UserData.name.Trim();
-                    AccountModel.city = UserData.city == null ? string.Empty : UserData.city.Trim();
+                    //AccountModel.city = UserData.city == null ? string.Empty : UserData.city.Trim();
                     AccountModel.dateOfbirth = UserData.dateOfbirth;
                     AccountModel.email = UserData.email.Trim();
                     AccountModel.mobile = UserData.mobile.Trim();
@@ -294,6 +296,7 @@
                     AccountModel.surname = UserData.surname.Trim();
                     selectedDate = AccountModel.dateOfbirth;
                     displayEditUserToDB = true;
+                    selectedListValue = Convert.ToInt32(UserData.city);
                 }
                 email = emailStorage;
             }
