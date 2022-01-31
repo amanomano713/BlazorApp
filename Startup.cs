@@ -114,7 +114,6 @@ namespace BlazorApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
             }
             else
             {

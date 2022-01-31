@@ -2,6 +2,8 @@
 using BlazorApp.DataAcess.Infraestructure.Abstractions;
 using BlazorApp.Entities.User;
 using BlazorApp.Handlers.Commands;
+using GOfit.MyGOfit.ExceptionMiddleware;
+using GOfit.MyGOfit.ExceptionMiddleware.Enums;
 using MediatR;
 
 namespace BlazorApp.Handlers.User
@@ -21,9 +23,16 @@ namespace BlazorApp.Handlers.User
         {
             var transfer = _mapper.Map<Transfer>(request);
 
-            _transferRepository.Add(transfer);
+            transfer = _transferRepository.Add(transfer);
+            
+            if (transfer==null)
+            {
+                throw new MyGOfitException(ExceptionType.Unknown, ExceptionRepository.NotFound, ExceptionEntity.Unknown, $"transfer not found");
+            }
 
             await _transferRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            _logger.LogInformation("Create Transfer this is a information message...");
 
             return transfer;
         }

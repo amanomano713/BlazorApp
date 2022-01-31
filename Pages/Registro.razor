@@ -1,5 +1,6 @@
 ﻿@page "/registro"
 @using BlazorInputMask
+@using Blazorise.Components
 @using Microsoft.JSInterop;
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ILocalStorageService _localStorageService
@@ -51,17 +52,24 @@
                         <strong style="color:black;font-size:large">Dirección de Correo Electrónico # </strong>
                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                     </div>
-                </fieldset> 
-                <div class="form-group" style="margin-top:5px">
+                </fieldset>
+                @*                <div class="form-group" style="margin-top:5px">
                     <strong style="color:black;font-size:large">Pais-Ciudad #</strong>
                     <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
-                </div>
+                    </div>*@
+                <SelectList TItem="MySelectModel"
+                            TValue="int"
+                            Data="@myDdlData"
+                            TextField="@((item)=>item.MyTextField)"
+                            ValueField="@((item)=>item.MyValueField)"
+                            SelectedValue="@selectedListValue"
+                            SelectedValueChanged="@MyListValueChangedHandler"
+                            DefaultItemText="Selecciona el pais" />
+
                 <div class="row" style="margin-top:5px">
                     <div class="col-md-12">
                         <strong style="color:black;font-size:large">Fecha de Nacimiento #</strong>
                         <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
-                    
-@*                        <DateEdit TValue="DateTime?" Date="@selectedDate"  />*@
                     </div>
                 </div>
                 <div class="form-group" style="margin-top:10px">
@@ -114,6 +122,24 @@
 </div>
 
 @code {
+
+    public class MySelectModel
+    {
+        public int MyValueField { get; set; }
+        public string MyTextField { get; set; }
+    }
+
+    static string[] Countries = { "España", "Portugal"};
+    IEnumerable<MySelectModel> myDdlData = Enumerable.Range( 1, Countries.Length ).Select( x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x } );
+
+    int selectedListValue { get; set; } = 1;
+
+    void MyListValueChangedHandler( int newValue )
+    {
+        selectedListValue = newValue;
+        StateHasChanged();
+    }
+
     bool displayYearValidate = false;
     int yearValidate = 1942;
     BlazorInputMask.InputMask? mask { get; set; }
@@ -130,6 +156,7 @@
     bool OnFieldChanged = false;
 
     private IJSRuntime? _jsRuntime;
+
     protected override void OnInitialized()
     {
         context = new EditContext(AccountModel);
@@ -152,20 +179,22 @@
 
                 if (year >= yearValidate)
                 {
-                     var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
+                    var pais = selectedListValue;
 
-                     var response = await mediator.Send(requestModel);
+                    var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
 
-                     var result = response;
+                    var response = await mediator.Send(requestModel);
 
-                     displayValidationErrorMessages = false;
+                    var result = response;
 
-                     displayUpdateUserToDB = true;
+                    displayValidationErrorMessages = false;
+
+                    displayUpdateUserToDB = true;
                 }
                 else
                 {
                     displayYearValidate = true;
-                    
+
                     displayValidationErrorMessages = false;
 
                     displayEditUserToDB = true;
@@ -223,7 +252,7 @@
 
                 displayUpdateUserToDB = false;
             }
-        
+
         }
 
         StateHasChanged();
