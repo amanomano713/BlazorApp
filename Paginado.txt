@@ -1,0 +1,61 @@
+﻿CREATE PROCEDURE Paging_test
+	 @PageSize INT			      --Tamaño página
+	,@PageNumber INT		      --Número de página
+	,@PageCount INT OUT		      --Retorno de cantidad de páginas
+	,@Color NVARCHAR(15) = NULL	      --Filtro por campo Color
+	,@Size NVARCHAR(5) = NULL	      --Filtro por campo Size
+AS
+BEGIN
+	--Validación de precondiciones
+	SET @PageCount = 0
+	IF @PageSize < 1  OR @PageNumber < 1 RETURN
+
+	--Ajuste de cantidad de páginas
+	DECLARE @RecordCnt INT
+	SELECT 
+		@RecordCnt = COUNT(*) 
+	FROM 
+		[SalesLT].[Product] 
+	WHERE   
+		(@Color IS NULL OR [Color]=@Color) 
+		AND (@Size IS NULL OR [Size]=@Size)
+
+	IF @RecordCnt = 0
+		SET @PageCount = 0
+	ELSE IF @RecordCnt % @PageSize = 0
+		SET @PageCount = @RecordCnt / @PageSize
+	ELSE
+		SET @PageCount = (@RecordCnt / @PageSize) + 1 
+                        
+	--Registros paginados,filtrados y ordenados
+	DECLARE @offset INT =  (@PageSize * (@PageNumber - 1)) 
+	SELECT  
+		 [ProductID]
+		,[Name]
+		,[ProductNumber]
+		,[Color]
+		,[ListPrice]
+		,[Size]
+		,[Weight]
+	FROM 
+		[SalesLT].[Product]
+	WHERE 
+		(@Color IS NULL OR [Color]=@Color) 
+		AND (@Size IS NULL OR [Size]=@Size)
+	ORDER BY 
+		Color ASC, ListPrice DESC
+	OFFSET @offset ROWS FETCH NEXT @PageSize ROWS ONLY; 
+END
+
+
+Ejemplo:
+
+DECLARE @PageCount int
+
+EXEC	[Paging_test]
+	@PageSize = 5,
+	@PageNumber = 1,
+	@PageCount = @PageCount OUTPUT,
+	@Color = N'Silver'
+
+SELECT	@PageCount as N'@PageCount'
