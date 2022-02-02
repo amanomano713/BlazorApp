@@ -21,6 +21,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
+    <Compile Remove="wwwroot\grid\demos\Showcase\**" />
+    <Compile Remove="wwwroot\grid\images\**" />
+    <Content Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
+    <Content Remove="wwwroot\grid\demos\Showcase\**" />
+    <Content Remove="wwwroot\grid\images\**" />
+    <EmbeddedResource Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
+    <EmbeddedResource Remove="wwwroot\grid\demos\Showcase\**" />
+    <EmbeddedResource Remove="wwwroot\grid\images\**" />
+    <None Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
+    <None Remove="wwwroot\grid\demos\Showcase\**" />
+    <None Remove="wwwroot\grid\images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Pages\Index.cshtml" />
     <Content Remove="Pages\_Layout.cshtml" />
   </ItemGroup>
