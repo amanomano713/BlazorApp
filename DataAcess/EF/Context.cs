@@ -34,6 +34,7 @@ namespace BlazorApp.Data.EF
             builder.ApplyConfiguration(new PackagesMappings());
             builder.ApplyConfiguration(new TransferMappings());
             builder.ApplyConfiguration(new WithdrawalMappings());
+            builder.ApplyConfiguration(new MovPackageMappings());
             base.OnModelCreating(builder);
         }
 

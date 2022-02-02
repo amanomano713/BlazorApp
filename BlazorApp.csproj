@@ -21,15 +21,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
     <Compile Remove="wwwroot\grid\demos\Showcase\**" />
     <Compile Remove="wwwroot\grid\images\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
     <Content Remove="wwwroot\grid\demos\Showcase\**" />
     <Content Remove="wwwroot\grid\images\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
     <EmbeddedResource Remove="wwwroot\grid\demos\Showcase\**" />
     <EmbeddedResource Remove="wwwroot\grid\images\**" />
+    <None Remove="Migrations\**" />
     <None Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
     <None Remove="wwwroot\grid\demos\Showcase\**" />
     <None Remove="wwwroot\grid\images\**" />
@@ -100,7 +104,6 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 
