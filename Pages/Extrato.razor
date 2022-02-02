@@ -2,6 +2,9 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
+@inject IMovPackageDataQueries _movpackagedataqueries
+@inject IUserDataQueries UserDataQueries
+
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h2>
     <p>
@@ -10,8 +13,11 @@
     <hr>
 </div>
 @code {
+
     private string? email;
     private string _userKey = "key";
+    public IEnumerable<MovPackage> movPackages;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -31,7 +37,12 @@
             }
             else
             {
-                email = emailStorage;
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id);
+                }
             }
             StateHasChanged();
         }
