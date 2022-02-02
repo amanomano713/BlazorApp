@@ -21,23 +21,7 @@
         </div>
     }
     <hr>
-    <div class="modal" id="modalSesion-id">
-        <a href="#close" class="modal-overlay" aria-label="Close"></a>
-        <div class="modal-container">
-            <div class="modal-header">
-                <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">Retiro</div>
-            </div>
-            <div class="modal-body">
-                <div class="content">
-                    <strong style="color:black;font-size:medium">Debe Cerrar Sesión</strong>
-                </div>
-            </div>
-@*            <div class="modal-footer">
-                Retiro exitoso.
-            </div>*@
-        </div>
-    </div>
+    <TemplateSesion></TemplateSesion>
     <div class="modal" id="modal-id">
         <a href="#close" class="modal-overlay" aria-label="Close"></a>
         <div class="modal-container">
@@ -99,9 +83,11 @@
             </div>
         </div>
     </EditForm>
+
 </div>
 
 @code {
+
     //Obtener el saldo y servicio de retiro
 
     bool displayErrorRetiro = false;
@@ -113,7 +99,6 @@
     private string _userKey = "key";
     private string? wallet;
     private string retiro = string.Empty;
-
 
     protected override void OnInitialized()
     {
@@ -161,10 +146,11 @@
         cadena =  IEncryptor.EnCryption(cadena);;
 
         await JS.InvokeVoidAsync("CreateRetiro", cadena);
-
+    
         displayErrorRetiro = false;
 
         StateHasChanged();
+
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
