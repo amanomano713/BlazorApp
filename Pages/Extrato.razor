@@ -4,7 +4,7 @@
 @inject ILocalStorageService _localStorageService
 @inject IMovPackageDataQueries _movpackagedataqueries
 @inject IUserDataQueries UserDataQueries
-
+@using MatBlazor
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h2>
     <p>
@@ -12,6 +12,18 @@
     </p>
     <hr>
 </div>
+<MatTable Items="@movPackages" class="mat-elevation-z5">
+    <MatTableHeader>
+        <th><strong>Paquete</strong></th>
+        <th>Fecha</th>
+        <th>Interes</th>
+    </MatTableHeader>
+    <MatTableRow>
+        <td>@context.CodPackage</td>
+         <td>@string.Format("{0:d}",@context.CreatedDate)</td>
+        <td>@string.Format("${0:f2}", @context.Interes)</td>
+    </MatTableRow>
+</MatTable>
 
 @code {
 
