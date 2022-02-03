@@ -21,13 +21,13 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
                 connection.Open();
 
                 var result = await connection.QueryAsync<MovPackage>(
-                   @"Select [Id] 
-                           ,[CodigoId]
-                           ,[CreatedDate]
-                           ,[CodPackage]
-                           ,[Interes]
-                           ,[Porcentaje]
-                          FROM MovPackage Where CodigoId =@id order by 3 DESC"
+                   @"Select dbo.Packages.IdAfiliado 
+                           ,dbo.Packages.CodPackage
+                           ,dbo.MovPackage.DateCreated
+                           ,dbo.Packages.Monto
+                           ,dbo.MovPackage.Interes
+                           FROM dbo.Packages INNER JOIN  dbo.MovPackage ON dbo.Packages.Id = dbo.MovPackage.IdPackage 
+                               Where dbo.Packages.IdAfiliado = @id order by 3 DESC"
                    , new { id = id }
                 );
 
@@ -36,3 +36,5 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
         }
     }
 }
+
+

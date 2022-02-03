@@ -9,9 +9,13 @@ namespace BlazorApp.Entities.User
     [Index(nameof(Id), IsUnique = true)]
     public class MovPackage
     {
-        public string? Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         [Required]
-        public string? CodigoId { get; set; }
+        public string? IdAfiliado { get; set; }
+        [Required]
+        public int IdPackage { get; set; }
         [Required]
         public string? CodPackage { get; set; }
         [Required]
@@ -20,5 +24,7 @@ namespace BlazorApp.Entities.User
         public float Interes { get; set; }
         [Required]
         public float Porcentaje { get; set; }
+        [Required]
+        public float Monto { get; set; }
     }
 }
