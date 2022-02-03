@@ -129,7 +129,7 @@
         public string MyTextField { get; set; }
     }
 
-    static string[] Countries = { "España", "Portugal","USA","Brasil","Colombia","Peru","Chile","Ecuador","Argentina","Venezuela"};
+    static string[] Countries = { "España", "Portugal","USA","Brasil","Colombia","Peru","Chile","Ecuador","Argentina","Venezuela","Cuba","India","Rusia","Mexico","Francia","Italia"};
     IEnumerable<MySelectModel> myDdlData = Enumerable.Range( 1, Countries.Length ).Select( x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x } );
 
     int selectedListValue { get; set; }

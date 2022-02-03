@@ -21,18 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
-    <Compile Remove="wwwroot\grid\demos\Showcase\**" />
-    <Compile Remove="wwwroot\grid\images\**" />
-    <Content Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
-    <Content Remove="wwwroot\grid\demos\Showcase\**" />
-    <Content Remove="wwwroot\grid\images\**" />
-    <EmbeddedResource Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
-    <EmbeddedResource Remove="wwwroot\grid\demos\Showcase\**" />
-    <EmbeddedResource Remove="wwwroot\grid\images\**" />
-    <None Remove="wwwroot\grid\demos\Javascript &amp; JQuery\documentation\**" />
-    <None Remove="wwwroot\grid\demos\Showcase\**" />
-    <None Remove="wwwroot\grid\images\**" />
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -73,6 +65,7 @@
     <PackageReference Include="MassTransit" Version="7.1.6" />
     <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.1.6" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
+    <PackageReference Include="MatBlazor" Version="2.8.0" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />
@@ -100,7 +93,6 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 

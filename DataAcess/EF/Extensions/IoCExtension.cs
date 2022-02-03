@@ -28,7 +28,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IEncryptor, Encryption>();
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
             services.AddScoped<IMessagesProcessor, MessagesProcessor>();
-
+            services.AddScoped<IMovPackageDataQueries, MovPackageDataQueries>();
 
         }
     }
