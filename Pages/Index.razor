@@ -41,8 +41,8 @@
     </div>
 </div>
 
-@code {
-
+@code 
+{
     public UserDTO AccountModel = new UserDTO();
     private string _userKey = "key";
     private IJSRuntime _jsRuntime;
@@ -75,10 +75,11 @@
                     codigo = UserData.Id;
                     wallet = UserData.wallet.Trim();
 
-                var packagesTotal = await PackageMontoDataQueries.TotalPackageDataAsync(UserData.Id);
-                if (packagesTotal != null && packagesTotal.PackMonto>0)
-                {
-                    packages = packagesTotal.PackMonto.ToString();
+                    var packagesTotal = await PackageMontoDataQueries.TotalPackageDataAsync(UserData.Id);
+                    if (packagesTotal != null && packagesTotal.PackMonto > 0)
+                    {
+                        packages = packagesTotal.PackMonto.ToString();
+                    }
                 }
             }
 
@@ -86,3 +87,5 @@
         }
     }
 }
+
+    

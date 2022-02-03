@@ -15,7 +15,7 @@ namespace BlazorApp.Entities.User
         [Required]
         public string? CodPackage { get; set; }
         [Required]
-        public new DateTime? CreatedDate { get; set; }
+        public DateTime? DateCreated { get; set; }
         [Required]
         public float Interes { get; set; }
         [Required]
