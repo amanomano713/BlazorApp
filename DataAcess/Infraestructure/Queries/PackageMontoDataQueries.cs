@@ -21,7 +21,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
 
                 var result = await connection.QueryFirstOrDefaultAsync<PackagesTotalDTO>(
                    @"Select SUM(monto) as PackMonto  
-                         From Packages Where id=@id"
+                         From Packages Where idafiliado=@id"
                    , new { id = id }
                 );
 
