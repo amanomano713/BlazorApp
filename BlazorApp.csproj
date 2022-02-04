@@ -65,7 +65,7 @@
     <PackageReference Include="MassTransit" Version="7.1.6" />
     <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.1.6" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
-    <PackageReference Include="MatBlazor" Version="2.8.0" />
+    <PackageReference Include="MatBlazor" Version="2.9.0-develop-042" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />

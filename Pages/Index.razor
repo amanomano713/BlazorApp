@@ -41,13 +41,13 @@
     </div>
 </div>
 
-@code {
-
+@code 
+{
     public UserDTO AccountModel = new UserDTO();
     private string _userKey = "key";
     private IJSRuntime _jsRuntime;
-    private string available = "1000.40";
-    private string packages = "0";
+    private string available="1000.40";
+    private string packages="0";
     private string? wallet;
     private string? codigo;
 
@@ -76,15 +76,16 @@
                     wallet = UserData.wallet.Trim();
 
                     var packagesTotal = await PackageMontoDataQueries.TotalPackageDataAsync(UserData.Id);
-                    if (packagesTotal != null)
+                    if (packagesTotal != null && packagesTotal.PackMonto > 0)
                     {
                         packages = packagesTotal.PackMonto.ToString();
                     }
                 }
-
             }
 
             StateHasChanged();
         }
     }
 }
+
+    

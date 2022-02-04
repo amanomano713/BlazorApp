@@ -177,7 +177,7 @@ namespace BlazorApp.Features.Accounts.Controllers
 
                 var packageDTO = new PackageDTO
                 {
-                    Id = parts[0],
+                    IdAfiliado = parts[0],
                     CodPackage = parts[1],
                     Monto = monto
                 };

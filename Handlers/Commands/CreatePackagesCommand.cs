@@ -8,7 +8,7 @@ namespace BlazorApp.Handlers.Commands
     public class CreatePackagesCommand : IRequest<Packages>
     {
         [DataMember]
-        public string? Id { get; set; }
+        public string? IdAfiliado{ get; set; }
         [DataMember]
         public string? CodPackage { get; set; }
         [DataMember]

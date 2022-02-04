@@ -172,7 +172,7 @@
     
     private string? email;
     private string _userKey = "key";
-    private string? Id;
+    private string? IdAfiliado;
     private bool result;
 
     private string? _idCod     = "Pack10";
@@ -193,12 +193,12 @@
         var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
         if (UserData != null)
         {
-            Id = UserData.Id;
+            IdAfiliado = UserData.Id;
         }
 
         paquete = _idCod;
 
-        var cadena = Id + "|" +_idCod;
+        var cadena = IdAfiliado + "|" +_idCod;
 
         var result = IEncryptor.EnCryption(cadena);
 
