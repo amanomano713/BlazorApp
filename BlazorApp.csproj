@@ -21,9 +21,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MatBlazor.Demo\**" />
+    <Compile Remove="MatBlazor\**" />
     <Compile Remove="Migrations\**" />
+    <Content Remove="MatBlazor.Demo\**" />
+    <Content Remove="MatBlazor\**" />
     <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="MatBlazor.Demo\**" />
+    <EmbeddedResource Remove="MatBlazor\**" />
     <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="MatBlazor.Demo\**" />
+    <None Remove="MatBlazor\**" />
     <None Remove="Migrations\**" />
   </ItemGroup>
 

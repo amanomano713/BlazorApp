@@ -1,4 +1,4 @@
-﻿@page "/extrato"
+﻿@page "/extrato";
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
@@ -8,25 +8,28 @@
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h2>
     <p>
-        <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+      <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
     <hr>
 </div>
-<MatTable Items="@movPackages" class="mat-elevation-z5">
-    <MatTableHeader>
-        <th><strong>Paquete</strong></th>
-        <th><strong>Monto</strong></th>
-        <th><strong>Fecha</strong></th>
-        <th><strong>Interes</strong></th>
-    </MatTableHeader>
-    <MatTableRow>
-        <td><strong>@context.CodPackage</strong></td>
-        <td><strong>@string.Format("${0:f2}", @context.Monto)</strong></td>
-         <td><strong>@string.Format("{0:d}",@context.DateCreated)</strong></td>
-        <td><strong>@string.Format("${0:f2}", @context.Interes)</strong></td>
-    </MatTableRow>
-</MatTable>
-
+<Container>
+    <SourceContent>
+        <MatTable Items="@movPackages" class="mat-elevation-z5">
+            <MatTableHeader>
+                <th><strong>Paquete</strong></th>
+                <th><strong>Monto</strong></th>
+                <th><strong>Fecha</strong></th>
+                <th><strong>Interes</strong></th>
+            </MatTableHeader>
+            <MatTableRow>
+                <td><strong>@context.CodPackage</strong></td>
+                <td><strong>@string.Format("${0:f2}", @context.Monto)</strong></td>
+                <td><strong>@string.Format("{0:d}",@context.DateCreated)</strong></td>
+                <td><strong>@string.Format("${0:f2}", @context.Interes)</strong></td>
+            </MatTableRow>
+        </MatTable>
+    </SourceContent>
+</Container>
 @code {
 
     private string? email;
