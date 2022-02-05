@@ -5,13 +5,16 @@
 @inject NavigationManager navigationManager
 @inject IDataProtectionProvider dataProtectionProvider
 @inject IAccountService AccountService
+@using Blazorise
+
+<ComponentContraseña modalVisible=@visible></ComponentContraseña>
 
 <div class="container">
     <h1 class="title">Conectar</h1>
 
     <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
         <DataAnnotationsValidator />
-        <ValidationSummary />
+        <Blazorise.ValidationSummary />
 
         <div class="field">
             <label class="form-label"><span class="h4">Email</span></label>
@@ -43,12 +46,31 @@
     <p class="h6">¿Aún no tienes cuenta? <a href="/account/register" style="color: #363636">Crear nueva cuenta</a></p>
 </div>
 
+<div class="container">
+    <p class="h6">Haz olvidado la contraseña? <Button Color="Color.Primary" Clicked="@ShowModal">Cambio de Contraeña</Button></p>
+</div>
+
 
 @code {
 
+    private bool visible = false;
     private SignInModel signInModel = new SignInModel();
     private bool showSignInError = false;
-   
+
+    private Task ShowModal()
+    {
+        visible = true;
+        
+        return Task.CompletedTask;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        StateHasChanged();
+    }
+
     private async Task RegisterUser()
     {
 
@@ -89,6 +111,5 @@
             showSignInError = true;
         }
     }
-
 
 }

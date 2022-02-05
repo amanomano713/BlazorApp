@@ -1,0 +1,58 @@
+﻿
+@using Blazorise
+@using Microsoft.AspNetCore.Components
+@inject IJSRuntime JsRuntime
+
+<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Cambio de contraseña</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Nueva Contraseña</FieldLabel>
+                <TextEdit Placeholder="Enter name..." />
+            </Field>
+            <Field>
+                <FieldLabel>Confirmar Contraseña</FieldLabel>
+                <TextEdit Placeholder="Enter surname..." />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@Hide_Modal">Close</Button>
+            <Button Color="Color.Primary" Clicked="@Show_Modal">OK</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code{
+
+    [Parameter]
+    public bool modalVisible { get; set; }
+   
+    private Task Show_Modal()
+    {
+        modalVisible = true;
+
+        JsRuntime.InvokeVoidAsync("recargar");
+
+        return Task.CompletedTask;
+    }
+
+    private Task Hide_Modal()
+    {
+        modalVisible = false;
+
+        JsRuntime.InvokeVoidAsync("recargar");
+
+        return Task.CompletedTask;
+    }
+
+    private Task OnModalClosing( ModalClosingEventArgs e )
+    {
+        JsRuntime.InvokeVoidAsync("recargar");
+
+        return Task.CompletedTask;
+    }
+}

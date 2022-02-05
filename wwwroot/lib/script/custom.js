@@ -5,6 +5,11 @@ var key = localStorage.getItem("key");
 
 var Bearer = 'Bearer' + token +'|'+ 'key' + key;
 
+function recargar() {
+
+    location.reload();
+}
+
 async function CreateRetiro(cadena) {
 
 /*    var token = localStorage.getItem("access_token");*/
