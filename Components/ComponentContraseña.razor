@@ -1,7 +1,15 @@
-﻿
+﻿@using BlazorApp.DataAcess
 @using Blazorise
 @using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@using static BlazorApp.Features.Account.Pages.Register
 @inject IJSRuntime JsRuntime
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@inject IUserDataQueries UserDataQueries
+@inject UserManager<IdentityUser> userManager
 
 <Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
     <ModalContent Centered="true">
@@ -10,49 +18,113 @@
             <CloseButton />
         </ModalHeader>
         <ModalBody>
-            <Field>
-                <FieldLabel>Nueva Contraseña</FieldLabel>
-                <TextEdit Placeholder="Enter name..." />
-            </Field>
-            <Field>
-                <FieldLabel>Confirmar Contraseña</FieldLabel>
-                <TextEdit Placeholder="Enter surname..." />
-            </Field>
+            <div class="container">
+                <EditForm Model="@registerAccountModel" OnValidSubmit="@Save_Password">
+                    <DataAnnotationsValidator />
+                    <Blazorise.ValidationSummary />
+                    <div class="field">
+                        <label class="form-label"><span class="h4">Password</span></label>
+                        <div class="form-group">
+                            <InputText class="col-md-5" id="password" type="password" @bind-Value="@registerAccountModel.Password"></InputText>
+                            <ValidationMessage For="@(()=>registerAccountModel.Password)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="form-label"><span class="h4">Confirmación password</span></label>
+                        <div class="form-group">
+                            <InputText class="col-md-5" id="cpassword" type="password" @bind-Value="@registerAccountModel.ConfirmPassword"></InputText>
+                            <ValidationMessage For="@(()=>registerAccountModel.ConfirmPassword)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="btn btn-success">OK</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
         </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Secondary" Clicked="@Hide_Modal">Close</Button>
-            <Button Color="Color.Primary" Clicked="@Show_Modal">OK</Button>
-        </ModalFooter>
     </ModalContent>
 </Modal>
 
-@code{
+@code {
+
+    EditContext? context;
 
     [Parameter]
     public bool modalVisible { get; set; }
-   
-    private Task Show_Modal()
-    {
-        modalVisible = true;
 
+    private RegisterAccountModel registerAccountModel = new RegisterAccountModel();
+
+    private string _userKey = "key";
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(registerAccountModel);
+        base.OnInitialized();
+    }
+
+    private async Task<bool> Save_Password(EditContext context)
+    {
+        var valorRetorno = false;
+
+        if (context.Validate())
+        {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (!string.IsNullOrEmpty(emailStorage))
+            {
+                try
+                {
+                    var user = await userManager.FindByEmailAsync(emailStorage);
+
+                    string newpassword = registerAccountModel.Password;
+
+                    await userManager.RemovePasswordAsync(user);
+
+                    var result = await userManager.AddPasswordAsync(user, newpassword);
+
+                    if (result.Succeeded)
+                    {
+                        valorRetorno = true;
+
+                        modalVisible = false;
+
+                        await JsRuntime.InvokeVoidAsync("recargar");
+                    }
+                    else
+                    {
+                        valorRetorno = false;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    valorRetorno = false;
+                }
+
+            }
+        }
+
+        return valorRetorno;
+    }
+
+
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
         JsRuntime.InvokeVoidAsync("recargar");
 
         return Task.CompletedTask;
     }
 
-    private Task Hide_Modal()
+    public class RegisterAccountModel
     {
-        modalVisible = false;
 
-        JsRuntime.InvokeVoidAsync("recargar");
-
-        return Task.CompletedTask;
-    }
-
-    private Task OnModalClosing( ModalClosingEventArgs e )
-    {
-        JsRuntime.InvokeVoidAsync("recargar");
-
-        return Task.CompletedTask;
+        [Required(ErrorMessage = "Password es Obligatorio.")]
+        [StringLength(10, MinimumLength = 6,
+                  ErrorMessage = "El Password debe tener entre 6 y 10 caracteres")]
+        public string Password { get; set; }
+        [Required(ErrorMessage = "ConfirmPassword es Obligatorio.")]
+        [Compare(nameof(Password), ErrorMessage = "Password no coinciden.")]
+        public string ConfirmPassword { get; set; }
     }
 }
