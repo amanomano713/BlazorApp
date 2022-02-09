@@ -20,7 +20,6 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly ILocalStorageService _localStorageService;
-        private string _userKey = "key";
         private readonly IEncryptor _IEncryptor;
         private readonly IMessagesProcessor _messagesProcessor;
         public AccountController(IDataProtectionProvider dataProtectionProvider,
@@ -92,7 +91,6 @@ namespace BlazorApp.Features.Accounts.Controllers
 
                 if (response != null)
                 {
-                    //var result = await _messagesProcessor.ServiceBusReceiver();
                     Ok = 1;
                 }
 
