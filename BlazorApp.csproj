@@ -70,6 +70,7 @@
     <PackageReference Include="Blazorise.Components" Version="0.9.5.4" />
     <PackageReference Include="Blazorise.Icons.FontAwesome" Version="0.9.5.4" />
     <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="DevExpress.Xpo" Version="21.2.6-pre-22040" />
     <PackageReference Include="MassTransit" Version="7.1.6" />
     <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="7.1.6" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.1.6" />
