@@ -6,7 +6,7 @@
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
 @inject IPackageMontoDataQueries PackageMontoDataQueries
-
+@inject IAccountService _IAccountService
 
 <div class="panel-bod">
     <h2><i class="icon-edit-sign teal"></i> HOME</h2>
@@ -43,6 +43,7 @@
 
 @code 
 {
+
     public UserDTO AccountModel = new UserDTO();
     private string _userKey = "key";
     private IJSRuntime _jsRuntime;
@@ -53,6 +54,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        //var mov = await _IAccountService.Get().ConfigureAwait(false);
+
+        //var result = mov.ToList();
+
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 
         if (firstRender)
