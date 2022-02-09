@@ -1,7 +1,6 @@
 using AutoMapper;
 using BlazorApp.Encryptor;
 using BlazorApp.Models;
-using DevExpress.Xpo;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorApp.Services
@@ -17,7 +16,7 @@ namespace BlazorApp.Services
     
     public class AccountService : IAccountService
     {
-        private readonly UnitOfWork _readUnitOfWork;
+
         private readonly IMapper _mapper;
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
@@ -32,14 +31,12 @@ namespace BlazorApp.Services
             IMapper mapper,
             NavigationManager navigationManager,
             ILocalStorageService localStorageService,
-            IEncryptor IEncryptor,
-            UnitOfWork readUnitOfWork
+            IEncryptor IEncryptor
         ) {
             _mapper = mapper;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
             _IEncryptor = IEncryptor;
-            _readUnitOfWork = readUnitOfWork;
 
         }
 
