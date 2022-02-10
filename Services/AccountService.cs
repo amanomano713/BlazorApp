@@ -13,7 +13,9 @@ namespace BlazorApp.Services
         Task Login(SignInModel model);
         Task<string> GetItem();
 
-        Task<IQueryable<MovPackage>> Get();
+        Task<List<MovPackage>> Get();
+
+        Task<bool> CreateMovPackage();
     }
     
     public class AccountService : IAccountService
@@ -44,12 +46,27 @@ namespace BlazorApp.Services
 
         }
 
-        public Task<IQueryable<MovPackage>> Get()
+        public Task<List<MovPackage>> Get()
         {
 
-            var query = (IQueryable<MovPackage>)_Session.Query<MovPackage>();
+            var query = _Session.Query<MovPackage>().ToList().OrderByDescending(x => x.DateCreated).ToList().GetRange(0, 50); 
 
             return Task.FromResult(query);
+        }
+
+        public Task<bool> CreateMovPackage()
+        {
+            MovPackage mov = new MovPackage(_Session);
+            mov.IdPackage = 1;
+            mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
+            mov.Interes = 1;
+            mov.Porcentaje = 10;
+            mov.CodPackage = "Pack10";
+            mov.DateCreated = DateTime.Now;
+
+            _Session.CommitChanges();
+
+            return Task.FromResult(true);
         }
 
         public async Task Login(SignInModel model)

@@ -4,6 +4,7 @@
 @inject ILocalStorageService _localStorageService
 @inject IMovPackageDataQueries _movpackagedataqueries
 @inject IUserDataQueries UserDataQueries
+@inject IAccountService _IAccountService
 @using MatBlazor
 <div class="panel-body">
     <h2><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h2>
@@ -17,13 +18,13 @@
         <MatTable Items="@movPackages" class="mat-elevation-z5">
             <MatTableHeader>
                 <th><strong>Paquete</strong></th>
-                <th><strong>Monto</strong></th>
+@*                <th><strong>Monto</strong></th>*@
                 <th><strong>Fecha</strong></th>
                 <th><strong>Interes</strong></th>
             </MatTableHeader>
             <MatTableRow>
                 <td><strong>@context.CodPackage</strong></td>
-                <td><strong>@string.Format("${0:f2}", @context.Monto)</strong></td>
+@*                <td><strong>@string.Format("${0:f2}", @context.Monto)</strong></td>*@
                 <td><strong>@string.Format("{0:d}",@context.DateCreated)</strong></td>
                 <td><strong>@string.Format("${0:f2}", @context.Interes)</strong></td>
             </MatTableRow>
@@ -34,7 +35,7 @@
 
     private string? email;
     private string _userKey = "key";
-    public IEnumerable<MovPackage> movPackages;
+    public List<BlazorApp.Entities.Xpo.MovPackage> movPackages;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -59,7 +60,8 @@
                 var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
                 if (UserData != null)
                 {
-                    movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id);
+                    //movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
+                    movPackages = await _IAccountService.Get().ConfigureAwait(false);
                 }
             }
             StateHasChanged();
