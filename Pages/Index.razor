@@ -54,9 +54,9 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //var mov = await _IAccountService.Get().ConfigureAwait(false);
+        var mov = await _IAccountService.Get().ConfigureAwait(false);
 
-        //var result = mov.ToList();
+        var result = mov.ToList();
 
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 

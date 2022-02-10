@@ -16,6 +16,9 @@ using NLog.Config;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DevExpress.Xpo.DB;
+using BlazorApp.DataAcess.EF;
+using System.Configuration;
 
 namespace BlazorApp
 {
@@ -68,6 +71,11 @@ namespace BlazorApp
               .AddDefaultTokenProviders();
 
             var connection = _configuration["DefaultConnection"];
+
+            services.AddXpoDefaultUnitOfWork(true, (DataLayerOptionsBuilder options) =>
+            options.UseConnectionString(_configuration["DefaultConnection"])
+                .UseAutoCreationOption(AutoCreateOption.DatabaseAndSchema) // debug only
+                    .UseEntityTypes(ConnectionHelper.GetPersistentTypes()));
 
             //Connection DB
             services.AddDbContext<Context>(options =>
