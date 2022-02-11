@@ -1,5 +1,4 @@
-﻿using BlazorApp.DataAcess.Bases;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,5 +25,8 @@ namespace BlazorApp.Entities.User
         public float Porcentaje { get; set; }
         [Required]
         public float Monto { get; set; }
+        public float MontoPackage { get; set; }
+        public float MontoRetiro { get; set; }
+        public float MontoTransferido { get; set; }
     }
 }

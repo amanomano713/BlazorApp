@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlazorApp.Data.EF;
 using BlazorApp.DataAcess.Infraestructure.Abstractions;
 using BlazorApp.Entities.User;
 using BlazorApp.Handlers.Commands;
@@ -11,28 +12,39 @@ namespace BlazorApp.Handlers.User
     public class CreateTransferCommandHandler : BaseCommandHandler<CreateTransferCommandHandler>, IRequestHandler<CreateTransferCommand, Transfer>
     {
         private readonly ITransferRepository _transferRepository;
+        private readonly Context _context;
         public CreateTransferCommandHandler(
             IMapper mapper,
             ILogger<CreateTransferCommandHandler> logger,
+            Context context,
             ITransferRepository transferRepository) : base(mapper, logger)
         {
+            _context = context;
             _transferRepository = transferRepository ?? throw new ArgumentNullException(nameof(transferRepository));
         }
 
         public async Task<Transfer> Handle(CreateTransferCommand request, CancellationToken cancellationToken)
         {
+
             var transfer = _mapper.Map<Transfer>(request);
 
-            transfer = _transferRepository.Add(transfer);
-            
-            if (transfer==null)
+            await using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                throw new MyGOfitException(ExceptionType.Unknown, ExceptionRepository.NotFound, ExceptionEntity.Unknown, $"transfer not found");
+                try
+                {
+                    _context.Transfer.Add(transfer);
+                    await _context.SaveEntitiesAsync(cancellationToken);
+                    await transaction.CommitAsync();
+                }
+                catch (Exception e)
+                {
+                    await transaction.RollbackAsync();
+                    throw new MyGOfitException(ExceptionType.Unknown, ExceptionRepository.NotFound, ExceptionEntity.Unknown, $"transfer not found");
+                }
+
             }
 
-            await _transferRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            _logger.LogInformation("Create Transfer this is a information message...");
+            _logger.LogInformation("Create transfer this is a information message...");
 
             return transfer;
         }
