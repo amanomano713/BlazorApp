@@ -12,104 +12,109 @@
 @inject IMediator mediator
 @inject IJSRuntime JsRuntime
 @using Blazorise;
-
-<div class="panel-body">
-    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-        <Blazorise.Alert Color="Color.Primary" Visible="true">
-            <h3><i class="icon-edit-sign teal"></i> REGISTRO</h3>
-            <p>
-                <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
-            </p>
-        </Blazorise.Alert>
-    </Blazorise.Container>
-
-    @if (displayUpdateUserToDB == true)
-    {
-        <div class="row bg-success text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Actualización correcta de datos en la base de datos... </label>
-        </div>
-    }
-    @if (displayYearValidate == true)
-    {
-        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">El año es inválido. </label>
-        </div>
-    }
-    <hr>
-    <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
-        <DataAnnotationsValidator />
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group" style="margin-top:5px">
-                    <label class="control-label">
-                        <strong style="color:black;font-size:large">Nombre #</strong>
-                    </label>
-                    <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
-                    <ValidationMessage For="@(()=>AccountModel.name)" />
-                </div>
-                <div class="form-group" style="margin-top:5px">
-                    <strong style="color:black;font-size:large">Apellido #</strong>
-                    <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
-                    <ValidationMessage For="@(()=>AccountModel.surname)" />
-                </div>
-                <fieldset disabled>
-                    <div class="form-group" style="margin-top:5px">
-                        <strong style="color:black;font-size:large">Dirección de Correo Electrónico # </strong>
-                        <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
-                    </div>
-                </fieldset>
-                <SelectList TItem="MySelectModel"
-                            TValue="int"
-                            Data="@myDdlData"
-                            TextField="@((item)=>item.MyTextField)"
-                            ValueField="@((item)=>item.MyValueField)"
-                            SelectedValue="@selectedListValue"
-                            SelectedValueChanged="@MyListValueChangedHandler"
-                            DefaultItemText="Selecciona el pais" />
-
-                <div class="row" style="margin-top:5px">
-                    <div class="col-md-12">
-                        <strong style="color:black;font-size:large">Fecha de Nacimiento #</strong>
-                        <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
-                    </div>
-                </div>
-                <div class="form-group" style="margin-top:10px">
-                    <strong style="color:black;font-size:large">Mobile #</strong>
-                    <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
-                    <ValidationMessage For="@(()=>AccountModel.mobile)" />
-                </div>
-                <div class="form-group" style="margin-top:10px">
-                    <strong style="color:black;font-size:large">Wallet BTC #</strong>
-                    <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
-                    <ValidationMessage For="@(()=>AccountModel.wallet)" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8" style="margin-top:20px">
+<body>
+    <div class="welcome"></div>
+    <div class="panel-body">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i> REGISTRO</h3>
                 <p>
-                    <strong style="color:black;font-size:large">Al hacer clic en REGISTRARSE, Acepto Términos y Condiciones de Uso y Política de Privacidad.</strong>
+                    <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
                 </p>
-            </div>
-            @if (displayEditUserToDB == false)
-            {
-                <div class="col-md-4">
-                    <button class="btn btn-yellow btn-block" type="submit">
-                        OK <i class="icon-circle-arrow-right"></i>
-                    </button>
-                </div>
-            }
-            @if (displayEditUserToDB == true)
-            {
-                <div class="col-md-4">
-                    <button class="btn btn-yellow btn-block" type="submit">
-                        Actualizar <i class="icon-circle-arrow-right"></i>
-                    </button>
-                </div>
-            }
-        </div>
-    </EditForm>
-</div>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Dark" Visible="true">
+                @if (displayUpdateUserToDB == true)
+                {
+                    <div class="row bg-success text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Actualización correcta de datos en la base de datos... </label>
+                    </div>
+                }
+                @if (displayYearValidate == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">El año es inválido. </label>
+                    </div>
+                }
+                <hr>
+                <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group" style="margin-top:5px">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:large">Nombre #</strong>
+                                </label>
+                                <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                                <ValidationMessage For="@(()=>AccountModel.name)" />
+                            </div>
+                            <div class="form-group" style="margin-top:5px">
+                                <strong style="color:black;font-size:large">Apellido #</strong>
+                                <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                                <ValidationMessage For="@(()=>AccountModel.surname)" />
+                            </div>
+                            <fieldset disabled>
+                                <div class="form-group" style="margin-top:5px">
+                                    <strong style="color:black;font-size:large">Dirección de Correo Electrónico # </strong>
+                                    <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
+                                </div>
+                            </fieldset>
+                            <SelectList TItem="MySelectModel"
+                                        TValue="int"
+                                        Data="@myDdlData"
+                                        TextField="@((item)=>item.MyTextField)"
+                                        ValueField="@((item)=>item.MyValueField)"
+                                        SelectedValue="@selectedListValue"
+                                        SelectedValueChanged="@MyListValueChangedHandler"
+                                        DefaultItemText="Selecciona el pais" />
+
+                            <div class="row" style="margin-top:5px">
+                                <div class="col-md-12">
+                                    <strong style="color:black;font-size:large">Fecha de Nacimiento #</strong>
+                                    <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top:10px">
+                                <strong style="color:black;font-size:large">Mobile #</strong>
+                                <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
+                                <ValidationMessage For="@(()=>AccountModel.mobile)" />
+                            </div>
+                            <div class="form-group" style="margin-top:10px">
+                                <strong style="color:black;font-size:large">Wallet BTC #</strong>
+                                <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                                <ValidationMessage For="@(()=>AccountModel.wallet)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8" style="margin-top:20px">
+                            <p>
+                                <strong style="color:black;font-size:large">Al hacer clic en REGISTRARSE, Acepto Términos y Condiciones de Uso y Política de Privacidad.</strong>
+                            </p>
+                        </div>
+                        @if (displayEditUserToDB == false)
+                        {
+                            <div class="col-md-4">
+                                <button class="btn btn-yellow btn-block" type="submit">
+                                    OK <i class="icon-circle-arrow-right"></i>
+                                </button>
+                            </div>
+                        }
+                        @if (displayEditUserToDB == true)
+                        {
+                            <div class="col-md-4">
+                                <button class="btn btn-yellow btn-block" type="submit">
+                                    Actualizar <i class="icon-circle-arrow-right"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </EditForm>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+    </div>
+</body>
 
 @code {
 
@@ -278,7 +283,6 @@
                 {
                     AccountModel.id = UserData.Id;
                     AccountModel.name = UserData.name.Trim();
-                    //AccountModel.city = UserData.city == null ? string.Empty : UserData.city.Trim();
                     AccountModel.dateOfbirth = UserData.dateOfbirth;
                     AccountModel.email = UserData.email.Trim();
                     AccountModel.mobile = UserData.mobile.Trim();

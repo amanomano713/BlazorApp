@@ -1,29 +1,35 @@
 ﻿@page "/account/register"
 @inject UserManager<IdentityUser> userManager
 @inject NavigationManager navigationManager
+@using Blazorise
+<Blazorise.Container Breakpoint="Breakpoint.Desktop">
+     <Blazorise.Alert Color="Color.Secondary" Visible="true">
 <div class="container">
+
+
     <h1 class="title">Regístrate</h1>
 
     <EditForm Model="@registerAccountModel" OnValidSubmit="@RegisterUser">
         <DataAnnotationsValidator />
-        <ValidationSummary />
-
         <div class="field">
             <label class="form-label"><span class="h4">Email</span></label>
             <div class="form-group">
                 <InputText class="col-lg-5" id="email"  type="email" @bind-Value="@registerAccountModel.Email"></InputText>
+                <ValidationMessage For="@(()=>registerAccountModel.Email)" />
             </div>
         </div>
         <div class="field">
             <label class="form-label"><span class="h4">Password</span></label>
             <div class="form-group">
                <InputText class="col-md-3" id="password"  type="password" @bind-Value="@registerAccountModel.Password"></InputText>
-            </div>
+               <ValidationMessage For="@(()=>registerAccountModel.Password)" /> 
+           </div>
         </div>
         <div class="field">
             <label class="form-label"><span class="h4">Confirmación password</span></label>
             <div class="form-group">
                 <InputText class="col-md-3" id="cpassword" type="password" @bind-Value="@registerAccountModel.ConfirmPassword"></InputText>
+                <ValidationMessage For="@(()=>registerAccountModel.ConfirmPassword)" /> 
             </div>
         </div>
         <div class="field">
@@ -40,6 +46,8 @@
 
     }
 </div>
+    </Blazorise.Alert>
+</Blazorise.Container>
 @code {
 
     private RegisterAccountModel registerAccountModel = new RegisterAccountModel();

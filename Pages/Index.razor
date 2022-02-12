@@ -7,43 +7,50 @@
 @using Blazorise;
 @inject IPackageMontoDataQueries PackageMontoDataQueries
 @inject IAccountService _IAccountService
+<body>
+    <div class="welcome"></div>
+    <div class="panel-bod">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i> HOME</h3>
+                <p>
+                    <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+                </p>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+        <hr>
+    </div>
 
-<div class="panel-bod">
     <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-        <Blazorise.Alert Color="Color.Primary" Visible="true">
-            <h3><i class="icon-edit-sign teal"></i> HOME</h3>
-            <p>
-                <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-            </p>
+        <Blazorise.Alert Color="Color.Light" Visible="true">
+            <TempleateUser></TempleateUser>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" style="margin-top:10px">
+                        <strong style="color:black;font-size:x-large">Disponible #</strong>
+                        <InputMask name="available" disabled @bind-Value="@available" class="form-control" />
+                    </div>
+                    <div class="form-group" style="margin-top:20px">
+                        <strong style="color:black;font-size:x-large">Inversión #</strong>
+                        <InputMask name="packages" disabled @bind-Value="@packages" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group" style="margin-top:10px">
+                        <strong style="color:black;font-size:x-large">Wallet BTC #</strong>
+                        <InputMask name="wallet" disabled @bind-Value="@wallet" class="form-control" />
+                    </div>
+                    <div class="form-group" style="margin-top:20px">
+                        <strong style="color:black;font-size:x-large">Código Afiliado #</strong>
+                        <InputMask name="codigo" disabled @bind-Value="@codigo" class="form-control" />
+                    </div>
+                </div>
+            </div>
         </Blazorise.Alert>
     </Blazorise.Container>
-    <hr>
-</div>
-<TempleateUser></TempleateUser>
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group" style="margin-top:10px">
-            <strong style="color:black;font-size:x-large">Disponible #</strong>
-            <InputMask name="available" disabled @bind-Value="@available" class="form-control" />
-        </div>
-        <div class="form-group" style="margin-top:20px">
-            <strong style="color:black;font-size:x-large">Inversión #</strong>
-            <InputMask name="packages" disabled @bind-Value="@packages" class="form-control" />
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group" style="margin-top:10px">
-            <strong style="color:black;font-size:x-large">Wallet BTC #</strong>
-            <InputMask name="wallet" disabled @bind-Value="@wallet" class="form-control" />
-        </div>
-        <div class="form-group" style="margin-top:20px">
-            <strong style="color:black;font-size:x-large">Código Afiliado #</strong>
-            <InputMask name="codigo" disabled @bind-Value="@codigo" class="form-control" />
-        </div>
-    </div>
-</div>
+</body>
 
 @code
 {

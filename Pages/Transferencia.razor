@@ -20,101 +20,105 @@
         </Blazorise.Alert>
     </Blazorise.Container>
 
-    @if (displayErrorTransfer == true)
-    {
-        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Error el Monto a transferir no puede ser mayor al saldo disponible... </label>
-        </div>
-    }
-
-    @if (displayErrorAfiliado == true)
-    {
-        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Error Afiliado no existe en la base de datos... </label>
-        </div>
-    }
-    @if (displayErrorNoValida == true)
-    {
-        <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
-            <label class="p-2">Error Transferencia No valida... </label>
-        </div>
-    }
-    <hr>
-    <TemplateSesion></TemplateSesion>
-    <div class="modal" id="modal-id">
-        <a href="#close" class="modal-overlay" aria-label="Close"></a>
-        <div class="modal-container">
-            <div class="modal-header">
-                <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">Transferencia Interna</div>
-            </div>
-            <div class="modal-body">
-                <div class="content">
-                    <strong style="color:black;font-size:medium">Código Afiliado:  @Afiliado</strong>
-                </div>
-            </div>
-            <div class="modal-footer">
-                Transferencia exitosa.
-            </div>
-        </div>
-    </div>
-    <EditForm Model="@TransferirModel" OnSubmit="@SubmitTransferir">
-        <DataAnnotationsValidator />
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group" style="margin-top:10px">
-                    <h1><strong style="color:black;font-size:x-large">Código Afiliado #</strong></h1>
-                    <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Id" class="form-control" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <fieldset disabled>
-                    <div class="form-group" style="margin-top:10px">
-                        <h1><strong style="color:black;font-size:x-large">Saldo #</strong></h1>
-                        <Blazorise.InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-        @if (Afiliado != null)
-        {
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group" style="margin-top:10px">
-                        <h1><strong style="color:black;font-size:x-large">Monto a Transferir #</strong></h1>
-                        <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="9999" class="form-control" />
-                        <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group" style="margin-top:10px">
-                        <h1><strong style="color:black;font-size:x-large">Afiliado Destino #</strong></h1>
-                        <Blazorise.InputMask id="afiliado" name="afiliado" @bind-Value="@TransferirModel.Afiliado" class="form-control" placeholder="Insertar el código del afiliado..." />
-                        <ValidationMessage For="@(()=>TransferirModel.Afiliado)" />
-                    </div>
-                </div>
-            </div>
-        }
-        <div class="row">
-            <div class="col-md-8" style="margin-top:25px">
-                <p>
-                    <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
-                </p>
-            </div>
-            @if (Afiliado != null)
+    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+        <Blazorise.Alert Color="Color.Secondary" Visible="true">
+            @if (displayErrorTransfer == true)
             {
-                <div class="col-md-4" style="margin-top:25px">
-                    <button class="btn btn-yellow btn-block" type="submit">
-                        Transferir <i class="icon-circle-arrow-right"></i>
-                    </button>
+                <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">Error el Monto a transferir no puede ser mayor al saldo disponible... </label>
                 </div>
             }
-        </div>
-    </EditForm>
+
+            @if (displayErrorAfiliado == true)
+            {
+                <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">Error Afiliado no existe en la base de datos... </label>
+                </div>
+            }
+            @if (displayErrorNoValida == true)
+            {
+                <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">Error Transferencia No valida... </label>
+                </div>
+            }
+            <hr>
+            <TemplateSesion></TemplateSesion>
+            <div class="modal" id="modal-id">
+                <a href="#close" class="modal-overlay" aria-label="Close"></a>
+                <div class="modal-container">
+                    <div class="modal-header">
+                        <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                        <div class="modal-title h5">Transferencia Interna</div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="content">
+                            <strong style="color:black;font-size:medium">Código Afiliado:  @Afiliado</strong>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        Transferencia exitosa.
+                    </div>
+                </div>
+            </div>
+            <EditForm Model="@TransferirModel" OnSubmit="@SubmitTransferir">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" style="margin-top:10px">
+                            <h1><strong style="color:black;font-size:x-large">Código Afiliado #</strong></h1>
+                            <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Id" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <fieldset disabled>
+                            <div class="form-group" style="margin-top:10px">
+                                <h1><strong style="color:black;font-size:x-large">Saldo #</strong></h1>
+                                <Blazorise.InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+                @if (Afiliado != null)
+                {
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group" style="margin-top:10px">
+                                <h1><strong style="color:black;font-size:x-large">Monto a Transferir #</strong></h1>
+                                <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="9999" class="form-control" />
+                                <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group" style="margin-top:10px">
+                                <h1><strong style="color:black;font-size:x-large">Afiliado Destino #</strong></h1>
+                                <Blazorise.InputMask id="afiliado" name="afiliado" @bind-Value="@TransferirModel.Afiliado" class="form-control" placeholder="Insertar el código del afiliado..." />
+                                <ValidationMessage For="@(()=>TransferirModel.Afiliado)" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="row">
+                    <div class="col-md-8" style="margin-top:25px">
+                        <p>
+                            <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
+                        </p>
+                    </div>
+                    @if (Afiliado != null)
+                    {
+                        <div class="col-md-4" style="margin-top:25px">
+                            <button class="btn btn-yellow btn-block" type="submit">
+                                Transferir <i class="icon-circle-arrow-right"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </EditForm>
+        </Blazorise.Alert>
+    </Blazorise.Container>
 </div>
 
 @code {

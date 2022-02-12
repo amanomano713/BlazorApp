@@ -3,6 +3,8 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
 @using Blazorise
+<body>
+    <div class="welcome"></div>
 <div class="panel-body">
     <Blazorise.Container Breakpoint="Breakpoint.Desktop">
         <Blazorise.Alert Color="Color.Primary" Visible="true">
@@ -14,6 +16,8 @@
     </Blazorise.Container>
     <hr>
 </div>
+</body>
+
 @code {
     private string? email;
     private string _userKey = "key";

@@ -10605,4 +10605,20 @@ label.panel-block:hover {
     margin-top: -98px;
     margin-left: -50px
 }
+.paquete {
+    background-image: url('../Bitcoin_.jpg');
+    height: 500%;
+    width: 200%;
+    position: fixed;
+    margin-top: -98px;
+    margin-left: -50px
+}
+.invertir {
+    background-image: url('../playa.jpg');
+    height: 500%;
+    width: 200%;
+    position: fixed;
+    margin-top: -98px;
+    margin-left: -50px
+}
 /*# sourceMappingURL=bulma.css.map */
