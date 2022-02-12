@@ -9,10 +9,14 @@
 @inject IAccountService _IAccountService
 
 <div class="panel-bod">
-    <h2><i class="icon-edit-sign teal"></i> HOME</h2>
-    <p>
-        <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-    </p>
+    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+        <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <h3><i class="icon-edit-sign teal"></i> HOME</h3>
+            <p>
+                <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+            </p>
+        </Blazorise.Alert>
+    </Blazorise.Container>
     <hr>
 </div>
 <TempleateUser></TempleateUser>
@@ -23,7 +27,7 @@
             <InputMask name="available" disabled @bind-Value="@available" class="form-control" />
         </div>
         <div class="form-group" style="margin-top:20px">
-            <strong style="color:black;font-size:x-large">Paquetes #</strong>
+            <strong style="color:black;font-size:x-large">Inversión #</strong>
             <InputMask name="packages" disabled @bind-Value="@packages" class="form-control" />
         </div>
     </div>
@@ -41,14 +45,14 @@
     </div>
 </div>
 
-@code 
+@code
 {
 
     public UserDTO AccountModel = new UserDTO();
     private string _userKey = "key";
     private IJSRuntime _jsRuntime;
-    private string available="1000.40";
-    private string packages="0";
+    private string available = "1000.40";
+    private string packages = "0";
     private string? wallet;
     private string? codigo;
 
@@ -61,7 +65,7 @@
         //for (int i = 0; i < 60; i++)
         //{
         //     var result = await _IAccountService.CreateMovPackage().ConfigureAwait(false);
-        //}       
+        //}
 
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 
@@ -98,4 +102,4 @@
     }
 }
 
-    
+

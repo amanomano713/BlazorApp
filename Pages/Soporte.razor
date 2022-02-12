@@ -2,11 +2,16 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
+@using Blazorise
 <div class="panel-body">
-    <h2><i class="icon-edit-sign teal"></i> SOPORTE</h2>
-    <p>
-        <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-    </p>
+    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+        <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <h3><i class="icon-edit-sign teal"></i> SOPORTE</h3>
+            <p>
+                <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+            </p>
+        </Blazorise.Alert>
+    </Blazorise.Container>
     <hr>
 </div>
 @code {

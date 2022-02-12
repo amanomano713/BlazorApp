@@ -11,10 +11,15 @@
 @inject IEncryptor IEncryptor
 
 <div class="panel-body">
-    <h2><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h2>
-    <p>
-        <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-    </p>
+    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+        <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <h3><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h3>
+            <p>
+                <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+            </p>
+        </Blazorise.Alert>
+    </Blazorise.Container>
+
     @if (displayErrorTransfer == true)
     {
         <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
@@ -276,7 +281,7 @@
                     TransferirModel.Id = UserData.Id;
                     TransferirModel.Wallet = UserData.wallet.Trim();
                     TransferirModel.Saldo = "300";
-                    Afiliado=UserData.Id;
+                    Afiliado = UserData.Id;
                 }
             }
             StateHasChanged();

@@ -14,10 +14,15 @@
 @using Blazorise;
 
 <div class="panel-body">
-    <h2><i class="icon-edit-sign teal"></i> REGISTRO</h2>
-    <p>
-        <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
-    </p>
+    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+        <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <h3><i class="icon-edit-sign teal"></i> REGISTRO</h3>
+            <p>
+                <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
+            </p>
+        </Blazorise.Alert>
+    </Blazorise.Container>
+
     @if (displayUpdateUserToDB == true)
     {
         <div class="row bg-success text-white" style="margin-top:10px; height:40px">
@@ -53,10 +58,6 @@
                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                     </div>
                 </fieldset>
-                @*                <div class="form-group" style="margin-top:5px">
-                    <strong style="color:black;font-size:large">Pais-Ciudad #</strong>
-                    <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
-                    </div>*@
                 <SelectList TItem="MySelectModel"
                             TValue="int"
                             Data="@myDdlData"
@@ -83,16 +84,6 @@
                     <ValidationMessage For="@(()=>AccountModel.wallet)" />
                 </div>
             </div>
-            @* <div class="col-md-6">
-                <div class="row" style="margin-top:10px">
-                <div class="col-md-8">
-                <div class="form-group">
-                <strong style="color:black;font-size:large">Ciudad</strong>
-                <input type="text" class="form-input" name="city" id="city" @oninput="ValueChanged" @bind-value="@AccountModel.city" placeholder="Insertar tu Ciudad...">
-                </div>
-                </div>
-                </div>
-                </div>*@
         </div>
         <div class="row">
             <div class="col-md-8" style="margin-top:20px">
@@ -118,7 +109,6 @@
             }
         </div>
     </EditForm>
-
 </div>
 
 @code {
@@ -129,12 +119,12 @@
         public string MyTextField { get; set; }
     }
 
-    static string[] Countries = { "España", "Portugal","USA","Brasil","Colombia","Peru","Chile","Ecuador","Argentina","Venezuela","Cuba","India","Rusia","Mexico","Francia","Italia"};
-    IEnumerable<MySelectModel> myDdlData = Enumerable.Range( 1, Countries.Length ).Select( x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x } );
+    static string[] Countries = { "España", "Portugal", "USA", "Brasil", "Colombia", "Peru", "Chile", "Ecuador", "Argentina", "Venezuela", "Cuba", "India", "Rusia", "Mexico", "Francia", "Italia" };
+    IEnumerable<MySelectModel> myDdlData = Enumerable.Range(1, Countries.Length).Select(x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x });
 
     int selectedListValue { get; set; }
 
-    void MyListValueChangedHandler( int newValue )
+    void MyListValueChangedHandler(int newValue)
     {
         selectedListValue = newValue;
         OnFieldChanged = true;
