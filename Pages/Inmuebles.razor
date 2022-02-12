@@ -1,4 +1,4 @@
-﻿@page "/paquete"
+﻿@page "/inmuebles"
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
@@ -9,7 +9,7 @@
 @inject IUserDataQueries UserDataQueries
 
 <div class="panel-body">
-    <h2><i class="icon-edit-sign teal"></i>INVERSIONES en CRIPTOMONEDAS</h2>
+    <h2><i class="icon-edit-sign teal"></i>INVERSION de BIENES INMUEBLES</h2>
     <p>
         <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
     </p>
@@ -20,11 +20,11 @@
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-                <div class="modal-title h5">Compra de Criptomoneda</div>
+                <div class="modal-title h5">Compra de Paquete</div>
             </div>
             <div class="modal-body">
                 <div class="content">
-                    <strong style="color:black;font-size:medium">Proceso de Compra de la Criptomoneda:@paquete Exitosa.</strong>
+                    <strong style="color:black;font-size:medium">Proceso de Compra :@paquete Exitosa.</strong>
                 </div>
             </div>
         </div>
@@ -230,3 +230,6 @@
         }
     }
 }
+
+
+    
