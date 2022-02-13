@@ -49,7 +49,8 @@ namespace BlazorApp.Services
         public Task<List<MovPackage>> Get(string IdAfiliado)
         {
 
-            var query = _Session.Query<MovPackage>().ToList().Where(x=> x.IdAfiliado== IdAfiliado).OrderByDescending(x => x.DateCreated).ToList().GetRange(0, 50); 
+            var query = _Session.Query<MovPackage>().ToList().Where(x=> x.IdAfiliado== IdAfiliado).OrderByDescending(x => x.Id)
+            .ToList().GetRange(0, 50); 
 
             return Task.FromResult(query);
         }
