@@ -28,11 +28,25 @@ namespace BlazorApp.Handlers.User
 
             var transfer = _mapper.Map<Transfer>(request);
 
+            var movPackage = new MovPackage
+            {
+                IdAfiliado = request.Afiliado,
+                DateCreated = DateTime.Now,
+                MontoTransferido = request.Monto,
+                IdPackage = 0,
+                CodPackage = "Transfer",
+                Porcentaje = 0,
+                MontoPackage = 0,
+                Interes = 0,    
+                MontoRetiro = 0
+            };
+
             await using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     _context.Transfer.Add(transfer);
+                    _context.MovPackage.Add(movPackage);
                     await _context.SaveEntitiesAsync(cancellationToken);
                     await transaction.CommitAsync();
                 }

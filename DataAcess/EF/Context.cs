@@ -42,6 +42,7 @@ namespace BlazorApp.Data.EF
         public DbSet<Packages> Packages { get; set; }
         public DbSet<Transfer> Transfer { get; set; }
         public DbSet<Withdrawal> Withdrawal { get; set; }
+        public DbSet<MovPackage> MovPackage { get; set; }
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -53,8 +54,15 @@ namespace BlazorApp.Data.EF
             await _mediator.DispatchDomainEventsAsync(this);
 
             Audit();
+            try
+            {
+                _ = await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
 
-            _ = await base.SaveChangesAsync(cancellationToken);
+            }
+
 
             return true;
         }
