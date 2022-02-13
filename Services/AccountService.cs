@@ -13,7 +13,7 @@ namespace BlazorApp.Services
         Task Login(SignInModel model);
         Task<string> GetItem();
 
-        Task<List<MovPackage>> Get();
+        Task<List<MovPackage>> Get(string IdAfiliado);
 
         Task<bool> CreateMovPackage();
     }
@@ -46,10 +46,10 @@ namespace BlazorApp.Services
 
         }
 
-        public Task<List<MovPackage>> Get()
+        public Task<List<MovPackage>> Get(string IdAfiliado)
         {
 
-            var query = _Session.Query<MovPackage>().ToList().OrderByDescending(x => x.DateCreated).ToList().GetRange(0, 50); 
+            var query = _Session.Query<MovPackage>().ToList().Where(x=> x.IdAfiliado== IdAfiliado).OrderByDescending(x => x.DateCreated).ToList().GetRange(0, 50); 
 
             return Task.FromResult(query);
         }

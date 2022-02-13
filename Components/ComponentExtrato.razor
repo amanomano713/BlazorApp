@@ -49,12 +49,11 @@
             }
             else
             {
-                UserDTO userData = new UserDTO();
                 var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
                 if (UserData != null)
                 {
                     //movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
-                    movPackages = await _IAccountService.Get().ConfigureAwait(false);
+                    movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
                 }
             }
             StateHasChanged();
