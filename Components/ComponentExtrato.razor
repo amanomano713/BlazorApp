@@ -7,6 +7,8 @@
 @inject IMovPackageDataQueries _movpackagedataqueries
 @inject IUserDataQueries UserDataQueries
 @inject IAccountService _IAccountService
+@inject IJSRuntime JsRuntime
+
 <Container>
     <SourceContent>
         <MatTable Items="@movPackages" class="mat-elevation-z5">
@@ -56,6 +58,7 @@
                     movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
                 }
             }
+             await JsRuntime.InvokeVoidAsync("mostrar");
             StateHasChanged();
         }
     }

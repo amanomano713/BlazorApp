@@ -288,6 +288,9 @@
                     Afiliado = UserData.Id;
                 }
             }
+            
+            await JS.InvokeVoidAsync("mostrar");
+
             StateHasChanged();
         }
     }

@@ -3,8 +3,8 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
 @using BlazorApp.Encryptor
-@using Microsoft.JSInterop;
-@inject IJSRuntime JS;
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
 @inject IEncryptor IEncryptor
@@ -194,6 +194,7 @@
                     wallet = UserData.wallet.Trim();
                 }
             }
+            await JS.InvokeVoidAsync("mostrar");
             StateHasChanged();
         }
     }

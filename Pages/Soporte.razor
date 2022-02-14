@@ -3,6 +3,8 @@
 @inject NavigationManager navigationManager
 @inject ILocalStorageService _localStorageService
 @using Blazorise
+@inject IJSRuntime JS;
+
 <body>
     <div class="welcome"></div>
 <div class="panel-body">
@@ -42,6 +44,9 @@
             {
                 email = emailStorage;
             }
+            
+            await JS.InvokeVoidAsync("mostrar");
+
             StateHasChanged();
         }
     }

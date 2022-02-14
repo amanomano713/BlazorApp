@@ -4,7 +4,7 @@
 @inject ILocalStorageService _localStorageService
 @using BlazorApp.Encryptor
 @using Microsoft.JSInterop
-@inject IJSRuntime JS
+@inject IJSRuntime JsRuntime
 @inject IEncryptor IEncryptor
 @inject IUserDataQueries UserDataQueries
 @using Blazorise
@@ -208,7 +208,7 @@
 
         var result = IEncryptor.EnCryption(cadena);
 
-        await JS.InvokeVoidAsync("CreatePackages", result);
+        await JsRuntime.InvokeVoidAsync("CreatePackages", result);
 
         StateHasChanged();
     }
@@ -231,7 +231,7 @@
                 email = emailStorage;
 
             }
-
+            await JsRuntime.InvokeVoidAsync("mostrar");
             StateHasChanged();
         }
     }

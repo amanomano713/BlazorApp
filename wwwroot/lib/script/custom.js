@@ -10,6 +10,16 @@ function recargar() {
     location.reload();
 }
 
+function ocultar() {
+
+    $('div#idsidebar').attr('style', 'visibility : hidden')
+}
+
+function mostrar() {
+
+    $('div#idsidebar').attr('style', 'visibility : visible')
+}
+
 async function CreateRetiro(cadena) {
 
 /*    var token = localStorage.getItem("access_token");*/

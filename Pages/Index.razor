@@ -7,6 +7,7 @@
 @using Blazorise;
 @inject IPackageMontoDataQueries PackageMontoDataQueries
 @inject IAccountService _IAccountService
+@inject IJSRuntime JS
 <body>
     <div class="welcome"></div>
     <div class="panel-bod">
@@ -103,6 +104,8 @@
                     }
                 }
             }
+            
+            await JS.InvokeVoidAsync("mostrar");
 
             StateHasChanged();
         }
