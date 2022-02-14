@@ -21,6 +21,7 @@
         </Blazorise.Container>
         <hr>
         <TemplateSesion></TemplateSesion>
+        <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion modalPuja=@puja modelIdAfiliado=@IdAfiliado></ComponentPujar>
         <div class="modal" id="modal-id">
             <a href="#close" class="modal-overlay" aria-label="Close"></a>
             <div class="modal-container">
@@ -30,7 +31,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="content">
-                        <strong style="color:black;font-size:medium">Proceso de Compra :@paquete Exitosa.</strong>
+                        <strong style="color:black;font-size:medium">Proceso de Puja Exitosa.</strong>
                     </div>
                 </div>
             </div>
@@ -43,13 +44,13 @@
                     <img src="img/miami.png" class="img-responsive">
                 </div>
                 <div class="card-header">
-                    <div class="card-title h2">Apartamento Miami</div>
+                    <div class="card-title h2">@this.descripcionPuj01</div>
                 </div>
                 <div class="card-body">
-                    Precio 500.000$.
+                    Precio $ @this.montoPuj01
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Pujar</button>
+                   <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01)">Pujar</button>
                 </div>
             </div>
         </div>
@@ -65,8 +66,8 @@
                     Precio 800.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -81,8 +82,8 @@
                     Precio 1.000.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
-                </div>
+ @*                   <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
+ *@               </div>
             </div>
         </div>
     </div>
@@ -100,8 +101,8 @@
                     Precio 500.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -116,8 +117,8 @@
                     Precio 800.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -132,8 +133,8 @@
                     Precio 1.000.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
     </div>
@@ -151,8 +152,8 @@
                     Precio 500.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -167,8 +168,8 @@
                     Precio 800.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
-                </div>
+ @*                   <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Pujar</button>
+*@                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -183,8 +184,8 @@
                     Precio 1.000.000$.
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
-                </div>
+@*                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Pujar</button>
+ *@               </div>
             </div>
         </div>
     </div>
@@ -192,43 +193,75 @@
 </body>
 @code {
 
+    private bool visible = false;
+    private string? Descripcion ;
     private string? email;
     private string _userKey = "key";
     private string? IdAfiliado;
     private bool result;
 
-    private string? _idCod = "Pack10";
-    private string? _idCod20 = "Pack20";
-    private string? _idCod50 = "Pack50";
-    private string? _idCod100 = "Pack100";
-    private string? _idCod200 = "Pack200";
-    private string? _idCod500 = "Pack500";
-    private string? _idCod1000 = "Pack1000";
-    private string? _idCod1500 = "Pack1500";
+    private string? _idPuj01 = "Puja01";
+    private string? _idPuj02 = "Puja02";
+    private string? _idPuj03 = "Puja03";
+    private string? _idPuj04 = "Puja04";
+    private string? _idPuj05 = "Puja05";
+    private string? _idPuj06 = "Puja06";
+    private string? _idPuj07 = "Puja07";
+    private string? _idPuj08 = "Puja08";
+    private string? _idPuj09 = "Puja09";
 
-    public string? paquete;
 
+    private string? montoPuj01 = "500.000";
+    private string? montoPuj02 = "500.000";
+    private string? montoPuj03 = "500.000";
+    private string? montoPuj04 = "500.000";
+    private string? montoPuj05 = "500.000";
+    private string? montoPuj06 = "500.000";
+    private string? montoPuj07 = "500.000";
+    private string? montoPuj08 = "500.000";
+    private string? montoPuj09 = "500.000";
 
-    private async Task CreatePackaqes(string? _idCod)
-    {
+    private string? descripcionPuj01 = "Apartamento Miami";
+    private string? descripcionPuj02 = "Apartamento Miami";
+    private string? descripcionPuj03 = "Apartamento Miami";
+    private string? descripcionPuj04 = "Apartamento Miami";
+    private string? descripcionPuj05 = "Apartamento Miami";
+    private string? descripcionPuj06 = "Apartamento Miami";
+    private string? descripcionPuj07 = "Apartamento Miami";
+    private string? descripcionPuj08 = "Apartamento Miami";
+    private string? descripcionPuj09 = "Apartamento Miami";
+
+    public string? puja;
+
+    private async Task ShowModal(string? _idCod,string? descripcion)    
+    {        
+
+        visible = true;
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
         UserDTO userData = new UserDTO();
         var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+
         if (UserData != null)
         {
             IdAfiliado = UserData.Id;
         }
 
-        paquete = _idCod;
-
-        var cadena = IdAfiliado + "|" + _idCod;
-
-        var result = IEncryptor.EnCryption(cadena);
-
-        await JS.InvokeVoidAsync("CreatePackages", result);
+        puja = _idCod;
+        Descripcion = descripcion;
 
         StateHasChanged();
     }
+
+    //private async Task CreatePuja()
+    //{
+    //    var cadena = IdAfiliado + "|" + puja + "|" + montoPuja;
+
+    //    var result = IEncryptor.EnCryption(cadena);
+
+    //    await JS.InvokeVoidAsync("CreatePuja", result);
+
+    //    StateHasChanged();
+    //}
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

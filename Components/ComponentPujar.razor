@@ -1,0 +1,81 @@
+﻿@using Blazorise
+@inject IJSRuntime JsRuntime
+
+<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Pujar</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <div class="container">
+                <EditForm Model="@pujarModel" OnValidSubmit="@Save_Puja">
+                    <DataAnnotationsValidator />
+                    <Blazorise.ValidationSummary />
+                    <div class="field">
+@*                        <label class="form-label"><span class="h4">@modalPuja</span></label>
+                        <label class="form-label"><span class="h4">@modelIdAfiliado</span></label>*@
+                        <label class="form-label"><span class="h4">@modalDescripcion</span></label>
+                        <label class="form-label"><span class="h4">Monto #</span></label>
+                        <div class="form-group">
+                            <Blazorise.InputMask id="montopujar" name="montopujar" @bind-value="@pujarModel.MontoPujar" Mask="9999999" class="form-control" />
+           @*                 <InputText class="col-lg-8" id="montopujar" @bind-Value="@pujarModel.MontoPujar"></InputText>*@
+                            <ValidationMessage For="@(()=>pujarModel.MontoPujar)" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button type="submit" class="btn btn-success">OK</button>
+                        </div>
+                    </div>
+                </EditForm>
+            </div>
+        </ModalBody>
+    </ModalContent>
+</Modal>
+
+@code {
+
+    EditContext? context;
+
+    [Parameter]
+    public bool modalVisible { get; set; }
+
+    [Parameter]
+    public string modalDescripcion { get; set; }
+
+    [Parameter]
+    public string modalPuja { get; set; }
+
+    [Parameter]
+    public string modelIdAfiliado { get; set; }
+
+    private bool visible = false;
+
+    private PujarModel pujarModel = new PujarModel();
+
+    private async Task Save_Puja()
+    {
+    }
+    private Task OnModalClosing(ModalClosingEventArgs e)
+    {
+        JsRuntime.InvokeVoidAsync("recargar");
+
+        return Task.CompletedTask;
+    }
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(pujarModel);
+        base.OnInitialized();
+    }
+
+    public class PujarModel
+    {
+        [Required(ErrorMessage = "El Monto es Obligatorio.")]
+        [StringLength(40, MinimumLength = 5,
+                  ErrorMessage = "El Monto debe tener entre 5 y 10")]
+        public string MontoPujar { get; set; }
+
+    }
+}
