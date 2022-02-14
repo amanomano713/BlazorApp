@@ -1,16 +1,23 @@
 ﻿@page "/extrato";
 @using Blazorise
+<body>
+    <div class="welcome"></div>
+    <div class="panel-body">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h3>
+                <p>
+                    <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+                </p>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+        <hr>
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <ComponentExtrato></ComponentExtrato>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+    </div>
+</body>
 
-<div class="panel-body">
-    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-        <Blazorise.Alert Color="Color.Primary" Visible="true">
-            <h3><i class="icon-edit-sign teal"></i> ESTADO DE CUENTA</h3>
-            <p>
-                <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-            </p>
-        </Blazorise.Alert>
-    </Blazorise.Container>
-    <hr>
-</div>
-<ComponentExtrato></ComponentExtrato>
 

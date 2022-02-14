@@ -12,7 +12,9 @@ function recargar() {
 
 function ocultar() {
 
-    $('div#idsidebar').attr('style', 'visibility : hidden')
+    $('div#idsidebar').attr('style', 'visibility : hidden');
+    $('div#idsidebar').attr('style', 'width : 0%')
+
 }
 
 function mostrar() {

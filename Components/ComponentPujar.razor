@@ -13,8 +13,8 @@
                     <DataAnnotationsValidator />
                     <Blazorise.ValidationSummary />
                     <div class="field">
-@*                        <label class="form-label"><span class="h4">@modalPuja</span></label>
-                        <label class="form-label"><span class="h4">@modelIdAfiliado</span></label>*@
+                        <label class="form-label"><span class="h4">Código: @modelId</span></label>
+@*                        <label class="form-label"><span class="h4">@modelIdAfiliado</span></label>*@
                         <label class="form-label"><span class="h4">@modalDescripcion</span></label>
                         <label class="form-label"><span class="h4">Monto #</span></label>
                         <div class="form-group">
@@ -49,6 +49,9 @@
 
     [Parameter]
     public string modelIdAfiliado { get; set; }
+
+    [Parameter]
+    public string modelId { get; set; }
 
     private bool visible = false;
 
