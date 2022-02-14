@@ -3,12 +3,12 @@
 @inject NavigationManager navigationManager
 @inject IAccountService AccountService
 <PageTitle>BlazorApp</PageTitle>
-
+@inject ILocalStorageService _localStorageService
 <div class="page">
     <div class="sidebar" id="idsidebar" style="visibility:visible;">
-        <NavMenu />
+         <NavMenu />
     </div>
-
+ 
     <main>
         <article class="content px-4">
             @Body
@@ -16,3 +16,27 @@
     </main>
 
 </div>
+@code{
+
+    private string _pageKey = "keyPage";
+    private bool NavMenu = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            //var KeyStorage = await _localStorageService.GetItem<String>(_pageKey);
+
+            //if(KeyStorage == "norecharge")
+            //{
+            //    NavMenu = false;
+            //}
+            //else
+            //{
+            //     NavMenu = true;
+            //}
+
+        }
+    }
+
+}

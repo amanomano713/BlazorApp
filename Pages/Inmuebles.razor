@@ -21,7 +21,6 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <hr>
-        <TemplateSesion></TemplateSesion>
         <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion 
                         modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
         <div class="modal" id="modal-id">
@@ -195,10 +194,11 @@
 </body>
 
 @functions {
-    
-    async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
-    {        
 
+    async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
+    {
+
+        //await _localStorageService.SetItem(_pageKey, "norecharge");
         visible = true;
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
         UserDTO userData = new UserDTO();
@@ -217,6 +217,8 @@
 
 }
 @code {
+
+     private string _pageKey = "keyPage";
 
     private bool visible = false;
     private string? Descripcion ;
@@ -260,24 +262,7 @@
     public string? puja;
     public string? IdPuja;
 
-    //async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
-    //{        
-
-    //    visible = true;
-    //    var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-    //    UserDTO userData = new UserDTO();
-    //    var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-
-    //    if (UserData != null)
-    //    {
-    //        IdAfiliado = UserData.Id;
-    //    }
-    //    puja = _idCod;
-    //    Descripcion = descripcion;
-    //    IdPuja = puja;
-
-    //    StateHasChanged();
-    //}
+  
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

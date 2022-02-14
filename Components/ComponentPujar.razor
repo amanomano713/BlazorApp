@@ -62,14 +62,16 @@
         modalVisible = false;
         var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
         var result = IEncryptor.EnCryption(cadena);
-        //await JsRuntime.InvokeVoidAsync("CreatePuja", result);
+        await JsRuntime.InvokeVoidAsync("CreatePuja", result);
         StateHasChanged();
     }
 
     private Task OnModalClosing(ModalClosingEventArgs e)
     {
-        modalVisible = true;
-        //JsRuntime.InvokeVoidAsync("recargar");
+        if (modalVisible == true)
+        {
+           JsRuntime.InvokeVoidAsync("recargar");            
+        }
 
         return Task.CompletedTask;
     }

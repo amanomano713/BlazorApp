@@ -1,6 +1,7 @@
 ﻿@inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
 @inject IAccountService AccountService
+@inject ILocalStorageService _localStorageService
 @if (activate == true)
 {
     <div class="container navbar navbar-dark bg-primary">
@@ -66,6 +67,7 @@
 
     private string? user;
     private bool activate = false;
+    private string _pageKey = "keyPage";
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,6 +80,7 @@
         }
         else
         {
+            
             user = state.User.Identities.FirstOrDefault()?.Name;
             activate = true;
 
