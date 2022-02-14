@@ -62,6 +62,53 @@ namespace BlazorApp.Features.Accounts.Controllers
             return isTokenValid;
         }
 
+
+
+        [HttpPost("account/createpuja")]
+        public async Task<IActionResult> CreatePuja(string param1)
+        {
+            //var val = await validatetoken();
+
+            var val = true;
+
+            var Ok = 0;
+
+            if (val == true)
+            {
+                var data = _IEncryptor.Decryption(param1);
+
+                var parts = data.Split('|');
+
+                string? MontoPuja= parts[2].Replace("_", string.Empty);
+
+                var monto = System.Convert.ToInt64(MontoPuja);
+
+                var pujaDTO = new PujaDTO
+                {
+                    IdAfiliado= parts[0],
+                    IdPuja = parts[1],
+                    Monto = monto
+                };
+
+                //var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+
+                //var response = await _mediator.Send(requestModel);
+
+                //if (response != null)
+                //{
+                    Ok = 1;
+                //}
+            }
+            else
+            {
+                Ok = 2;
+            }
+
+            return this.Json(new { result = Ok });
+        }
+
+
+
         [HttpPost("account/createretiro")]
         public async Task<IActionResult> CreateRetiro(string param1)
         {

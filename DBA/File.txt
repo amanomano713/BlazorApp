@@ -1,0 +1,1 @@
+﻿CREATE INDEX index_puja ON dbo.Puja (Id);

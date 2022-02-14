@@ -8,6 +8,7 @@
 @inject IJSRuntime JS
 @inject IEncryptor IEncryptor
 @inject IUserDataQueries UserDataQueries
+@using BlazorApp.Components
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
@@ -22,7 +23,7 @@
         <hr>
         <TemplateSesion></TemplateSesion>
         <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion 
-                        modalPuja=@puja modelIdAfiliado=@IdAfiliado modelId=@IdPuja></ComponentPujar>
+                        modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
         <div class="modal" id="modal-id">
             <a href="#close" class="modal-overlay" aria-label="Close"></a>
             <div class="modal-container">
@@ -192,6 +193,29 @@
     </div>
 
 </body>
+
+@functions {
+    
+    async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
+    {        
+
+        visible = true;
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        UserDTO userData = new UserDTO();
+        var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+
+        if (UserData != null)
+        {
+            IdAfiliado = UserData.Id;
+        }
+        puja = _idCod;
+        Descripcion = descripcion;
+        IdPuja = puja;
+
+        StateHasChanged();
+    }
+
+}
 @code {
 
     private bool visible = false;
@@ -222,6 +246,7 @@
     private string? montoPuj08 = "130.000";
     private string? montoPuj09 = "230.000";
 
+
     private string? descripcionPuj01 = "Apartamento Miami";
     private string? descripcionPuj02 = "Apartamento La Florida";
     private string? descripcionPuj03 = "Apartamento Miami Beach";
@@ -235,33 +260,21 @@
     public string? puja;
     public string? IdPuja;
 
-    private async Task ShowModal(string? _idCod,string? descripcion,string? puja)    
-    {        
+    //async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
+    //{        
 
-        visible = true;
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-        UserDTO userData = new UserDTO();
-        var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+    //    visible = true;
+    //    var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+    //    UserDTO userData = new UserDTO();
+    //    var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
 
-        if (UserData != null)
-        {
-            IdAfiliado = UserData.Id;
-        }
-
-        puja = _idCod;
-        Descripcion = descripcion;
-        IdPuja = puja;
-
-        StateHasChanged();
-    }
-
-    //private async Task CreatePuja()
-    //{
-    //    var cadena = IdAfiliado + "|" + puja + "|" + montoPuja;
-
-    //    var result = IEncryptor.EnCryption(cadena);
-
-    //    await JS.InvokeVoidAsync("CreatePuja", result);
+    //    if (UserData != null)
+    //    {
+    //        IdAfiliado = UserData.Id;
+    //    }
+    //    puja = _idCod;
+    //    Descripcion = descripcion;
+    //    IdPuja = puja;
 
     //    StateHasChanged();
     //}
@@ -287,8 +300,10 @@
 
             await JS.InvokeVoidAsync("ocultar");
 
-            StateHasChanged();
         }
+
+        StateHasChanged();
+
     }
 }
 

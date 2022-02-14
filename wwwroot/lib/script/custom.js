@@ -22,6 +22,31 @@ function mostrar() {
     $('div#idsidebar').attr('style', 'visibility : visible')
 }
 
+async function CreatePuja(cadena) {
+
+    $.ajax({
+        url: '/account/createpuja',
+        headers: { 'Authorization': Bearer },
+        type: "POST",
+        async: true,
+        data: jQuery.param({ param1: cadena }),
+        dataType: "json",
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data.result == 1) {
+                $('div#modal-id').removeClass('modal').addClass('modal active')
+            } else if (data.result == 2) {
+                $('div#modal-id').removeClass('modal active').addClass('modal')
+                $('div#modalSesion-id').removeClass('modal').addClass('modal active')
+            }
+            else {
+                $('div#modal-id').removeClass('modal active').addClass('modal')
+                $('div#modalSesion-id').removeClass('modal active').addClass('modal')
+            }
+        }
+    });
+}
+
 async function CreateRetiro(cadena) {
 
 /*    var token = localStorage.getItem("access_token");*/

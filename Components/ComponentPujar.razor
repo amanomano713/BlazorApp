@@ -1,5 +1,7 @@
 ﻿@using Blazorise
-@inject IJSRuntime JsRuntime
+@using BlazorApp.Encryptor;
+@inject IJSRuntime JsRuntime;
+@inject IEncryptor IEncryptor;
 
 <Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
     <ModalContent Centered="true">
@@ -13,13 +15,11 @@
                     <DataAnnotationsValidator />
                     <Blazorise.ValidationSummary />
                     <div class="field">
-                        <label class="form-label"><span class="h4">Código: @modelId</span></label>
-@*                        <label class="form-label"><span class="h4">@modelIdAfiliado</span></label>*@
-                        <label class="form-label"><span class="h4">@modalDescripcion</span></label>
+                        <label class="form-label"><span class="h4">Código: @modalId</span></label>
+                       <label class="form-label"><span class="h4">@modalDescripcion</span></label>
                         <label class="form-label"><span class="h4">Monto #</span></label>
                         <div class="form-group">
                             <Blazorise.InputMask id="montopujar" name="montopujar" @bind-value="@pujarModel.MontoPujar" Mask="9999999" class="form-control" />
-           @*                 <InputText class="col-lg-8" id="montopujar" @bind-Value="@pujarModel.MontoPujar"></InputText>*@
                             <ValidationMessage For="@(()=>pujarModel.MontoPujar)" />
                         </div>
                     </div>
@@ -48,10 +48,10 @@
     public string modalPuja { get; set; }
 
     [Parameter]
-    public string modelIdAfiliado { get; set; }
+    public string modalIdAfiliado { get; set; }
 
     [Parameter]
-    public string modelId { get; set; }
+    public string modalId { get; set; }
 
     private bool visible = false;
 
@@ -59,10 +59,17 @@
 
     private async Task Save_Puja()
     {
+        modalVisible = false;
+        var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
+        var result = IEncryptor.EnCryption(cadena);
+        //await JsRuntime.InvokeVoidAsync("CreatePuja", result);
+        StateHasChanged();
     }
+
     private Task OnModalClosing(ModalClosingEventArgs e)
     {
-        JsRuntime.InvokeVoidAsync("recargar");
+        modalVisible = true;
+        //JsRuntime.InvokeVoidAsync("recargar");
 
         return Task.CompletedTask;
     }
