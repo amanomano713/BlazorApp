@@ -67,9 +67,9 @@ namespace BlazorApp.Features.Accounts.Controllers
         [HttpPost("account/createpuja")]
         public async Task<IActionResult> CreatePuja(string param1)
         {
-            //var val = await validatetoken();
+            var val = await validatetoken();
 
-            var val = true;
+            //var val = true;
 
             var Ok = 0;
 
@@ -90,14 +90,14 @@ namespace BlazorApp.Features.Accounts.Controllers
                     Monto = monto
                 };
 
-                //var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+                var requestModel = _mapper.Map<CreatePujaCommand>(pujaDTO);
 
-                //var response = await _mediator.Send(requestModel);
+                var response = await _mediator.Send(requestModel);
 
-                //if (response != null)
-                //{
+                if (response != null)
+                {
                     Ok = 1;
-                //}
+                }
             }
             else
             {

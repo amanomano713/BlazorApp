@@ -42,6 +42,12 @@ namespace BlazorApp.DataAcess.Mapper
             CreateMap<CreateWithdrawalCommand, WithdrawalDTO>();
             CreateMap<WithdrawalDTO, CreateWithdrawalCommand>();
 
+            CreateMap<CreatePujaCommand, PujaDTO>();
+            CreateMap<PujaDTO, CreatePujaCommand>();
+
+            CreateMap<CreatePujaCommand, Puja>();
+            CreateMap<Puja, CreatePujaCommand>();
+
         }
     }
 }

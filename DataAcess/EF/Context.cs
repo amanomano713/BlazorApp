@@ -35,6 +35,8 @@ namespace BlazorApp.Data.EF
             builder.ApplyConfiguration(new TransferMappings());
             builder.ApplyConfiguration(new WithdrawalMappings());
             builder.ApplyConfiguration(new MovPackageMappings());
+            builder.ApplyConfiguration(new PujaMappings());
+
             base.OnModelCreating(builder);
         }
 
@@ -43,6 +45,7 @@ namespace BlazorApp.Data.EF
         public DbSet<Transfer> Transfer { get; set; }
         public DbSet<Withdrawal> Withdrawal { get; set; }
         public DbSet<MovPackage> MovPackage { get; set; }
+        public DbSet<Puja> Puja { get; set; }
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -92,59 +95,59 @@ namespace BlazorApp.Data.EF
             }
         }
 
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            if (_currentTransaction != null) return null;
+        //public async Task<IDbContextTransaction> BeginTransactionAsync()
+        //{
+        //    if (_currentTransaction != null) return null;
 
-            _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        //    _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            return _currentTransaction;
-        }
+        //    return _currentTransaction;
+        //}
 
-        public Task CommitTransactionAsync(IDbContextTransaction transaction)
-        {
-            if (transaction == null) throw new ArgumentNullException(nameof(transaction));
-            if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not the current one.");
+        //public Task CommitTransactionAsync(IDbContextTransaction transaction)
+        //{
+        //    if (transaction == null) throw new ArgumentNullException(nameof(transaction));
+        //    if (transaction != _currentTransaction) throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not the current one.");
 
-            return CommitTransactionInternalAsync(transaction);
-        }
+        //    return CommitTransactionInternalAsync(transaction);
+        //}
 
-        private async Task CommitTransactionInternalAsync(IDbContextTransaction transaction)
-        {
-            try
-            {
-                await SaveChangesAsync();
-                transaction.Commit();
-            }
-            catch
-            {
-                RollbackTransaction();
-                throw;
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    _currentTransaction.Dispose();
-                    _currentTransaction = null;
-                }
-            }
-        }
+        //private async Task CommitTransactionInternalAsync(IDbContextTransaction transaction)
+        //{
+        //    try
+        //    {
+        //        await SaveChangesAsync();
+        //        transaction.Commit();
+        //    }
+        //    catch
+        //    {
+        //        RollbackTransaction();
+        //        throw;
+        //    }
+        //    finally
+        //    {
+        //        if (_currentTransaction != null)
+        //        {
+        //            _currentTransaction.Dispose();
+        //            _currentTransaction = null;
+        //        }
+        //    }
+        //}
 
-        public void RollbackTransaction()
-        {
-            try
-            {
-                _currentTransaction?.Rollback();
-            }
-            finally
-            {
-                if (_currentTransaction != null)
-                {
-                    _currentTransaction.Dispose();
-                    _currentTransaction = null;
-                }
-            }
-        }
+        //public void RollbackTransaction()
+        //{
+        //    try
+        //    {
+        //        _currentTransaction?.Rollback();
+        //    }
+        //    finally
+        //    {
+        //        if (_currentTransaction != null)
+        //        {
+        //            _currentTransaction.Dispose();
+        //            _currentTransaction = null;
+        //        }
+        //    }
+        //}
     }
 }

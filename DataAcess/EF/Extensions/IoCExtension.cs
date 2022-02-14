@@ -29,7 +29,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
             services.AddScoped<IMessagesProcessor, MessagesProcessor>();
             services.AddScoped<IMovPackageDataQueries, MovPackageDataQueries>();
-
+            services.AddScoped<IPujaRepository, PujaRepository>();
         }
     }
 }
