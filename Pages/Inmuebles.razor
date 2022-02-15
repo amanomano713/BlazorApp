@@ -9,6 +9,8 @@
 @inject IEncryptor IEncryptor
 @inject IUserDataQueries UserDataQueries
 @using BlazorApp.Components
+
+
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
@@ -21,9 +23,13 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <hr>
-        <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion 
+        @if (activate == true)
+        {
+             <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion 
                         modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
-        <div class="modal" id="modal-id">
+        }              
+
+        @*<div class="modal" id="modal-id">
             <a href="#close" class="modal-overlay" aria-label="Close"></a>
             <div class="modal-container">
                 <div class="modal-header">
@@ -36,7 +42,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="row col-md-12">
         <div class="col-md-4">
@@ -193,6 +199,8 @@
 
 </body>
 
+
+
 @functions {
 
     async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
@@ -214,12 +222,15 @@
 
         StateHasChanged();
     }
-
 }
+
 @code {
 
-     private string _pageKey = "keyPage";
 
+
+    private string _pageKey = "keyPage";
+
+    private bool activate = false;
     private bool visible = false;
     private string? Descripcion ;
     private string? email;
@@ -262,8 +273,6 @@
     public string? puja;
     public string? IdPuja;
 
-  
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -280,6 +289,16 @@
             else
             {
                 email = emailStorage;
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData == null)
+                {
+                    activate = false;
+                }
+                else
+                {
+                    activate = true;
+                }
 
             }
 
