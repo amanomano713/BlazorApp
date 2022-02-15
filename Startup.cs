@@ -19,6 +19,8 @@ using Microsoft.Extensions.DependencyInjection;
 using DevExpress.Xpo.DB;
 using BlazorApp.DataAcess.EF;
 using System.Configuration;
+using Microsoft.AspNetCore.ResponseCompression;
+using BlazorApp.Hubs;
 
 namespace BlazorApp
 {
@@ -40,6 +42,13 @@ namespace BlazorApp
             var logger = GetLogger(loggerFactory);
             LogConfiguration(logger);
 
+
+            services.AddResponseCompression(opts =>
+             {
+                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                     new[] { "application/octet-stream" });
+             });
+
             services
               .AddBlazorise(options =>
               {
@@ -57,7 +66,7 @@ namespace BlazorApp
             
             //Connection IdentityUser
             services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(connectionDB), ServiceLifetime.Transient);
+                 options.UseSqlServer(connectionDB), ServiceLifetime.Singleton);
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -149,6 +158,8 @@ namespace BlazorApp
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
+            
+            app.UseResponseCompression();
 
             if (env.IsDevelopment())
             {
@@ -168,11 +179,13 @@ namespace BlazorApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
