@@ -140,12 +140,15 @@
                      {
                          IdPuja = idpuja,
                          userInput = user,
-                         messageInput = message
+                         messageInput = message,
+                         createdate = DateTime.Now
                      };
 
                  Pujamessages.Add(pujarModelDto);
-                 Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList();
-
+                 Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x=> x.createdate).ToList();
+                 if (Pujamessages.Count()>=2){
+                     Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x=> x.createdate).ToList().GetRange(0, 2);
+                 }
                  StateHasChanged();
              });
 
