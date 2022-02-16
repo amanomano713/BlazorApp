@@ -5,18 +5,19 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @inject NavigationManager NavigationManager
 @implements IAsyncDisposable
+@using BlazorApp.Models
 
 <Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Pujar</ModalTitle>
             <CloseButton />
-            <ul id="messagesList">
+            @*<ul id="messagesList">
                 @foreach (var message in messages)
                 {
-                    <li>@message</li>
+                <li>@message</li>
                 }
-            </ul>
+                </ul>*@
         </ModalHeader>
         <ModalBody>
             <div class="container">
@@ -34,7 +35,7 @@
                     </div>
                     <div class="field">
                         <div class="control">
-                            <button type="submit" class="btn btn-success">OK</button>
+                            <button type="submit" disabled="@(!IsConnected)" class="btn btn-success">OK</button>
                         </div>
                     </div>
                 </EditForm>
@@ -49,11 +50,12 @@
             <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
             <div class="modal-title h5">Ultimas Pujas</div>
             <ul id="messagesList">
-                @foreach (var message in messages)
-                {
-                    <li>@message</li>
-                }
-            </ul>
+                    @foreach (var message in Pujamessages)
+                    {
+                        <li>@message.userInput</li>
+                        <li>@message.messageInput</li>
+                    }
+                </ul>
         </div>
         <div class="modal-body">
             <div class="content">
@@ -68,6 +70,8 @@
     private List<string> messages = new List<string>();
     private string? userInput;
     private string? messageInput;
+
+    private List<ModalPuja> Pujamessages = new List<ModalPuja>();
 
     EditContext? context;
 
@@ -88,17 +92,23 @@
 
     private bool visible = false;
 
+    private string IdPuja;
+
     private PujarModel pujarModel = new PujarModel();
+
+    private BlazorApp.Models.ModalPuja pujarModelDto = new BlazorApp.Models.ModalPuja();
 
     private async Task Save_Puja()
     {
         if (hubConnection is not null)
         {
-            userInput = "Afiliado:" + modalIdAfiliado; 
+            IdPuja = modalId;
 
-            messageInput = modalId +"|"+ modalDescripcion + "|" + "$"+ pujarModel.MontoPujar.Replace("_", string.Empty);
+            userInput = "Afiliado:" + modalIdAfiliado;
 
-            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+            messageInput = modalId + "|" + modalDescripcion + "|" + "$" + pujarModel.MontoPujar.Replace("_", string.Empty);
+
+            await hubConnection.SendAsync("SendMessage", userInput, messageInput, IdPuja);
         }
 
         modalVisible = false;
@@ -124,12 +134,20 @@
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
             .Build();
 
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
-        {
-            var encodedMsg = $"{user} {message}";
-            messages.Add(encodedMsg);
-            StateHasChanged();
-        });
+        hubConnection.On<string, string, string>("ReceiveMessage", (user, message, idpuja) =>
+             {
+                 var pujarModelDto = new ModalPuja
+                     {
+                         IdPuja = idpuja,
+                         userInput = user,
+                         messageInput = message
+                     };
+
+                 Pujamessages.Add(pujarModelDto);
+                 Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList();
+
+                 StateHasChanged();
+             });
 
         await hubConnection.StartAsync();
     }
