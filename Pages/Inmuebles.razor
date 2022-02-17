@@ -25,24 +25,24 @@
         <hr>
         @if (activate == true)
         {
-             <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion 
+            <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion
                         modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
-        }              
+        }
 
         @*<div class="modal" id="modal-id">
             <a href="#close" class="modal-overlay" aria-label="Close"></a>
             <div class="modal-container">
-                <div class="modal-header">
-                    <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-                    <div class="modal-title h5">Puja de Inmuebles</div>
-                </div>
-                <div class="modal-body">
-                    <div class="content">
-                        <strong style="color:black;font-size:medium">Proceso de Puja Exitosa.</strong>
-                    </div>
-                </div>
+            <div class="modal-header">
+            <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+            <div class="modal-title h5">Puja de Inmuebles</div>
             </div>
-        </div>*@
+            <div class="modal-body">
+            <div class="content">
+            <strong style="color:black;font-size:medium">Proceso de Puja Exitosa.</strong>
+            </div>
+            </div>
+            </div>
+            </div>*@
     </div>
     <div class="row col-md-12">
         <div class="col-md-4">
@@ -57,7 +57,7 @@
                     <span class="h4"> Precio $ @this.montoPuj01</span>
                 </div>
                 <div class="card-footer">
-                   <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Pujar</button>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Pujar</button>
                 </div>
             </div>
         </div>
@@ -73,7 +73,7 @@
                     <span class="h4"> Precio $ @this.montoPuj02</span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</button>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</button>
                 </div>
             </div>
         </div>
@@ -89,8 +89,8 @@
                     <span class="h4"> Precio $ @this.montoPuj03</span>
                 </div>
                 <div class="card-footer">
-                     <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</button>
-              </div>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -108,7 +108,7 @@
                     <span class="h4">Precio $ @this.montoPuj04</span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04)">Pujar</button>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04)">Pujar</button>
                 </div>
             </div>
         </div>
@@ -124,8 +124,8 @@
                     <span class="h4">Precio $ @this.montoPuj05</span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05)">Pujar</button>
-               </div>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05)">Pujar</button>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -137,10 +137,10 @@
                     <div class="card-title h2">@this.descripcionPuj06</div>
                 </div>
                 <div class="card-body">
-                     <span class="h4">Precio $ @this.montoPuj06</span>
+                    <span class="h4">Precio $ @this.montoPuj06</span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06)">Pujar</button>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06)">Pujar</button>
                 </div>
             </div>
         </div>
@@ -159,8 +159,8 @@
                     <span class="h4"> Precio $ @this.montoPuj07 </span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj07,this.descripcionPuj07,this._idPuj07)">Pujar</button>
-               </div>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj07,this.descripcionPuj07,this._idPuj07)">Pujar</button>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -172,11 +172,11 @@
                     <div class="card-title h2">@this.descripcionPuj08</div>
                 </div>
                 <div class="card-body">
-                     <span class="h4">Precio $ @this.montoPuj08</span>
+                    <span class="h4">Precio $ @this.montoPuj08</span>
                 </div>
                 <div class="card-footer">
-                    <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj08,this.descripcionPuj08,this._idPuj08)">Pujar</button>
-               </div>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj08,this.descripcionPuj08,this._idPuj08)">Pujar</button>
+                </div>
             </div>
         </div>
         <div class="col-md-4">
@@ -188,11 +188,11 @@
                     <div class="card-title h2">@this.descripcionPuj09</div>
                 </div>
                 <div class="card-body">
-                     <span class="h4">Precio $ @this.montoPuj09</span>
+                    <span class="h4">Precio $ @this.montoPuj09</span>
                 </div>
                 <div class="card-footer">
-                   <button  class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj09,this.descripcionPuj09,this._idPuj09)">Pujar</button>
-               </div>
+                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj09,this.descripcionPuj09,this._idPuj09)">Pujar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -203,36 +203,30 @@
 
 @functions {
 
-    async Task ShowModal(string? _idCod, string? descripcion, string? puja)    
+    async Task ShowModal(string? idCod, string? descripcion, string? puja)
     {
-
-        //await _localStorageService.SetItem(_pageKey, "norecharge");
-        visible = true;
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-        UserDTO userData = new UserDTO();
-        var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-
-        if (UserData != null)
+        if (string.IsNullOrEmpty(emailStorage))
         {
-            IdAfiliado = UserData.Id;
+            var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+            if (!state.User.Identity.IsAuthenticated)
+            {
+                navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+            }
         }
-        puja = _idCod;
+        visible = true;
+        puja = idCod;
         Descripcion = descripcion;
         IdPuja = puja;
-
         StateHasChanged();
     }
 }
 
 @code {
 
-
-
-    private string _pageKey = "keyPage";
-
     private bool activate = false;
     private bool visible = false;
-    private string? Descripcion ;
+    private string? Descripcion;
     private string? email;
     private string _userKey = "key";
     private string? IdAfiliado;
@@ -298,6 +292,7 @@
                 else
                 {
                     activate = true;
+                    IdAfiliado = UserData.Id;
                 }
 
             }
