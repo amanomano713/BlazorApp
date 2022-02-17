@@ -288,5 +288,11 @@ namespace BlazorApp.Features.Accounts.Controllers
 
             return Redirect("/");
         }
+
+        [HttpGet("account/index")]
+        public async Task<IActionResult> Index()
+        {
+            return Redirect("/");
+        }
     }
 }
