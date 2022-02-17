@@ -34,13 +34,13 @@ async function CreatePuja(cadena) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             if (data.result == 1) {
-                $('div#modal-id').removeClass('modal').addClass('modal active')
+               /* $('div#modal-id').removeClass('modal').addClass('modal active')*/
             } else if (data.result == 2) {
-                $('div#modal-id').removeClass('modal active').addClass('modal')
+               /* $('div#modal-id').removeClass('modal active').addClass('modal')*/
                 $('div#modalSesion-id').removeClass('modal').addClass('modal active')
             }
             else {
-                $('div#modal-id').removeClass('modal active').addClass('modal')
+               /* $('div#modal-id').removeClass('modal active').addClass('modal')*/
                 $('div#modalSesion-id').removeClass('modal active').addClass('modal')
             }
         }

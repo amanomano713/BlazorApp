@@ -7,17 +7,10 @@
 @implements IAsyncDisposable
 @using BlazorApp.Models
 
-<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
+<Modal @ref="modalRef">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Pujar</ModalTitle>
-            <CloseButton />
-            @*<ul id="messagesList">
-                @foreach (var message in messages)
-                {
-                <li>@message</li>
-                }
-                </ul>*@
         </ModalHeader>
         <ModalBody>
             <div class="container">
@@ -39,33 +32,59 @@
                         </div>
                     </div>
                 </EditForm>
+                <hr/>
+                <div class="field">
+                    <div class="control">
+                        <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
+                    </div>
+                </div>
             </div>
         </ModalBody>
     </ModalContent>
 </Modal>
-<div class="modal" id="modal-id">
-    <a href="#close" class="modal-overlay" aria-label="Close"></a>
-    <div class="modal-container">
-        <div class="modal-header">
-            <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-            <div class="modal-title h5">Ultimas Pujas</div>
-                <ul id="messagesList">
-                    @foreach (var message in Pujamessages)
-                    {
-                        <li>@message.userInput</li>
-                        <li>@message.messageInput</li>
-                    }
-                </ul>
-        </div>
-        <div class="modal-body">
-            <div class="content">
-                <strong style="color:black;font-size:medium">Monitorización de Pujas</strong>
-            </div>
-        </div>
-    </div>
-</div>
+
+<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
+    <ModalContent Centered="true">
+        <ModalHeader>
+            <ModalTitle>Ultimas Pujas</ModalTitle>
+            <CloseButton />
+        </ModalHeader>
+        <ModalBody>
+            <ul id="messagesList">
+                @foreach (var message in Pujamessages)
+                {
+                    <li>@message.userInput</li>
+                    <li>@message.messageInput</li>
+                }
+            </ul>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="@ShowModalPujas">Quiero pujar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
 @code {
 
+    private Modal modalRef;
+
+    private Task ModalPuja()
+    {
+        modalVisible = true;
+        return modalRef.Hide();
+    }
+
+    private Task ShowModalPujas()
+    {
+        modalVisible = false;
+        return modalRef.Show();
+    }
+
+    private Task HideModal()
+    {
+        modalVisible = true;
+        return modalRef.Hide();
+    }
     private HubConnection? hubConnection;
 
     private List<string> messages = new List<string>();
@@ -111,10 +130,10 @@
             await hubConnection.SendAsync("SendMessage", userInput, messageInput, IdPuja);
         }
 
-        modalVisible = false;
         var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
         var result = IEncryptor.EnCryption(cadena);
         await JsRuntime.InvokeVoidAsync("CreatePuja", result);
+        await ModalPuja();
         StateHasChanged();
     }
 
@@ -145,9 +164,10 @@
                      };
 
                  Pujamessages.Add(pujarModelDto);
-                 Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x=> x.createdate).ToList();
-                 if (Pujamessages.Count()>=2){
-                     Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x=> x.createdate).ToList().GetRange(0, 2);
+                 Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x => x.createdate).ToList();
+                 if (Pujamessages.Count() >= 2)
+                 {
+                     Pujamessages = Pujamessages.Where(x => x.IdPuja == modalId).ToList().OrderByDescending(x => x.createdate).ToList().GetRange(0, 2);
                  }
                  StateHasChanged();
              });
