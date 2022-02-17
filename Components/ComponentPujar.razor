@@ -7,7 +7,7 @@
 @implements IAsyncDisposable
 @using BlazorApp.Models
 
-<Modal @ref="modalRef"  Closing="@OnModalClosing">
+<Modal @ref="modalRef" Closing="@OnModalClosing">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Pujar</ModalTitle>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </EditForm>
-                <hr/>
+                <hr />
                 <div class="field">
                     <div class="control">
                         <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
@@ -47,7 +47,6 @@
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Ultimas Pujas</ModalTitle>
-            <CloseButton />
         </ModalHeader>
         <ModalBody>
             <ul id="messagesList">
@@ -60,11 +59,16 @@
         </ModalBody>
         <ModalFooter>
             <Button Color="Color.Primary" Clicked="@ShowModalPujas">Quiero pujar</Button>
+            <Button Color="Color.Primary" Clicked="@HideModalPujas">Cerrar puja</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
 
 @code {
+
+    private bool ModalClose = false;
+
+    private bool ModalClickeado = false;
 
     private Modal modalRef;
 
@@ -76,15 +80,24 @@
 
     private Task ShowModalPujas()
     {
+        ModalClickeado = false;
         modalVisible = false;
         return modalRef.Show();
     }
 
+    private Task HideModalPujas()
+    {
+        ModalClose = true;
+        return Task.CompletedTask;
+    }
+
     private Task HideModal()
     {
+        ModalClickeado = true;
         modalVisible = true;
         return modalRef.Hide();
     }
+
     private HubConnection? hubConnection;
 
     private List<string> messages = new List<string>();
@@ -133,15 +146,30 @@
         var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
         var result = IEncryptor.EnCryption(cadena);
         await JsRuntime.InvokeVoidAsync("CreatePuja", result);
+        ModalClickeado = true;
         await ModalPuja();
         StateHasChanged();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (ModalClose == true)
+        {
+            await JsRuntime.InvokeVoidAsync("recargar");
+        }
+    }
     private Task OnModalClosing(ModalClosingEventArgs e)
     {
-        if (modalVisible == true)
+        if (modalVisible == false)
         {
-            JsRuntime.InvokeVoidAsync("recargar");
+            ShowModalPujas();
+        }
+        else
+        {
+            if (ModalClickeado == false)
+            {
+                JsRuntime.InvokeVoidAsync("recargar");
+            }
         }
 
         return Task.CompletedTask;
