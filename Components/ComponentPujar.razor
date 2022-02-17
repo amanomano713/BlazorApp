@@ -49,7 +49,7 @@
         <div class="modal-header">
             <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
             <div class="modal-title h5">Ultimas Pujas</div>
-            <ul id="messagesList">
+                <ul id="messagesList">
                     @foreach (var message in Pujamessages)
                     {
                         <li>@message.userInput</li>
@@ -67,8 +67,11 @@
 @code {
 
     private HubConnection? hubConnection;
+
     private List<string> messages = new List<string>();
+
     private string? userInput;
+
     private string? messageInput;
 
     private List<ModalPuja> Pujamessages = new List<ModalPuja>();
@@ -103,11 +106,8 @@
         if (hubConnection is not null)
         {
             IdPuja = modalId;
-
             userInput = "Afiliado:" + modalIdAfiliado;
-
             messageInput = modalId + "|" + modalDescripcion + "|" + "$" + pujarModel.MontoPujar.Replace("_", string.Empty);
-
             await hubConnection.SendAsync("SendMessage", userInput, messageInput, IdPuja);
         }
 
