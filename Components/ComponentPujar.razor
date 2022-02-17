@@ -7,7 +7,7 @@
 @implements IAsyncDisposable
 @using BlazorApp.Models
 
-<Modal @ref="modalRef">
+<Modal @ref="modalRef"  Closing="@OnModalClosing">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Pujar</ModalTitle>
