@@ -72,6 +72,8 @@
 
     private bool ModalClickeado = false;
 
+    private bool ModalClosePujas = false;
+
     private Modal modalRef;
 
     private Task ModalPuja()
@@ -95,12 +97,13 @@
 
     private Task HideModalPujas()
     {
-        ModalClose = true;
+        ModalClosePujas = true;
         return Task.CompletedTask;
     }
 
     private Task HideModal()
     {
+        ModalClose = true;
         ModalClickeado = true;
         modalVisible = true;
         return modalRef.Hide();
@@ -165,7 +168,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (ModalClose == true)
+        if (ModalClosePujas == true)
         {
             navigationManager.NavigateTo("/account/index", forceLoad: true);
         }
@@ -175,7 +178,7 @@
         if (modalVisible == false && ModalClose == false && ModalClickeado == true && string.IsNullOrEmpty(Montopuja)==true)
         {
             i = i + 1;
-            
+
             if (i>=2)
             {
                 navigationManager.NavigateTo("/account/index", forceLoad: true);
@@ -183,29 +186,15 @@
 
             return Task.CompletedTask;
         }
-        
-        if (modalVisible == true && ModalClose == false && ModalClickeado == true && string.IsNullOrEmpty(Montopuja)==true)
-        {
-            navigationManager.NavigateTo("/account/index", forceLoad: true);
 
-            return Task.CompletedTask;
-        }
-        
         if (modalVisible == false && ModalClose == false && ModalClickeado == false && string.IsNullOrEmpty(Montopuja)!=false)
         {
             navigationManager.NavigateTo("/account/index", forceLoad: true);
 
             return Task.CompletedTask;
         }
-        
-        if (modalVisible == false && ModalClose == false && ModalClickeado == true && string.IsNullOrEmpty(Montopuja)==false)
-        {
-            navigationManager.NavigateTo("/account/index", forceLoad: true);
 
-            return Task.CompletedTask;
-        }
-        
-        if (modalVisible == false)
+        if (modalVisible == false && ModalClickeado == true)
         {
             ShowModalPujas();
         }
