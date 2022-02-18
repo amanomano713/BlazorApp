@@ -8,7 +8,7 @@
 @using BlazorApp.Models
 @inject NavigationManager navigationManager
 
-<Modal @ref="modalRef" Closing="@OnModalClosing">
+<Modal @ref="modalRef" Closing="@OnModalClosingHijo">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Pujar</ModalTitle>
@@ -23,7 +23,7 @@
                         <label class="form-label"><span class="h4">@modalDescripcion</span></label>
                         <label class="form-label"><span class="h4">Monto #</span></label>
                         <div class="form-group">
-                            <Blazorise.InputMask id="montopujar" name="montopujar" @onchange="() => OnchangeModal()" @bind-value="@pujarModel.MontoPujar" Mask="9999999" class="form-control" />
+                            <Blazorise.InputMask autocomplete="off" id="montopujar" name="montopujar" @onchange="() => OnchangeModal()" @bind-value="@pujarModel.MontoPujar" Mask="9999999" class="form-control" />
                             <ValidationMessage For="@(()=>pujarModel.MontoPujar)" />
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                 <hr />
                 <div class="field">
                     <div class="control">
-                        <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
+                        <Button Color="Color.Secondary" Clicked="@HideModalHijo">Cerrar</Button>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
     </ModalContent>
 </Modal>
 
-<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
+<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosingPadre">
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Ultimas Pujas</ModalTitle>
@@ -59,16 +59,13 @@
             </ul>
         </ModalBody>
         <ModalFooter>
-            <Button Color="Color.Primary" Clicked="@ShowModalPujas">Quiero pujar</Button>
-            <Button Color="Color.Primary" Clicked="@HideModalPujas">Cerrar puja</Button>
+            <Button Color="Color.Primary" Clicked="@ShowModalPadre">Quiero pujar</Button>
+            <Button Color="Color.Primary" Clicked="@HideModalPadre">Cerrar puja</Button>
         </ModalFooter>
     </ModalContent>
 </Modal>
 
 @code {
-    private int i = 0;
-
-    private bool ModalClose = false;
 
     private bool ModalClickeado = false;
 
@@ -76,17 +73,26 @@
 
     private Modal modalRef;
 
+    private bool cancelClose = true;
+
+    private bool cancelCloseHijo = true;
+
     private Task ModalPuja()
     {
         modalVisible = true;
+        cancelCloseHijo = false; 
+        cancelClose = true; 
         return modalRef.Hide();
     }
 
-    private Task ShowModalPujas()
+    private Task ShowModalPadre()
     {
+        cancelCloseHijo = true; 
+        cancelClose = false; 
         ModalClickeado = true;
         modalVisible = false;
         return modalRef.Show();
+
     }
 
     private Task OnchangeModal()
@@ -95,17 +101,20 @@
         return Task.CompletedTask;
     }
 
-    private Task HideModalPujas()
+    /// <summary>
+    ///  No tocar
+    /// </summary>
+    /// <returns></returns>
+    private Task HideModalPadre()
     {
         ModalClosePujas = true;
         return Task.CompletedTask;
     }
 
-    private Task HideModal()
+    private Task HideModalHijo()
     {
-        ModalClose = true;
-        ModalClickeado = true;
-        modalVisible = true;
+        cancelClose = true;
+        cancelCloseHijo = false;
         return modalRef.Hide();
     }
 
@@ -148,22 +157,29 @@
 
     private async Task Save_Puja()
     {
-        if (hubConnection is not null)
+        Montopuja = pujarModel.MontoPujar.Replace("_", string.Empty);
+
+        if (Montopuja != "0")
         {
-            Montopuja =  pujarModel.MontoPujar.Replace("_", string.Empty);
-            IdPuja = modalId;
-            userInput = "Afiliado:" + modalIdAfiliado;
-            messageInput = modalId + "|" + modalDescripcion + "|" + "$" + Montopuja;
-            await hubConnection.SendAsync("SendMessage", userInput, messageInput, IdPuja);
+            if (hubConnection is not null)
+            {
+                IdPuja = modalId;
+                userInput = "Afiliado:" + modalIdAfiliado;
+                messageInput = modalId + "|" + modalDescripcion + "|" + "$" + Montopuja;
+                await hubConnection.SendAsync("SendMessage", userInput, messageInput, IdPuja);
+            }
+
+            var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
+            var result = IEncryptor.EnCryption(cadena);
+            await JsRuntime.InvokeVoidAsync("CreatePuja", result);
+            ModalClickeado = true;
+            modalVisible = true;
+            pujarModel.MontoPujar = "0";
+           await ModalPuja();
         }
 
-        var cadena = modalIdAfiliado + "|" + modalId + "|" + pujarModel.MontoPujar;
-        var result = IEncryptor.EnCryption(cadena);
-        await JsRuntime.InvokeVoidAsync("CreatePuja", result);
-        ModalClickeado = true;
-        modalVisible = true;
-        await ModalPuja();
         StateHasChanged();
+
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -173,45 +189,32 @@
             navigationManager.NavigateTo("/account/index", forceLoad: true);
         }
     }
-    private Task OnModalClosing(ModalClosingEventArgs e)
+
+    private Task OnModalClosingPadre(ModalClosingEventArgs e)
     {
-        if (modalVisible == false && ModalClose == false && ModalClickeado == true && string.IsNullOrEmpty(Montopuja)==true)
+
+        if( modalVisible == false && ModalClickeado == true )
         {
-            i = i + 1;
-
-            if (i>=2)
-            {
-                navigationManager.NavigateTo("/account/index", forceLoad: true);
-            }
-
-            return Task.CompletedTask;
+            ShowModalPadre();
         }
 
-        if (modalVisible == false && ModalClose == false && ModalClickeado == false && string.IsNullOrEmpty(Montopuja)!=false)
-        {
-            navigationManager.NavigateTo("/account/index", forceLoad: true);
-
-            return Task.CompletedTask;
-        }
-
-        if (modalVisible == false && ModalClickeado == true)
-        {
-            ShowModalPujas();
-        }
-        else
-        {
-            if (ModalClickeado == false)
-            {
-                navigationManager.NavigateTo("/account/index", forceLoad: true);
-                return Task.CompletedTask;
-            }
-        }
+        e.Cancel = cancelClose;
 
         return Task.CompletedTask;
+
+    }
+
+    private Task OnModalClosingHijo(ModalClosingEventArgs e)
+    {
+         e.Cancel = cancelCloseHijo;
+         modalVisible = true;
+         return Task.CompletedTask;
     }
 
     protected override async Task OnInitializedAsync()
     {
+        pujarModel.MontoPujar = "0;";
+
         hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
             .Build();
@@ -257,4 +260,5 @@
         public string? MontoPujar { get; set; }
 
     }
+
 }
