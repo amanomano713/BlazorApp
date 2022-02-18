@@ -175,7 +175,7 @@
             ModalClickeado = true;
             modalVisible = true;
             pujarModel.MontoPujar = "0";
-           await ModalPuja();
+            await ModalPuja();
         }
 
         StateHasChanged();
@@ -192,16 +192,14 @@
 
     private Task OnModalClosingPadre(ModalClosingEventArgs e)
     {
-
+        //No tocar
         if( modalVisible == false && ModalClickeado == true )
         {
             ShowModalPadre();
         }
 
         e.Cancel = cancelClose;
-
         return Task.CompletedTask;
-
     }
 
     private Task OnModalClosingHijo(ModalClosingEventArgs e)
