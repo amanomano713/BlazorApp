@@ -1,0 +1,17 @@
+﻿@using Blazorise
+<h3>ComponentCarousel</h3>
+
+<Carousel @bind-SelectedSlide="@selectedSlide">
+    <CarouselSlide Name="1">
+        <Image Source="img/miami.jpg" Text="Lights" Display="Display.Block" Width="Width.Is100" />
+    </CarouselSlide>
+    <CarouselSlide Name="2">
+        <Image Source="img/imagen.jpg" Text="Keyboard" Display="Display.Block" Width="Width.Is100" />
+    </CarouselSlide>
+    <CarouselSlide Name="3">
+        <Image Source="img/miami1.jpg" Text="Road" Display="Display.Block" Width="Width.Is100" />
+    </CarouselSlide>
+</Carousel>
+@code{
+    private string selectedSlide = "2";
+}
