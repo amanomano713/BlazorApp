@@ -8,6 +8,7 @@
 @using BlazorApp.Models
 @inject NavigationManager navigationManager
 
+
 <Modal @ref="modalRef" Closing="@OnModalClosingHijo">
     <ModalContent Centered="true">
         <ModalHeader>
@@ -67,6 +68,7 @@
 
 @code {
 
+
     private bool ModalClickeado = false;
 
     private bool ModalClosePujas = false;
@@ -77,18 +79,20 @@
 
     private bool cancelCloseHijo = true;
 
+    private bool cancelClosingCarousel = true;
+
     private Task ModalPuja()
     {
         modalVisible = true;
-        cancelCloseHijo = false; 
-        cancelClose = true; 
+        cancelCloseHijo = false;
+        cancelClose = true;
         return modalRef.Hide();
     }
 
     private Task ShowModalPadre()
     {
-        cancelCloseHijo = true; 
-        cancelClose = false; 
+        cancelCloseHijo = true;
+        cancelClose = false;
         ModalClickeado = true;
         modalVisible = false;
         return modalRef.Show();
@@ -159,7 +163,7 @@
     {
         Montopuja = pujarModel.MontoPujar.Replace("_", string.Empty);
 
-        if (Montopuja != "0" && string.IsNullOrEmpty(Montopuja)==false)
+        if (Montopuja != "0" && string.IsNullOrEmpty(Montopuja) == false)
         {
             if (hubConnection is not null)
             {
@@ -193,7 +197,7 @@
     private Task OnModalClosingPadre(ModalClosingEventArgs e)
     {
         //No tocar
-        if( modalVisible == false && ModalClickeado == true )
+        if (modalVisible == false && ModalClickeado == true)
         {
             ShowModalPadre();
         }
@@ -204,9 +208,9 @@
 
     private Task OnModalClosingHijo(ModalClosingEventArgs e)
     {
-         e.Cancel = cancelCloseHijo;
-         modalVisible = true;
-         return Task.CompletedTask;
+        e.Cancel = cancelCloseHijo;
+        modalVisible = true;
+        return Task.CompletedTask;
     }
 
     protected override async Task OnInitializedAsync()

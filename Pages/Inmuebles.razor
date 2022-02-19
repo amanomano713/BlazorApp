@@ -26,87 +26,134 @@
         @if (activate == true)
         {
             <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion
-                        modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
+                        modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
         }
     </div>
 
     <CardDeck>
         <Card>
-            <CardImage Source="/img/miami.png" ></CardImage>
+            <CardImage Source="/img/miami.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj01</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj01</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj01" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01,1)">Pujar</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami1.png" ></CardImage>
+            <CardImage Source="/img/miami1.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj02</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj02</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj02" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02,2)">Pujar</Button>
                 <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami4.png" ></CardImage>
+            <CardImage Source="/img/miami4.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj03</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj03</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj03" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03,3)">Pujar</Button>
                 <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
     </CardDeck>
-    <hr/>
+    <hr />
     <CardDeck>
         <Card>
-            <CardImage Source="/img/miami5.png" ></CardImage>
+            <CardImage Source="/img/miami5.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj04</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj04</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04)">Pujar</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj04" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04,4)">Pujar</Button>
                 <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami.png" ></CardImage>
+            <CardImage Source="/img/miami.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj05</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj05</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05)">Pujar</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj05" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05,5)">Pujar</Button>
                 <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami3.png" ></CardImage>
+            <CardImage Source="/img/miami3.png"></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj06</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj06</h4>
                 </CardText>
-                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06)">Pujar</Button>
+                <Button Color="Color.Primary" Loading="@isLoadingPuj06" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06,6)">Pujar</Button>
                 <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
     </CardDeck>
 </body>
 
+<Modal @ref="CarouselRef" Closing="@OnModalClosingCarousel">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>Pujar</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <Carousel>
+                <CarouselSlide Name="1">
+                    <Image Source="/img/miami.png" Text="Lights" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+                <CarouselSlide Name="2">
+                    <Image Source="/img/miami3.png" Text="Keyboard" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+                <CarouselSlide Name="3">
+                    <Image Source="/img/miami1.png" Text="Road" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+            </Carousel>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="@HideModalCarousel">Cerrar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
 @functions {
 
-    async Task ShowModal(string? idCod, string? descripcion, string? puja)
+    async Task ShowModal(string? idCod, string? descripcion, string? puja, int Loading)
     {
+
+        switch (Loading)
+        {
+            case 1:
+                isLoadingPuj01=true;
+                break;
+            case 2:
+                isLoadingPuj02=true;
+                break;
+            case 3:
+                isLoadingPuj03=true;
+                break;
+            case 4:
+                isLoadingPuj04=true;
+                break;
+            case 5:
+                isLoadingPuj05=true;
+                break;
+            case 6:
+                isLoadingPuj06=true;
+                break;
+        }
+
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
         if (string.IsNullOrEmpty(emailStorage))
         {
@@ -116,17 +163,58 @@
                 navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
             }
         }
+        await Task.Delay(TimeSpan.FromSeconds(3));
         visible = true;
-        puja = idCod;
         Descripcion = descripcion;
-        IdPuja = puja;
+        IdPuja = idCod;
         StateHasChanged();
+        switch (Loading)
+        {
+            case 1:
+                isLoadingPuj01=false;
+                break;
+            case 2:
+                isLoadingPuj02=false;
+                break;
+            case 3:
+                isLoadingPuj03=false;
+                break;
+            case 4:
+                isLoadingPuj04=false;
+                break;
+            case 5:
+                isLoadingPuj05=false;
+                break;
+            case 6:
+                isLoadingPuj06=false;
+                break;
+        }
     }
 
+    private Task ShowModalCarousel(string? idCod, string? descripcion, string? puja)
+    {
+        cancelClosingCarousel = true;
+        return CarouselRef.Show();
+    }
+
+    private Task OnModalClosingCarousel(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClosingCarousel;
+        return Task.CompletedTask;
+    }
+
+    private Task HideModalCarousel()
+    {
+        cancelClosingCarousel = false;
+        return CarouselRef.Hide();
+    }
 }
 
 @code {
 
+    private Modal CarouselRef;
+
+    private bool cancelClosingCarousel=true;
     private bool activate = false;
     private bool visible = false;
     private string? Descripcion;
@@ -161,7 +249,7 @@
     private string? descripcionPuj02 = "Apartamento La Florida";
     private string? descripcionPuj03 = "Apartamento Miami Beach";
     private string? descripcionPuj04 = "Apartamento Orlando";
-    private string? descripcionPuj05 = "Casa Miami";
+    private string? descripcionPuj05 = "Apartamento Miami";
     private string? descripcionPuj06 = "Apartamento New York";
     private string? descripcionPuj07 = "Duplex Miami";
     private string? descripcionPuj08 = "Estudio Miami";
@@ -170,11 +258,15 @@
     public string? puja;
     public string? IdPuja;
 
-    private Task ShowModalCarousel()
-    {
-        return Task.CompletedTask;
-    }
+    private bool isLoading;
 
+    private bool isLoadingPuj01;
+    private bool isLoadingPuj02;
+    private bool isLoadingPuj03;
+    private bool isLoadingPuj04;
+    private bool isLoadingPuj05;
+    private bool isLoadingPuj06;
+    private bool isLoadingPuj07;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
