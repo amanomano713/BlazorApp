@@ -28,174 +28,43 @@
             <ComponentPujar modalVisible=@visible modalDescripcion=@Descripcion
                         modalPuja=@puja modalIdAfiliado=@IdAfiliado modalId=@IdPuja></ComponentPujar>
         }
+    </div>
 
-        @*<div class="modal" id="modal-id">
-            <a href="#close" class="modal-overlay" aria-label="Close"></a>
-            <div class="modal-container">
-            <div class="modal-header">
-            <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
-            <div class="modal-title h5">Puja de Inmuebles</div>
-            </div>
-            <div class="modal-body">
-            <div class="content">
-            <strong style="color:black;font-size:medium">Proceso de Puja Exitosa.</strong>
-            </div>
-            </div>
-            </div>
-            </div>*@
-    </div>
-    <div class="row col-md-12">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj01</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4"> Precio $ @this.montoPuj01</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami1.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj02</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4"> Precio $ @this.montoPuj02</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img//miami3.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj03</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4"> Precio $ @this.montoPuj03</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="row col-md-12">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj04</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4">Precio $ @this.montoPuj04</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami1.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj05</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4">Precio $ @this.montoPuj05</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img//miami3.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj06</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4">Precio $ @this.montoPuj06</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06)">Pujar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <hr>
-    <div class="row col-md-12">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj07</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4"> Precio $ @this.montoPuj07 </span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj07,this.descripcionPuj07,this._idPuj07)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img/miami1.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj08</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4">Precio $ @this.montoPuj08</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj08,this.descripcionPuj08,this._idPuj08)">Pujar</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-image">
-                    <img src="img//miami3.png" class="img-responsive">
-                </div>
-                <div class="card-header">
-                    <div class="card-title h2">@this.descripcionPuj09</div>
-                </div>
-                <div class="card-body">
-                    <span class="h4">Precio $ @this.montoPuj09</span>
-                </div>
-                <div class="card-footer">
-                    <button class="btn btn-primary" @onclick="async () => await ShowModal(this._idPuj09,this.descripcionPuj09,this._idPuj09)">Pujar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <CardDeck>
+        <Card>
+            <CardImage Source="/img/miami.png" Alt="Card image cap 3"></CardImage>
+            <CardBody>
+                <CardTitle Size="3">Precio $ @this.montoPuj01</CardTitle>
+                <CardText>
+                    <h4>@this.descripcionPuj01</h4>
+                </CardText>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardImage Source="/img/miami1.png" Alt="Card image cap 9"></CardImage>
+            <CardBody>
+                <CardTitle Size="3">Precio $ @this.montoPuj02</CardTitle>
+                <CardText>
+                    <h4>@this.descripcionPuj02</h4>
+                </CardText>
+                    <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</Button>
+                    <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardImage Source="/img/miami3.png" Alt="Card image cap 12"></CardImage>
+            <CardBody>
+               <CardTitle Size="3">Precio $ @this.montoPuj03</CardTitle>
+                <CardText>
+                      <h4>@this.descripcionPuj03</h4>
+               </CardText>
+                    <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</Button>
+                    <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+    </CardDeck>
 
 </body>
 
@@ -220,6 +89,7 @@
         IdPuja = puja;
         StateHasChanged();
     }
+
 }
 
 @code {
@@ -266,6 +136,12 @@
 
     public string? puja;
     public string? IdPuja;
+
+    private Task ShowModalCarousel()
+    {
+        return Task.CompletedTask;
+    }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
