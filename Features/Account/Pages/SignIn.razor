@@ -7,61 +7,61 @@
 @inject IAccountService AccountService
 @using Blazorise
 
-    <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-        <Blazorise.Alert Color="Color.Secondary" Visible="true">
-            <ComponentContraseña modalVisible=@visible></ComponentContraseña>
-            <div class="container">
-                <h1 class="title">Conectate</h1>
-                <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
-                    <DataAnnotationsValidator />
-                    <div class="field">
-                        <label class="form-label"><span class="h4">Email</span></label>
-                        <div class="form-group">
-                            <InputText class="col-lg-5" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
-                            <ValidationMessage For="@(()=>signInModel.Email)" />
-                        </div>
+<Blazorise.Container Breakpoint="Breakpoint.Desktop">
+    <Blazorise.Alert Color="Color.Secondary" Visible="true">
+        <ComponentContraseña modalVisible=@visible></ComponentContraseña>
+        <div class="container">
+            <h1 class="title">Conectate</h1>
+            <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
+                <DataAnnotationsValidator />
+                <div class="field">
+                    <label class="form-label"><span class="h4">Email</span></label>
+                    <div class="form-group">
+                        <InputText class="col-lg-5" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
+                        <ValidationMessage For="@(()=>signInModel.Email)" />
                     </div>
-                    <div class="field">
-                        <label class="form-label"><span class="h4">Password</span></label>
-                        <div class="form-group">
-                            <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
-                            <ValidationMessage For="@(()=>signInModel.Password)" />
-                        </div>
+                </div>
+                <div class="field">
+                    <label class="form-label"><span class="h4">Password</span></label>
+                    <div class="form-group">
+                        <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
+                        <ValidationMessage For="@(()=>signInModel.Password)" />
                     </div>
-                    <div class="field">
-                        <div class="control">
-                            <button type="submit" class="btn btn-success">OK</button>
-                        </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button type="submit" class="btn btn-success">OK</button>
                     </div>
-                </EditForm>
-                @if (showSignInError)
-                {
-                    <div class="col-lg-5 notification is-danger">
-                        Lo sentimos, nombre de usuario o contraseña incorrectos.
-                    </div>
-                }
-            </div>
-            <div class="container">
-                <p class="h6">¿Aún no tienes cuenta? <a href="/account/register" style="color: #363636">Crear nueva cuenta</a></p>
-            </div>
-            <hr>
-            <div class="container">
-                <p class="h6">Haz olvidado la contraseña? <Button Color="Color.Primary" Clicked="@ShowModal">Cambio de Contraseña</Button></p>
-            </div>
-        </Blazorise.Alert>
-    </Blazorise.Container>
-    <div class="container">
-        <Jumbotron Background="Background.Dark" Margin="Margin.Is4.FromBottom">
-            <JumbotronTitle Size="JumbotronTitleSize.Is4">Un mundo de nuevas posibilidades!</JumbotronTitle>
-            <JumbotronSubtitle>
-                El mundo actual avanza a pasos de gigante. Lo que ayer nos entusiasmaba y parecía moderno, hoy está obsoleto y no produce beneficios.
-            </JumbotronSubtitle>
-            <Divider></Divider>
-            <Paragraph>
-                ¿Cómo tener éxito en un mundo que se desarrolla vertiginosamente?
-            </Paragraph>
-        </Jumbotron>
-    </div>
+                </div>
+            </EditForm>
+            @if (showSignInError)
+            {
+                <div class="col-lg-5 notification is-danger">
+                    Lo sentimos, nombre de usuario o contraseña incorrectos.
+                </div>
+            }
+        </div>
+        <div class="container">
+            <p class="h6">¿Aún no tienes cuenta? <a href="/account/register" style="color: #363636">Crear nueva cuenta</a></p>
+        </div>
+        <hr>
+        <div class="container">
+            <p class="h6">Haz olvidado la contraseña? <Button Color="Color.Primary" Clicked="@ShowModal">Cambio de Contraseña</Button></p>
+        </div>
+    </Blazorise.Alert>
+</Blazorise.Container>
+<div class="container">
+    <Jumbotron Background="Background.Dark" Margin="Margin.Is4.FromBottom">
+        <JumbotronTitle Size="JumbotronTitleSize.Is4">Un mundo de nuevas posibilidades!</JumbotronTitle>
+        <JumbotronSubtitle>
+            El mundo actual avanza a pasos de gigante. Lo que ayer nos entusiasmaba y parecía moderno, hoy está obsoleto y no produce beneficios.
+        </JumbotronSubtitle>
+        <Divider></Divider>
+        <Paragraph>
+            ¿Cómo tener éxito en un mundo que se desarrolla vertiginosamente?
+        </Paragraph>
+    </Jumbotron>
+</div>
 
 @code {
 

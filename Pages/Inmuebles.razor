@@ -32,7 +32,7 @@
 
     <CardDeck>
         <Card>
-            <CardImage Source="/img/miami.png" Alt="Card image cap 3"></CardImage>
+            <CardImage Source="/img/miami.png" ></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj01</CardTitle>
                 <CardText>
@@ -43,32 +43,65 @@
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami1.png" Alt="Card image cap 9"></CardImage>
+            <CardImage Source="/img/miami1.png" ></CardImage>
             <CardBody>
                 <CardTitle Size="3">Precio $ @this.montoPuj02</CardTitle>
                 <CardText>
                     <h4>@this.descripcionPuj02</h4>
                 </CardText>
-                    <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</Button>
-                    <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
-            <CardImage Source="/img/miami3.png" Alt="Card image cap 12"></CardImage>
+            <CardImage Source="/img/miami4.png" ></CardImage>
             <CardBody>
-               <CardTitle Size="3">Precio $ @this.montoPuj03</CardTitle>
+                <CardTitle Size="3">Precio $ @this.montoPuj03</CardTitle>
                 <CardText>
-                      <h4>@this.descripcionPuj03</h4>
-               </CardText>
-                    <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</Button>
-                    <Button Color="Color.Secondary">Detalles</Button>
+                    <h4>@this.descripcionPuj03</h4>
+                </CardText>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
             </CardBody>
         </Card>
     </CardDeck>
-
+    <hr/>
+    <CardDeck>
+        <Card>
+            <CardImage Source="/img/miami5.png" ></CardImage>
+            <CardBody>
+                <CardTitle Size="3">Precio $ @this.montoPuj04</CardTitle>
+                <CardText>
+                    <h4>@this.descripcionPuj04</h4>
+                </CardText>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardImage Source="/img/miami.png" ></CardImage>
+            <CardBody>
+                <CardTitle Size="3">Precio $ @this.montoPuj05</CardTitle>
+                <CardText>
+                    <h4>@this.descripcionPuj05</h4>
+                </CardText>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardImage Source="/img/miami3.png" ></CardImage>
+            <CardBody>
+                <CardTitle Size="3">Precio $ @this.montoPuj06</CardTitle>
+                <CardText>
+                    <h4>@this.descripcionPuj06</h4>
+                </CardText>
+                <Button Color="Color.Primary" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06)">Pujar</Button>
+                <Button Color="Color.Secondary">Detalles</Button>
+            </CardBody>
+        </Card>
+    </CardDeck>
 </body>
-
-
 
 @functions {
 
