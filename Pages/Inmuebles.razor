@@ -39,7 +39,7 @@
                     <h4>@this.descripcionPuj01</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj01" @onclick="async () => await ShowModal(this._idPuj01,this.descripcionPuj01,this._idPuj01,1)">Pujar</Button>
-                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj01,this.descripcionPuj01,this._idPuj01)">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj01,this.descripcionPuj01,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
@@ -50,7 +50,7 @@
                     <h4>@this.descripcionPuj02</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj02" @onclick="async () => await ShowModal(this._idPuj02,this.descripcionPuj02,this._idPuj02,2)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj02,this.descripcionPuj02,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
@@ -61,7 +61,7 @@
                     <h4>@this.descripcionPuj03</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj03" @onclick="async () => await ShowModal(this._idPuj03,this.descripcionPuj03,this._idPuj03,3)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj03,this.descripcionPuj03,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
     </CardDeck>
@@ -75,7 +75,7 @@
                     <h4>@this.descripcionPuj04</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj04" @onclick="async () => await ShowModal(this._idPuj04,this.descripcionPuj04,this._idPuj04,4)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj04,this.descripcionPuj04,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
@@ -86,7 +86,7 @@
                     <h4>@this.descripcionPuj05</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj05" @onclick="async () => await ShowModal(this._idPuj05,this.descripcionPuj05,this._idPuj05,5)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj05,this.descripcionPuj05,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
         <Card>
@@ -97,35 +97,16 @@
                     <h4>@this.descripcionPuj06</h4>
                 </CardText>
                 <Button Color="Color.Primary" Loading="@isLoadingPuj06" @onclick="async () => await ShowModal(this._idPuj06,this.descripcionPuj06,this._idPuj06,6)">Pujar</Button>
-                <Button Color="Color.Secondary">Detalles</Button>
+                <Button Color="Color.Secondary" @onclick="async () => await ShowModalCarousel(this._idPuj05,this.descripcionPuj05,this.Imagen01,this.Imagen02,this.Imagen03)">Detalles</Button>
             </CardBody>
         </Card>
     </CardDeck>
 </body>
 
-<Modal @ref="CarouselRef" Closing="@OnModalClosingCarousel">
-    <ModalContent Size="ModalSize.Large" Centered="true">
-        <ModalHeader>
-            <ModalTitle>Pujar</ModalTitle>
-        </ModalHeader>
-        <ModalBody>
-            <Carousel>
-                <CarouselSlide Name="1">
-                    <Image Source="/img/miami.png" Text="Lights" Display="Display.Block" Width="Width.Is100" />
-                </CarouselSlide>
-                <CarouselSlide Name="2">
-                    <Image Source="/img/miami3.png" Text="Keyboard" Display="Display.Block" Width="Width.Is100" />
-                </CarouselSlide>
-                <CarouselSlide Name="3">
-                    <Image Source="/img/miami1.png" Text="Road" Display="Display.Block" Width="Width.Is100" />
-                </CarouselSlide>
-            </Carousel>
-        </ModalBody>
-        <ModalFooter>
-            <Button Color="Color.Primary" Clicked="@HideModalCarousel">Cerrar</Button>
-        </ModalFooter>
-    </ModalContent>
-</Modal>
+
+<ComponentCarousel modalimagen01=@sImagen01 modalimagen02=@sImagen02 
+                   modalimagen03=@sImagen03  modalVisible=@visibleCarousel modalDescripcion=@sdescripcion>
+               </ComponentCarousel>
 
 @functions {
 
@@ -191,30 +172,32 @@
         }
     }
 
-    private Task ShowModalCarousel(string? idCod, string? descripcion, string? puja)
+    private Task ShowModalCarousel(string? idCod, string? descripcion, string? imagen01, string? imagen02, string? imagen03)
     {
-        cancelClosingCarousel = true;
-        return CarouselRef.Show();
-    }
 
-    private Task OnModalClosingCarousel(ModalClosingEventArgs e)
-    {
-        e.Cancel = cancelClosingCarousel;
+        sImagen01 = Imagen01;
+        sImagen02 = Imagen02;
+        sImagen02 = Imagen03;
+        sdescripcion = descripcion;
+        visibleCarousel = true;
         return Task.CompletedTask;
-    }
-
-    private Task HideModalCarousel()
-    {
-        cancelClosingCarousel = false;
-        return CarouselRef.Hide();
     }
 }
 
 @code {
 
-    private Modal CarouselRef;
+    private string sdescripcion;
 
-    private bool cancelClosingCarousel=true;
+    private bool visibleCarousel;
+
+    private string sImagen01;
+    private string sImagen02;
+    private string sImagen03;
+
+    private string Imagen01 ="/img/miami.png";
+    private string Imagen02 ="/img/miam3.png";
+    private string Imagen03 ="/img/miami1.png";
+    
     private bool activate = false;
     private bool visible = false;
     private string? Descripcion;

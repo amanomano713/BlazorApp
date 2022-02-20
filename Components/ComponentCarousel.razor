@@ -1,17 +1,66 @@
 ﻿@using Blazorise
-<h3>ComponentCarousel</h3>
+@inject NavigationManager navigationManager
 
-<Carousel @bind-SelectedSlide="@selectedSlide">
-    <CarouselSlide Name="1">
-        <Image Source="img/miami.jpg" Text="Lights" Display="Display.Block" Width="Width.Is100" />
-    </CarouselSlide>
-    <CarouselSlide Name="2">
-        <Image Source="img/imagen.jpg" Text="Keyboard" Display="Display.Block" Width="Width.Is100" />
-    </CarouselSlide>
-    <CarouselSlide Name="3">
-        <Image Source="img/miami1.jpg" Text="Road" Display="Display.Block" Width="Width.Is100" />
-    </CarouselSlide>
-</Carousel>
-@code{
+<Modal @bind-Visible="@modalVisible"  Closing="@OnModalClosingCarousel">
+    <ModalContent Size="ModalSize.Large" Centered="true">
+        <ModalHeader>
+            <ModalTitle>@modalDescripcion</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+            <Carousel @bind-SelectedSlide="@selectedSlide" ShowIndicators="@showIndicators" ShowControls="@showControls">
+                <CarouselSlide Name="1">
+                    <Image Source=@modalimagen01 Text="" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+                <CarouselSlide Name="2">
+                    <Image Source=@modalimagen02 Text="" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+                <CarouselSlide Name="3">
+                    <Image Source=@modalimagen03 Text="" Display="Display.Block" Width="Width.Is100" />
+                </CarouselSlide>
+            </Carousel>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Primary" Clicked="@HideModalCarousel">Cerrar</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+   
     private string selectedSlide = "2";
+
+    private bool cancelClosingCarousel = true;
+
+    private bool showIndicators = true;
+
+    private bool showControls = true;
+
+    [Parameter]
+    public string modalimagen01 { get; set; }
+
+    [Parameter]
+    public string modalimagen02 { get; set; }
+
+    [Parameter]
+    public string modalimagen03 { get; set; }
+
+    [Parameter]
+    public bool modalVisible { get; set; }
+
+    [Parameter]
+    public string? modalDescripcion  { get; set; }
+    
+    private Task OnModalClosingCarousel(ModalClosingEventArgs e)
+    {
+        e.Cancel = cancelClosingCarousel;
+        return Task.CompletedTask;
+    }
+
+    private void HideModalCarousel()
+    {
+        modalVisible = false;
+        cancelClosingCarousel = false;
+        navigationManager.NavigateTo("/account/index", forceLoad: true);
+    }
+
 }
