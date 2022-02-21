@@ -44,19 +44,19 @@
                         <div class="col-md-6">
                             <div class="form-group" style="margin-top:5px">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:large">Nombre #</strong>
+                                    <strong style="color:black;font-size:large">Nombre </strong>
                                 </label>
                                 <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.name)" />
                             </div>
                             <div class="form-group" style="margin-top:5px">
-                                <strong style="color:black;font-size:large">Apellido #</strong>
+                                <strong style="color:black;font-size:large">Apellido </strong>
                                 <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.surname)" />
                             </div>
                             <fieldset disabled>
                                 <div class="form-group" style="margin-top:5px">
-                                    <strong style="color:black;font-size:large">Dirección de Correo Electrónico # </strong>
+                                    <strong style="color:black;font-size:large">Correo Electrónico </strong>
                                     <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                                 </div>
                             </fieldset>
@@ -71,28 +71,23 @@
 
                             <div class="row" style="margin-top:5px">
                                 <div class="col-md-12">
-                                    <strong style="color:black;font-size:large">Fecha de Nacimiento #</strong>
+                                    <strong style="color:black;font-size:large">Fecha de Nacimiento </strong>
                                     <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:large">Mobile #</strong>
+                                <strong style="color:black;font-size:large">Mobile </strong>
                                 <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
                                 <ValidationMessage For="@(()=>AccountModel.mobile)" />
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:large">Wallet BTC #</strong>
+                                <strong style="color:black;font-size:large">Wallet BTC </strong>
                                 <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                                 <ValidationMessage For="@(()=>AccountModel.wallet)" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-@*                        <div class="col-md-8" style="margin-top:20px">
-                            <p>
-                                <strong style="color:black;font-size:large">Al hacer clic en REGISTRARSE, Acepto Términos y Condiciones de Uso y Política de Privacidad.</strong>
-                            </p>
-                        </div>*@
                         @if (displayEditUserToDB == false)
                         {
                             <div class="col-md-4">
