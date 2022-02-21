@@ -175,9 +175,9 @@
     private Task ShowModalCarousel(string? idCod, string? descripcion, string? imagen01, string? imagen02, string? imagen03)
     {
 
-        sImagen01 = Imagen01;
-        sImagen02 = Imagen02;
-        sImagen02 = Imagen03;
+        sImagen01 = imagen01;
+        sImagen02 = imagen02;
+        sImagen03 = imagen03;
         sdescripcion = descripcion;
         visibleCarousel = true;
         return Task.CompletedTask;
@@ -195,7 +195,7 @@
     private string sImagen03;
 
     private string Imagen01 ="/img/miami.png";
-    private string Imagen02 ="/img/miam3.png";
+    private string Imagen02 ="/img/miami3.png";
     private string Imagen03 ="/img/miami1.png";
     
     private bool activate = false;

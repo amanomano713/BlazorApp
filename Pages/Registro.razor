@@ -24,7 +24,7 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Dark" Visible="true">
+            <Blazorise.Alert Color="Color.None" Visible="true">
                 @if (displayUpdateUserToDB == true)
                 {
                     <div class="row bg-success text-white" style="margin-top:10px; height:40px">
@@ -37,32 +37,31 @@
                         <label class="p-2">El año es inválido. </label>
                     </div>
                 }
-                <hr>
                 <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
                     <DataAnnotationsValidator />
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group" style="margin-top:5px">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:large">Nombre </strong>
+                                    <strong style="color:white;font-size:xx-large">Nombre </strong>
                                 </label>
                                 <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.name)" />
                             </div>
                             <div class="form-group" style="margin-top:5px">
-                                <strong style="color:black;font-size:large">Apellido </strong>
+                                <strong style="color:white;font-size:xx-large">Apellido </strong>
                                 <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.surname)" />
                             </div>
                             <fieldset disabled>
                                 <div class="form-group" style="margin-top:5px">
-                                    <strong style="color:black;font-size:large">Correo Electrónico </strong>
+                                    <strong style="color:white;font-size:xx-large">Correo Electrónico </strong>
                                     <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                                 </div>
                             </fieldset>
                             <SelectList TItem="MySelectModel"
                                         TValue="int"
-                                        Data="@myDdlData"
+                                        Data="@myData"
                                         TextField="@((item)=>item.MyTextField)"
                                         ValueField="@((item)=>item.MyValueField)"
                                         SelectedValue="@selectedListValue"
@@ -71,17 +70,17 @@
 
                             <div class="row" style="margin-top:5px">
                                 <div class="col-md-12">
-                                    <strong style="color:black;font-size:large">Fecha de Nacimiento </strong>
+                                    <strong style="color:white;font-size:xx-large">Fecha de Nacimiento </strong>
                                     <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:large">Mobile </strong>
+                                <strong style="color:white;font-size:xx-large">Mobile </strong>
                                 <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
                                 <ValidationMessage For="@(()=>AccountModel.mobile)" />
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:large">Wallet BTC </strong>
+                                <strong style="color:white;font-size:xx-large">Wallet BTC </strong>
                                 <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                                 <ValidationMessage For="@(()=>AccountModel.wallet)" />
                             </div>
@@ -120,7 +119,7 @@
     }
 
     static string[] Countries = { "España", "Portugal", "USA", "Brasil", "Colombia", "Peru", "Chile", "Ecuador", "Argentina", "Venezuela", "Cuba", "India", "Rusia", "Mexico", "Francia", "Italia" };
-    IEnumerable<MySelectModel> myDdlData = Enumerable.Range(1, Countries.Length).Select(x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x });
+    IEnumerable<MySelectModel> myData = Enumerable.Range(1, Countries.Length).Select(x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x });
 
     int selectedListValue { get; set; }
 
