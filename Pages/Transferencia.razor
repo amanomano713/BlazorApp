@@ -20,7 +20,6 @@
                 </p>
             </Blazorise.Alert>
         </Blazorise.Container>
-
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
             <Blazorise.Alert Color="Color.Secondary" Visible="true">
                 @if (displayErrorTransfer == true)
@@ -42,7 +41,6 @@
                         <label class="p-2">Error Transferencia No valida... </label>
                     </div>
                 }
-                <hr>
                 <TemplateSesion></TemplateSesion>
                 <div class="modal" id="modal-id">
                     <a href="#close" class="modal-overlay" aria-label="Close"></a>
@@ -103,12 +101,12 @@
                         </div>
                     }
                     <div class="row">
-                        <div class="col-md-8" style="margin-top:25px">
+                       @* <div class="col-md-8" style="margin-top:25px">
                             <p>
                                 <h5><strong style="color:black;font-size:large">Al hacer clic en RETIRAR, Asegurese que el WALLET es el suyo.</strong></h5>
                             </p>
                         </div>
-                        @if (Afiliado != null)
+*@                        @if (Afiliado != null)
                         {
                             <div class="col-md-4" style="margin-top:25px">
                                 <button class="btn btn-yellow btn-block" type="submit">

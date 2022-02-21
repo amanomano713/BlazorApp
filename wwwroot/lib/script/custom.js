@@ -17,6 +17,18 @@ function ocultar() {
 
 }
 
+function ajustar() {
+
+    $('div#idsidebar').attr('style', 'height : 150vh');
+
+}
+
+function ajustar01() {
+
+    $('div#idsidebar').attr('style', 'height : 120vh');
+
+}
+
 function mostrar() {
 
     $('div#idsidebar').attr('style', 'visibility : visible')

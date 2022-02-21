@@ -88,11 +88,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-8" style="margin-top:20px">
+@*                        <div class="col-md-8" style="margin-top:20px">
                             <p>
                                 <strong style="color:black;font-size:large">Al hacer clic en REGISTRARSE, Acepto Términos y Condiciones de Uso y Política de Privacidad.</strong>
                             </p>
-                        </div>
+                        </div>*@
                         @if (displayEditUserToDB == false)
                         {
                             <div class="col-md-4">
@@ -294,7 +294,7 @@
                 }
                 email = emailStorage;
             }
-            await JsRuntime.InvokeVoidAsync("mostrar");
+            await JsRuntime.InvokeVoidAsync("ajustar01");
             StateHasChanged();
         }
     }
