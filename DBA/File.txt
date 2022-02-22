@@ -1,6 +1,6 @@
 ﻿CREATE INDEX index_puja ON dbo.Puja (Id);
 
-Server=localhost\SQLEXPRESS;Database=master;Trusted_Connection=True;
+Server=DESKTOP-4BV122A\SQLEXPRESS;Database=master;Trusted_Connection=True;
 
 C:\Program Files\Microsoft SQL Server\150\Setup Bootstrap\Log\20220222_150929
 

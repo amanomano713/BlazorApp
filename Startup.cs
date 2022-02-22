@@ -58,7 +58,7 @@ namespace BlazorApp
               .AddFontAwesomeIcons();
 
 
-            var connectionDB = _configuration["DefaultConnectionDB"];
+            var connectionDB = _configuration["ConnectionStrings:DefaultConnectionDB"];
 
             //ServiceLifetime.Transient
             //ServiceLifetime.Scoped
@@ -79,10 +79,11 @@ namespace BlazorApp
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 
-            var connection = _configuration["DefaultConnection"];
+            var connection = _configuration["ConnectionStrings:DefaultConnection"];
 
+            //XPO
             services.AddXpoDefaultUnitOfWork(true, (DataLayerOptionsBuilder options) =>
-            options.UseConnectionString(_configuration["DefaultConnection"])
+            options.UseConnectionString(_configuration["ConnectionStrings:DefaultConnection"])
                 .UseAutoCreationOption(AutoCreateOption.DatabaseAndSchema) // debug only
                     .UseEntityTypes(ConnectionHelper.GetPersistentTypes()));
 
@@ -91,13 +92,13 @@ namespace BlazorApp
                 options.UseLazyLoadingProxies(false)
                    .UseSqlServer(connection), ServiceLifetime.Transient);
 
-            ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
+            //ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
 
-            services.AddApplicationInsightsTelemetry(options =>
-            {
-                options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
-                options.EnableAdaptiveSampling = false;
-            });
+            //services.AddApplicationInsightsTelemetry(options =>
+            //{
+            //    options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
+            //    options.EnableAdaptiveSampling = false;
+            //});
 
             services.AddAuthorization(options =>
             {
@@ -211,10 +212,10 @@ namespace BlazorApp
         private static void EnsureTestUsers(DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //create bda identity
-            using (var db = new ApplicationDbContext(identityDbContextOptions))
-            {
-                db.Database.EnsureCreated();
-            }
+            //using (var db = new ApplicationDbContext(identityDbContextOptions))
+            //{
+            //    db.Database.EnsureCreated();
+            //}
         }
     }
 }

@@ -11,7 +11,8 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
 
         public PackageMontoDataQueries(IConfiguration configuration)
         {
-            _connectionString = configuration["DefaultConnection"];
+            _connectionString = configuration["ConnectionStrings:DefaultConnection"];
+            //_connectionString = configuration["DefaultConnection"];
         }
         public async Task<PackagesTotalDTO> TotalPackageDataAsync(string id)
         {

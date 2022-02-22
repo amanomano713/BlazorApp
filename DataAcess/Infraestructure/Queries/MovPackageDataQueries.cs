@@ -12,7 +12,8 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
 
         public MovPackageDataQueries(IConfiguration configuration)
         {
-            _connectionString = configuration["DefaultConnection"]; 
+            _connectionString = configuration["ConnectionStrings:DefaultConnection"];
+            //_connectionString = configuration["DefaultConnection"]; 
         }
         public async Task<IEnumerable<MovPackage>> GetAfiliadoDataAsync(string id)
         {
