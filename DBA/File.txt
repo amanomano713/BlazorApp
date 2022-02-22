@@ -8,3 +8,4 @@ Advertencia: la máxima longitud de clave para un índice agrupado es de 900 byt
 Advertencia: la máxima longitud de clave para un índice agrupado es de 900 bytes. El índice 'PK_AspNetUserRoles' tiene una longitud máxima de 1800 bytes. Para algunas combinaciones de valores grandes, la operación de inserción o actualización no funcionará correctamente.
 Advertencia: la máxima longitud de clave para un índice agrupado es de 900 bytes. El índice 'PK_AspNetUserTokens' tiene una longitud máxima de 2700 bytes. Para algunas combinaciones de valores grandes, la operación de inserción o actualización no funcionará correctamente.
 
+EXEC sp_updatestats;  Actualizar los indices.
