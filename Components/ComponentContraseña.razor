@@ -15,7 +15,6 @@
     <ModalContent Centered="true">
         <ModalHeader>
             <ModalTitle>Cambio de contraseña</ModalTitle>
-            <CloseButton />
         </ModalHeader>
         <ModalBody>
             <div class="container">
@@ -23,16 +22,22 @@
                     <DataAnnotationsValidator />
                     <Blazorise.ValidationSummary />
                     <div class="field">
+                        <label class="form-label"><span class="h4">Correo Electrónico</span></label>
+                        <div class="form-group">
+                            <InputText disabled  class="col-lg-8" id="email" type="text" @bind-Value="@email"></InputText>
+                        </div>
+                    </div>
+                    <div class="field">
                         <label class="form-label"><span class="h4">Password</span></label>
                         <div class="form-group">
-                            <InputText class="col-md-5" id="password" type="password" @bind-Value="@registerAccountModel.Password"></InputText>
+                            <InputText autocomplete="off" class="col-md-5" id="password" type="password" @bind-Value="@registerAccountModel.Password"></InputText>
                             <ValidationMessage For="@(()=>registerAccountModel.Password)" />
                         </div>
                     </div>
                     <div class="field">
                         <label class="form-label"><span class="h4">Confirmación password</span></label>
                         <div class="form-group">
-                            <InputText class="col-md-5" id="cpassword" type="password" @bind-Value="@registerAccountModel.ConfirmPassword"></InputText>
+                            <InputText autocomplete="off" class="col-md-5" id="cpassword" type="password" @bind-Value="@registerAccountModel.ConfirmPassword"></InputText>
                             <ValidationMessage For="@(()=>registerAccountModel.ConfirmPassword)" />
                         </div>
                     </div>
@@ -40,8 +45,14 @@
                         <div class="control">
                             <button type="submit" class="btn btn-success">OK</button>
                         </div>
-                    </div>
+                    </div>                  
                 </EditForm>
+                 <hr />
+                    <div class="field">
+                        <div class="control">
+                            <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
+                        </div>
+                    </div>
             </div>
         </ModalBody>
     </ModalContent>
@@ -58,10 +69,31 @@
 
     private string _userKey = "key";
 
+    private string email ;
+
+    private bool cancelClosing = true;
+
+    private void HideModal()
+    {
+        cancelClosing = false;
+
+        modalVisible = false;
+    }
+
     protected override void OnInitialized()
     {
+
         context = new EditContext(registerAccountModel);
         base.OnInitialized();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            email = await _localStorageService.GetItem<String>(_userKey);              
+        }
+
     }
 
     private async Task<bool> Save_Password(EditContext context)
@@ -109,11 +141,14 @@
     }
 
 
-    private Task OnModalClosing(ModalClosingEventArgs e)
+    private async Task OnModalClosing(ModalClosingEventArgs e)
     {
-        JsRuntime.InvokeVoidAsync("recargar");
+        e.Cancel = cancelClosing;
+        if (!cancelClosing)
+        {
+           await JsRuntime.InvokeVoidAsync("recargar");            
+        }
 
-        return Task.CompletedTask;
     }
 
     public class RegisterAccountModel
