@@ -9,3 +9,17 @@ Advertencia: la máxima longitud de clave para un índice agrupado es de 900 byt
 Advertencia: la máxima longitud de clave para un índice agrupado es de 900 bytes. El índice 'PK_AspNetUserTokens' tiene una longitud máxima de 2700 bytes. Para algunas combinaciones de valores grandes, la operación de inserción o actualización no funcionará correctamente.
 
 EXEC sp_updatestats;  Actualizar los indices.
+
+Local
+
+"ConnectionStrings": {
+    "DefaultConnection": "Data Source=DESKTOP-4BV122A\\SQLEXPRESS;Initial Catalog=appclientblazor;Integrated Security=True",
+    "DefaultConnectionDB": "Data Source=DESKTOP-4BV122A\\SQLEXPRESS;Initial Catalog=appclientblazor;Integrated Security=True"
+  },
+
+  Azure
+
+   "ConnectionStrings": {
+    "DefaultConnection": "Server=tcp:appserverblazor.database.windows.net,1433;Initial Catalog=appclientblazor;Persist Security Info=False;User ID=SaAdmin;Password=Quemasda2019.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "DefaultConnectionDB": "Server=tcp:appserverblazor.database.windows.net,1433;Initial Catalog=appclientblazor;Persist Security Info=False;User ID=SaAdmin;Password=Quemasda2019.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  },
