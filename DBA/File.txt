@@ -23,3 +23,25 @@ Local
     "DefaultConnection": "Server=tcp:appserverblazor.database.windows.net,1433;Initial Catalog=appclientblazor;Persist Security Info=False;User ID=SaAdmin;Password=Quemasda2019.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
     "DefaultConnectionDB": "Server=tcp:appserverblazor.database.windows.net,1433;Initial Catalog=appclientblazor;Persist Security Info=False;User ID=SaAdmin;Password=Quemasda2019.;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   },
+
+  Application Insights
+
+  union isfuzzy=true
+    availabilityResults,
+    requests,
+    exceptions,
+    pageViews,
+    traces,
+    customEvents,
+    dependencies
+| where timestamp > datetime("2022-02-22T21:13:41.441Z") and timestamp < datetime("2022-02-23T21:13:41.441Z")
+| order by timestamp desc
+| take 100
+
+
+
+_logger.LogDebug($"Debug {iteration}");  
+_logger.LogInformation($"Information {iteration}");  
+_logger.LogWarning($"Warning {iteration}");  
+_logger.LogError($"Error {iteration}");  
+_logger.LogCritical($"Critical {iteration}");  

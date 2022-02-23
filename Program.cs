@@ -21,7 +21,7 @@ namespace BlazorApp
             //.ConfigureAppConfiguration((context, config) =>
             //{
             //    var root = config.Build();
-            //    config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", 
+            //    config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/",
             //        root["KeyVault:ClientId"],
             //        root["KeyVault:ClientSecret"]);
             //})

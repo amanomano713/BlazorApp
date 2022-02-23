@@ -12,12 +12,10 @@ namespace BlazorApp.Services
         SignInModel User { get; }
         Task Login(SignInModel model);
         Task<string> GetItem();
-
         Task<List<MovPackage>> Get(string IdAfiliado);
-
         Task<bool> CreateMovPackage();
     }
-    
+
     public class AccountService : IAccountService
     {
         private UnitOfWork _Session;
@@ -37,7 +35,8 @@ namespace BlazorApp.Services
             ILocalStorageService localStorageService,
             IEncryptor IEncryptor,
             UnitOfWork Session
-        ) {
+        )
+        {
             _mapper = mapper;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
@@ -48,74 +47,82 @@ namespace BlazorApp.Services
 
         public Task<List<MovPackage>> Get(string IdAfiliado)
         {
-
-            var query = new List<MovPackage>();
-            var _count = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado).FirstOrDefault();
-            if (_count != null)
+            int numberOfObjectsPerPage = 50;
+            int pageNumber = 1;
+            var queryResultPage = new List<MovPackage>();
+            var _count = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado).ToList();
+            if (_count.Count() >= numberOfObjectsPerPage)
             {
-                query = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
+
+                queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
                            .OrderByDescending(x => x.Id)
                                .ToList().GetRange(0, 50);
             }
+            else
+            {
+                queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
+                    .OrderByDescending(x => x.Id).ToList();
+            }
 
-            return Task.FromResult(query);
+            return Task.FromResult(queryResultPage);
         }
 
-        public Task<bool> CreateMovPackage()
+    public Task<bool> CreateMovPackage()
+    {
+        MovPackage mov = new MovPackage(_Session);
+        mov.IdPackage = 1;
+        mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
+        mov.Interes = 1;
+        mov.Porcentaje = 10;
+        mov.CodPackage = "Pack10";
+        mov.DateCreated = DateTime.Now;
+
+        _Session.CommitChanges();
+
+        return Task.FromResult(true);
+    }
+
+    public async Task Login(SignInModel model)
+    {
+
+        string? UserEmail = model.Email;
+
+        var email = await _localStorageService.GetItem<string>(_userKey);
+
+        if (!string.IsNullOrEmpty(email))
         {
-            MovPackage mov = new MovPackage(_Session);
-            mov.IdPackage = 1;
-            mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
-            mov.Interes = 1;
-            mov.Porcentaje = 10;
-            mov.CodPackage = "Pack10";
-            mov.DateCreated = DateTime.Now;
 
-            _Session.CommitChanges();
-
-            return Task.FromResult(true);
-        }
-
-        public async Task Login(SignInModel model)
-        {
-
-            string? UserEmail = model.Email;
-
-            var email = await _localStorageService.GetItem<string>(_userKey);
-
-            if (!string.IsNullOrEmpty(email)) {
-
-                if (email.Contains("@")) 
-                {
-                    await _localStorageService.SetItemToken(_access, model.Token);
-                    await _localStorageService.SetItem(_userKey, UserEmail);
-                    return;
-                }
-                else
-                {
-                    var result = _IEncryptor.Decryption(email);
-
-                    if (UserEmail != result)
-                    {
-                        await _localStorageService.SetItemToken(_access, model.Token);
-                        await _localStorageService.SetItem(_userKey, UserEmail);
-                    };
-                }                
+            if (email.Contains("@"))
+            {
+                await _localStorageService.SetItemToken(_access, model.Token);
+                await _localStorageService.SetItem(_userKey, UserEmail);
+                return;
             }
             else
             {
-                await _localStorageService.SetItem(_userKey, UserEmail);
-                await _localStorageService.SetItemToken(_access, model.Token);
-            } 
+                var result = _IEncryptor.Decryption(email);
 
+                if (UserEmail != result)
+                {
+                    await _localStorageService.SetItemToken(_access, model.Token);
+                    await _localStorageService.SetItem(_userKey, UserEmail);
+                };
+            }
         }
-
-        public async Task<string> GetItem()
+        else
         {
-            var result =  await _localStorageService.GetItem<string>(_userKey);
-
-            return result;
+            await _localStorageService.SetItem(_userKey, UserEmail);
+            await _localStorageService.SetItemToken(_access, model.Token);
         }
-        
+
     }
+
+    public async Task<string> GetItem()
+    {
+        var result = await _localStorageService.GetItem<string>(_userKey);
+
+        return result;
+    }
+
+}
 }
