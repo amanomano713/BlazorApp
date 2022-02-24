@@ -10,7 +10,7 @@
 @inject IAfiliadoDataQueries AfiliadoDataQueries
 @inject IEncryptor IEncryptor
 <body>
-    <div class="welcome"></div>
+    <div class="welcome1"></div>
     <div class="panel-body">
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
             <Blazorise.Alert Color="Color.Primary" Visible="true">
@@ -21,7 +21,7 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Secondary" Visible="true">
+            <Blazorise.Alert Color="Color.None" Visible="true">
                 @if (displayErrorTransfer == true)
                 {
                     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">

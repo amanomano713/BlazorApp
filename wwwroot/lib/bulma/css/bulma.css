@@ -10621,5 +10621,13 @@ label.panel-block:hover {
     margin-top: -98px;
     margin-left: -50px
 }
+.welcome1 {
+    background-image: url('../Bitcoin3.jpg');
+    height: 500%;
+    width: 200%;
+    position: fixed;
+    margin-top: -98px;
+    margin-left: -50px
+}
 
 /*# sourceMappingURL=bulma.css.map */
