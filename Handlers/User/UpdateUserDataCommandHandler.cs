@@ -28,6 +28,8 @@ namespace BlazorApp.Handlers.User
 
             await _userDataRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
+            _logger.LogInformation("Update UserData this is a information message...");
+
             return userdata;
         }
     }

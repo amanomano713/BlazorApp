@@ -13,10 +13,10 @@
 @inject IJSRuntime JsRuntime
 @using Blazorise;
 <body>
-    <div class="welcome"></div>
+    <div class="invertir"></div>
     <div class="panel-body">
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <Blazorise.Alert Color="Color.Info" Visible="true">
                 <h3><i class="icon-edit-sign teal"></i> REGISTRO</h3>
                 <p>
                     <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
@@ -34,7 +34,7 @@
                 @if (displayYearValidate == true)
                 {
                     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
-                        <label class="p-2">El año es inválido. </label>
+                        <label class="p-2">El año es incorrecto. </label>
                     </div>
                 }
                 <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
@@ -43,19 +43,19 @@
                         <div class="col-md-6">
                             <div class="form-group" style="margin-top:5px">
                                 <label class="control-label">
-                                    <strong style="color:white;font-size:xx-large">Nombre </strong>
+                                    <strong style="color:black;font-size:xx-large">Nombre </strong>
                                 </label>
                                 <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.name)" />
                             </div>
                             <div class="form-group" style="margin-top:5px">
-                                <strong style="color:white;font-size:xx-large">Apellido </strong>
+                                <strong style="color:black;font-size:xx-large">Apellidos </strong>
                                 <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.surname)" />
                             </div>
                             <fieldset disabled>
                                 <div class="form-group" style="margin-top:5px">
-                                    <strong style="color:white;font-size:xx-large">Correo Electrónico </strong>
+                                    <strong style="color:black;font-size:xx-large">Correo Electrónico </strong>
                                     <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                                 </div>
                             </fieldset>
@@ -70,17 +70,17 @@
 
                             <div class="row" style="margin-top:5px">
                                 <div class="col-md-12">
-                                    <strong style="color:white;font-size:xx-large">Fecha de Nacimiento </strong>
+                                    <strong style="color:black;font-size:xx-large">Fecha de Nacimiento </strong>
                                     <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                                 </div>
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:white;font-size:xx-large">Mobile </strong>
+                                <strong style="color:black;font-size:xx-large">Mobile </strong>
                                 <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
                                 <ValidationMessage For="@(()=>AccountModel.mobile)" />
                             </div>
                             <div class="form-group" style="margin-top:10px">
-                                <strong style="color:white;font-size:xx-large">Wallet BTC </strong>
+                                <strong style="color:black;font-size:xx-large">Wallet BTC </strong>
                                 <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                                 <ValidationMessage For="@(()=>AccountModel.wallet)" />
                             </div>
