@@ -41,68 +41,99 @@
                     <DataAnnotationsValidator />
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" style="margin-top:5px">
-                                <label class="control-label">
-                                    <strong style="color:black;font-size:xx-large">Nombre </strong>
-                                </label>
-                                <input type="text" class="form-input" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
-                                <ValidationMessage For="@(()=>AccountModel.name)" />
-                            </div>
-                            <div class="form-group" style="margin-top:5px">
-                                <strong style="color:black;font-size:xx-large">Apellidos </strong>
-                                <input type="text" class="form-input" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
-                                <ValidationMessage For="@(()=>AccountModel.surname)" />
-                            </div>
-                            <fieldset disabled>
-                                <div class="form-group" style="margin-top:5px">
-                                    <strong style="color:black;font-size:xx-large">Correo Electrónico </strong>
-                                    <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
-                                </div>
-                            </fieldset>
-                            <SelectList TItem="MySelectModel"
-                                        TValue="int"
-                                        Data="@myData"
-                                        TextField="@((item)=>item.MyTextField)"
-                                        ValueField="@((item)=>item.MyValueField)"
-                                        SelectedValue="@selectedListValue"
-                                        SelectedValueChanged="@MyListValueChangedHandler"
-                                        DefaultItemText="Selecciona el pais" />
-
-                            <div class="row" style="margin-top:5px">
-                                <div class="col-md-12">
-                                    <strong style="color:black;font-size:xx-large">Fecha de Nacimiento </strong>
-                                    <input type="date" class="form-input" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Nombre </strong>
+                                    </label>
+                                    <input type="text" class="form-control" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                                    <ValidationMessage For="@(()=>AccountModel.name)" />
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:xx-large">Mobile </strong>
-                                <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
-                                <ValidationMessage For="@(()=>AccountModel.mobile)" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Pais </strong>
+                                    </label>
+                                    <SelectList TItem="MySelectModel"
+                                                TValue="int"
+                                                Data="@myData"
+                                                TextField="@((item)=>item.MyTextField)"
+                                                ValueField="@((item)=>item.MyValueField)"
+                                                SelectedValue="@selectedListValue"
+                                                SelectedValueChanged="@MyListValueChangedHandler"
+                                                DefaultItemText="Selecciona el pais" />
+                                </div>
                             </div>
-                            <div class="form-group" style="margin-top:10px">
-                                <strong style="color:black;font-size:xx-large">Wallet BTC </strong>
-                                <input type="text" class="form-input" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
-                                <ValidationMessage For="@(()=>AccountModel.wallet)" />
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Nacimiento </strong>
+                                    </label>
+                                    <input type="date" class="form-control" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Mobile </strong>
+                                    </label>
+                                    <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
+                                    <ValidationMessage For="@(()=>AccountModel.mobile)" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        @if (displayEditUserToDB == false)
-                        {
-                            <div class="col-md-4">
-                                <button class="btn btn-yellow btn-block" type="submit">
-                                    OK <i class="icon-circle-arrow-right"></i>
-                                </button>
+                        <div class="col-md-6">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Apellidos </strong>
+                                    </label>
+                                    <input type="text" class="form-control" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                                    <ValidationMessage For="@(()=>AccountModel.surname)" />
+                                </div>
                             </div>
-                        }
-                        @if (displayEditUserToDB == true)
-                        {
-                            <div class="col-md-4">
-                                <button class="btn btn-yellow btn-block" type="submit">
-                                    Actualizar <i class="icon-circle-arrow-right"></i>
-                                </button>
+                            <fieldset disabled>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            <strong style="color:black;font-size:xx-large">Correo Electrónico </strong>
+                                        </label>
+                                        <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:xx-large">Wallet BTC </strong>
+                                    </label>
+                                    <input type="text" class="form-control" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                                    <ValidationMessage For="@(()=>AccountModel.wallet)" />
+                                </div>
                             </div>
-                        }
+                            @if (displayEditUserToDB == false)
+                            {
+                                <div class="col-md-6" style="margin-top:110px">
+                                    <div class="form-group">
+                                        <button class="btn btn-yellow btn-block" type="submit">
+                                            OK <i class="icon-circle-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                            @if (displayEditUserToDB == true)
+                            {
+                                <div class="col-md-6" style="margin-top:100px">
+                                    <div class="form-group">
+                                        <button class="btn btn-yellow btn-block" type="submit">
+                                            Actualizar <i class="icon-circle-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
                     </div>
                 </EditForm>
             </Blazorise.Alert>
@@ -288,8 +319,10 @@
                 }
                 email = emailStorage;
             }
-            await JsRuntime.InvokeVoidAsync("ajustar01");
-            StateHasChanged();
+         
+               await JsRuntime.InvokeVoidAsync("ajustar");
         }
+
+        StateHasChanged();
     }
 }

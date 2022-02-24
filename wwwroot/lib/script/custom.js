@@ -5,6 +5,16 @@ var key = localStorage.getItem("key");
 
 var Bearer = 'Bearer' + token +'|'+ 'key' + key;
 
+function getOrientation() {
+    return Math.abs(window.orientation) - 90 == 0 ? "landscape" : "portrait";
+};
+function getMobileWidth() {
+    return getOrientation() == "landscape" ? screen.availHeight : screen.availWidth;
+};
+function getMobileHeight() {
+    return getOrientation() == "landscape" ? screen.availWidth : screen.availHeight;
+};
+
 function recargar() {
 
     location.reload();
@@ -17,10 +27,20 @@ function ocultar() {
 
 }
 
-function ajustar() {
+function ajustar(pantalla) {
 
-    $('div#idsidebar').attr('style', 'height : 150vh');
-
+    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
+    if (screen.width > 560) {
+        if (pantalla == "Subastas") {
+            $('div#idsidebar').attr('style', 'height : 150vh');
+        } else {
+            $('div#idsidebar').removeAttr('style');
+        }
+        return true;
+    } else {
+        $('div#idsidebar').removeAttr('style');
+        return false;
+    }
 }
 
 function ajustar01() {
