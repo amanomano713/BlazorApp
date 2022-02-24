@@ -19,7 +19,7 @@
             <Blazorise.Alert Color="Color.Info" Visible="true">
                 <h3><i class="icon-edit-sign teal"></i> REGISTRO</h3>
                 <p>
-                    <strong style="color:black;font-size:x-larg">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
+                    <strong style="color:black;font-size:x-large">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne.</strong>
                 </p>
             </Blazorise.Alert>
         </Blazorise.Container>
@@ -44,7 +44,7 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Nombre </strong>
+                                        <strong style="color:black;font-size:x-large">Nombre </strong>
                                     </label>
                                     <input type="text" class="form-control" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
                                     <ValidationMessage For="@(()=>AccountModel.name)" />
@@ -53,7 +53,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Pais </strong>
+                                        <strong style="color:black;font-size:x-large">Pais </strong>
                                     </label>
                                     <SelectList TItem="MySelectModel"
                                                 TValue="int"
@@ -68,7 +68,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Nacimiento </strong>
+                                        <strong style="color:black;font-size:x-large">Nacimiento </strong>
                                     </label>
                                     <input type="date" class="form-control" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                                 </div>
@@ -76,7 +76,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Mobile </strong>
+                                        <strong style="color:black;font-size:x-large">Mobile </strong>
                                     </label>
                                     <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
                                     <ValidationMessage For="@(()=>AccountModel.mobile)" />
@@ -87,7 +87,7 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Apellidos </strong>
+                                        <strong style="color:black;font-size:x-large">Apellidos </strong>
                                     </label>
                                     <input type="text" class="form-control" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                                     <ValidationMessage For="@(()=>AccountModel.surname)" />
@@ -97,7 +97,7 @@
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label class="control-label">
-                                            <strong style="color:black;font-size:xx-large">Correo Electrónico </strong>
+                                            <strong style="color:black;font-size:x-large">Correo Electrónico </strong>
                                         </label>
                                         <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                                     </div>
@@ -106,7 +106,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:xx-large">Wallet BTC </strong>
+                                        <strong style="color:black;font-size:x-large">Wallet BTC </strong>
                                     </label>
                                     <input type="text" class="form-control" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                                     <ValidationMessage For="@(()=>AccountModel.wallet)" />

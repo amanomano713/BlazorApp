@@ -13,13 +13,14 @@
     <div class="welcome1"></div>
     <div class="panel-body">
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Primary" Visible="true">
+            <Blazorise.Alert Color="Color.None" Visible="true">
                 <h3><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h3>
-                <p>
+                @*<p>
                     <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
-                </p>
+                </p>*@
             </Blazorise.Alert>
         </Blazorise.Container>
+         <hr>
         <Blazorise.Container Breakpoint="Breakpoint.Desktop">
             <Blazorise.Alert Color="Color.None" Visible="true">
                 @if (displayErrorTransfer == true)
@@ -62,48 +63,71 @@
                 <EditForm Model="@TransferirModel" OnSubmit="@SubmitTransferir">
                     <DataAnnotationsValidator />
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group" style="margin-top:10px">
-                                <h1><strong style="color:black;font-size:x-large">Código Afiliado </strong></h1>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <h1><strong style="color:black;font-size:x-large">Afiliado </strong></h1>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Id" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
+                            <label class="control-label">
+                                <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
                             <fieldset disabled>
-                                <div class="form-group" style="margin-top:10px">
-                                    <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
+                                <div class="form-group">
                                     <Blazorise.InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
                                 </div>
                             </fieldset>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <h1><strong style="color:black;font-size:x-large">Destino </strong></h1>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Blazorise.InputMask id="afiliado" name="afiliado" @bind-Value="@TransferirModel.Afiliado" class="form-control" placeholder="Insertar el código del afiliado..." />
+                                <ValidationMessage For="@(()=>TransferirModel.Afiliado)" />
+                            </div>
+                        </div>
+                    </div>
                     @if (Afiliado != null)
                     {
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group" style="margin-top:10px">
-                                    <h1><strong style="color:black;font-size:x-large">Monto a Transferir </strong></h1>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <h1><strong style="color:black;font-size:x-large">Monto </strong></h1>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="9999" class="form-control" />
                                     <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group" style="margin-top:10px">
-                                    <h1><strong style="color:black;font-size:x-large">Afiliado Destino </strong></h1>
-                                    <Blazorise.InputMask id="afiliado" name="afiliado" @bind-Value="@TransferirModel.Afiliado" class="form-control" placeholder="Insertar el código del afiliado..." />
-                                    <ValidationMessage For="@(()=>TransferirModel.Afiliado)" />
-                                </div>
-                            </div>
-                        </div>
                     }
-                    <div class="row">    
+                     <hr>
+                    <div class="row">
                         @if (Afiliado != null)
                         {
-                            <div class="col-md-4" style="margin-top:25px">
+                            <div class="col-md-2" style="margin-top:25px">
                                 <button class="btn btn-yellow btn-block" type="submit">
                                     Transferir <i class="icon-circle-arrow-right"></i>
                                 </button>
