@@ -39,12 +39,22 @@
                     </NavLink>
                 </div>
             }
-
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="Transferencia">
-                    <span class="oi oi-monitor" aria-hidden="true"></span> Transferencia
-                </NavLink>
-            </div>
+            @if (this.movil == true)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="TransferenciaMovil">
+                        <span class="oi oi-monitor" aria-hidden="true"></span> Transferencia
+                    </NavLink>
+                </div>
+            }
+            @if (this.movil == false)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Transferencia">
+                        <span class="oi oi-monitor" aria-hidden="true"></span> Transferencia
+                    </NavLink>
+                </div>
+            }
             @if (this.visible == true)
             {
                 <div class="nav-item px-3">
