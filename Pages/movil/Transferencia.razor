@@ -1,0 +1,315 @@
+﻿@page "/transferencia"
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@inject IUserDataQueries UserDataQueries
+@using Microsoft.JSInterop;
+@inject IJSRuntime JS;
+@using Blazorise;
+@using BlazorApp.Encryptor;
+@inject IAfiliadoDataQueries AfiliadoDataQueries
+@inject IEncryptor IEncryptor
+<body>
+    <div class="welcome1"></div>
+    <div class="panel-body">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Info" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i> TRANSFERENCIA INTERNA </h3>
+                <p>
+                    <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+                </p>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+         <hr>
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.None" Visible="true">
+                @if (displayErrorTransfer == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Error el Monto a transferir no puede ser mayor al saldo disponible... </label>
+                    </div>
+                }
+
+                @if (displayErrorAfiliado == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Error Afiliado no existe en la base de datos... </label>
+                    </div>
+                }
+                @if (displayErrorNoValida == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Error Transferencia No valida... </label>
+                    </div>
+                }
+                <TemplateSesion></TemplateSesion>
+                <div class="modal" id="modal-id">
+                    <a href="#close" class="modal-overlay" aria-label="Close"></a>
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                            <div class="modal-title h5">Transferencia Interna</div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="content">
+                                <strong style="color:black;font-size:medium">Código Afiliado:  @Afiliado</strong>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            Transferencia exitosa.
+                        </div>
+                    </div>
+                </div>
+                <EditForm Model="@TransferirModel" OnSubmit="@SubmitTransferir">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <h1><strong style="color:black;font-size:x-large">Afiliado </strong></h1>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Blazorise.InputMask id="wallet" name="wallet" disabled @bind-Value="@TransferirModel.Id" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label">
+                                <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
+                            </label>
+                        </div>
+                        <div class="col-md-2">
+                            <fieldset disabled>
+                                <div class="form-group">
+                                    <Blazorise.InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <h1><strong style="color:black;font-size:x-large">Destino </strong></h1>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <Blazorise.InputMask id="afiliado" name="afiliado" @bind-Value="@TransferirModel.Afiliado" class="form-control" placeholder="Insertar el código del afiliado..." />
+                                <ValidationMessage For="@(()=>TransferirModel.Afiliado)" />
+                            </div>
+                        </div>
+                    </div>
+                    @if (Afiliado != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <h1><strong style="color:black;font-size:x-large">Monto </strong></h1>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <Blazorise.InputMask id="transferir" name="transferir" @bind-value="@TransferirModel.Transferir" Mask="9999" class="form-control" />
+                                    <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                     <hr>
+                    <div class="row">
+                        @if (Afiliado != null)
+                        {
+                            <div class="col-md-2" style="margin-top:25px">
+                                <button class="btn btn-yellow btn-block" type="submit">
+                                    Transferir <i class="icon-circle-arrow-right"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </EditForm>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+    </div>
+</body>
+
+@code {
+
+    //Obtener el saldo y servicio de transferencia
+
+    bool displayErrorNoValida = false;
+    bool displayErrorAfiliado = false;
+    bool displayErrorTransfer = false;
+    bool displayValidationErrorMessages = false;
+    public TransferirDTO TransferirModel = new TransferirDTO();
+    private string? email;
+    private string _userKey = "key";
+
+    EditContext? context;
+    private string? Id;
+    private string? Afiliado;
+    private string? Montotransferencia;
+    private float MontoTransfer;
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(TransferirModel);
+        base.OnInitialized();
+    }
+
+    private float validateMonto()
+    {
+        float Montoresult = 0;
+
+        string? Montotransferencia = TransferirModel.Transferir.Replace("_", string.Empty);
+
+        if (String.IsNullOrEmpty(Montotransferencia) == false)
+        {
+            var MontoSaldo = System.Convert.ToInt32(TransferirModel.Saldo);
+
+            var MontoTransfer = System.Convert.ToInt32(Montotransferencia);
+
+            if (MontoTransfer > MontoSaldo)
+            {
+                displayErrorNoValida = false;
+                displayErrorAfiliado = false;
+                displayErrorTransfer = true;
+                Montoresult = 0;
+            }
+            else
+            {
+                Montoresult = MontoTransfer;
+            }
+        }
+
+        return Montoresult;
+    }
+
+    private async Task<bool> validateAfiliado()
+    {
+        var result = true;
+
+        Afiliado = TransferirModel.Afiliado;
+        var TransferData = await AfiliadoDataQueries.GetAfiliadoDataAsync(Afiliado);
+        if (TransferData == null)
+        {
+            displayErrorAfiliado = true;
+            displayErrorTransfer = false;
+            displayErrorNoValida = false;
+            result = false;
+        }
+
+        return result;
+
+    }
+
+    private async void SubmitTransferir(EditContext context)
+    {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        UserDTO userData = new UserDTO();
+
+        if (context.Validate())
+        {
+            var resultAfiliado = await validateAfiliado();
+
+            var resultMonto = validateMonto();
+
+            if (resultAfiliado == true && resultMonto != 0)
+            {
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    if (UserData.Id == Afiliado)
+                    {
+                        displayErrorAfiliado = false;
+                        displayErrorTransfer = false;
+                        displayErrorNoValida = true;
+                    }
+                    else
+                    {
+                        var transferData = new TransfDTO
+                            {
+                                Id = UserData.Id,
+                                Afiliado = Afiliado,
+                                Monto = resultMonto.ToString()
+                            };
+
+                        await CreateTransfer(transferData);
+                    }
+                }
+            }
+            else
+            {
+                displayErrorNoValida = false;
+            }
+        }
+        else
+        {
+            displayValidationErrorMessages = true;
+            displayErrorTransfer = false;
+            displayErrorAfiliado = false;
+            displayErrorNoValida = false;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task CreateTransfer(TransfDTO transfData)
+    {
+        displayValidationErrorMessages = false;
+
+        var cadena = transfData.Id + "|" + transfData.Afiliado + "|" + transfData.Monto;
+
+        var result = IEncryptor.EnCryption(cadena);
+
+        await JS.InvokeVoidAsync("CreateTransfer", result);
+
+        displayErrorTransfer = false;
+
+        displayErrorAfiliado = false;
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+                else
+                {
+                    email = state.User.Identities.FirstOrDefault().Name;
+                }
+            }
+            else
+            {
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    TransferirModel.Id = UserData.Id;
+                    TransferirModel.Wallet = UserData.wallet.Trim();
+                    TransferirModel.Saldo = "300";
+                    Afiliado = UserData.Id;
+                }
+            }
+
+            await JS.InvokeVoidAsync("mostrar");
+
+            StateHasChanged();
+        }
+    }
+}

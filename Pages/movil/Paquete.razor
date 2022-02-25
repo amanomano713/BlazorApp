@@ -1,0 +1,238 @@
+﻿@page "/paquete"
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@using BlazorApp.Encryptor
+@using Microsoft.JSInterop
+@inject IJSRuntime JsRuntime
+@inject IEncryptor IEncryptor
+@inject IUserDataQueries UserDataQueries
+@using Blazorise
+<body>
+    <div class="paquete"></div>
+    <div class="panel-body">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i>INVERSIONES en CRIPTOMONEDAS</h3>
+                <p>
+                    <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+                </p>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+        <hr>
+        <TemplateSesion></TemplateSesion>
+        <div class="modal" id="modal-id">
+            <a href="#close" class="modal-overlay" aria-label="Close"></a>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                    <div class="modal-title h5">Compra de Criptomoneda</div>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        <strong style="color:black;font-size:medium">Proceso de Compra de la Criptomoneda:@paquete Exitosa.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg"  class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 10$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 20$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 50$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod50)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 100$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row col-md-12">
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 200$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod200)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                     Inversión 500$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod500)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                     Inversión 1000$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod1000)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card">
+                <div class="card-image">
+                    <img src="img/imagen.jpg" class="img-responsive">
+                </div>
+                <div class="card-header">
+                    <div class="card-title h2">BTC</div>
+                </div>
+                <div class="card-body">
+                    Inversión 1500$
+                </div>
+                <div class="card-footer">
+                    <button @onclick="async () => await CreatePackaqes(this._idCod1500)" class="btn btn-primary">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+@code {
+
+    private string? email;
+    private string _userKey = "key";
+    private string? IdAfiliado;
+    private bool result;
+
+    private string? _idCod = "Pack10";
+    private string? _idCod20 = "Pack20";
+    private string? _idCod50 = "Pack50";
+    private string? _idCod100 = "Pack100";
+    private string? _idCod200 = "Pack200";
+    private string? _idCod500 = "Pack500";
+    private string? _idCod1000 = "Pack1000";
+    private string? _idCod1500 = "Pack1500";
+
+    public string? paquete;
+
+    private async Task CreatePackaqes(string? _idCod)
+    {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        UserDTO userData = new UserDTO();
+        var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+        if (UserData != null)
+        {
+            IdAfiliado = UserData.Id;
+        }
+
+        paquete = _idCod;
+
+        var cadena = IdAfiliado + "|" + _idCod;
+
+        var result = IEncryptor.EnCryption(cadena);
+
+        await JsRuntime.InvokeVoidAsync("CreatePackages", result);
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+            }
+            else
+            {
+                email = emailStorage;
+
+            }
+            await JsRuntime.InvokeVoidAsync("mostrar");
+            StateHasChanged();
+        }
+    }
+}
