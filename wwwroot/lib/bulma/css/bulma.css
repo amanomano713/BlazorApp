@@ -10648,6 +10648,38 @@ label.panel-block:hover {
     }
 }
 
+
+@media screen and (min-width: 1366px), print {
+
+    .form-group-wallet {
+        width: 80%;
+        margin-top: -20px;
+    }
+
+    .form-group-wallet-monto {
+        width: 20%;
+    }
+
+    .form-group-wallet-value {
+        font-weight: 200;
+        width: 255%;
+    }
+
+}
+
+
+@media screen and (min-width: 1366px), print {
+
+    .form-group-wallet-monto {
+        width: 50%;
+    }
+
+    .btn-block-retiro {
+        display: block;
+        width: 40%;
+    }
+
+}
 /*For iPad and iPad pro you have to use*/
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
     /*//Put your CSS here for 768px to 1024px width devices(covers all width between 768px to 1024px //*/

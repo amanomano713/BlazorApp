@@ -50,7 +50,7 @@
                     <DataAnnotationsValidator />
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group" style="margin-top:10px">
+                            <div class="form-group form-group-wallet" style="margin-top:10px">
                                 <h1><strong style="color:black;font-size:x-large">Wallet </strong></h1>
                                 <InputMask id="wallet " name="wallet" disabled @bind-Value="@RetiroModel.Wallet" class="form-control" />
                             </div>
@@ -59,9 +59,9 @@
                     <div class="row">
                         <div class="col-md-4">
                             <fieldset disabled>
-                                <div class="form-group" style="margin-top:10px">
-                                    <h1><strong style="color:black;font-size:x-large">Saldo Disponible </strong></h1>
-                                    <InputMask id="saldo" name="saldo" disabled @bind-Value="@saldo" class="form-control" />
+                                <div class="form-group form-group-wallet-monto" style="margin-top:10px">
+                                    <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
+                                    <InputMask id="saldo" name="saldo" disabled @bind-Value="@saldo" class="form-control form-group-wallet-monto" />
                                 </div>
                             </fieldset>
                         </div>
@@ -70,16 +70,16 @@
                     {
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group" style="margin-top:10px">
+                                <div class="form-group form-group-wallet-monto" style="margin-top:10px">
                                     <h1><strong style="color:black;font-size:x-large">Monto a Retirar </strong></h1>
-                                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro" class="form-control" Mask="9999" />
+                                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro" class="form-control form-group-wallet-monto" Mask="9999" />
                                     <ValidationMessage For="@(()=>RetiroModel.MontoRetiro)" />
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4" style="margin-top:20px">
-                                <button class="btn btn-yellow btn-block" type="submit">
+                            <div class="col-md-4 form-group-wallet-monto" style="margin-top:20px">
+                                <button class="btn btn-yellow btn-block-retiro" type="submit">
                                     Retirar <i class="icon-circle-arrow-right"></i>
                                 </button>
                             </div>
