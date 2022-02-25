@@ -10646,6 +10646,10 @@ label.panel-block:hover {
         font-weight: 200;
         width: 255%;
     }
+    .form-group-wallet-Transfer {
+        width: 80%;
+        margin-top: 8px;
+    }
 }
 
 
