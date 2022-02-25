@@ -104,6 +104,7 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
+    <Folder Include="Pages\movil\" />
   </ItemGroup>
 
 
