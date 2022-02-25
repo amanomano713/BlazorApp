@@ -24,15 +24,19 @@
     <Compile Remove="MatBlazor.Demo\**" />
     <Compile Remove="MatBlazor\**" />
     <Compile Remove="Migrations\**" />
+    <Compile Remove="Pages\movil\**" />
     <Content Remove="MatBlazor.Demo\**" />
     <Content Remove="MatBlazor\**" />
     <Content Remove="Migrations\**" />
+    <Content Remove="Pages\movil\**" />
     <EmbeddedResource Remove="MatBlazor.Demo\**" />
     <EmbeddedResource Remove="MatBlazor\**" />
     <EmbeddedResource Remove="Migrations\**" />
+    <EmbeddedResource Remove="Pages\movil\**" />
     <None Remove="MatBlazor.Demo\**" />
     <None Remove="MatBlazor\**" />
     <None Remove="Migrations\**" />
+    <None Remove="Pages\movil\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -104,7 +108,6 @@
 
   <ItemGroup>
     <Folder Include="Exception\" />
-    <Folder Include="Pages\movil\" />
   </ItemGroup>
 
 
