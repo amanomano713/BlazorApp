@@ -43,6 +43,16 @@ function ajustar(pantalla) {
     }
 }
 
+function movil(pantalla) {
+
+    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
+    if (screen.width > 560) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 function ajustar01() {
 
     $('div#idsidebar').attr('style', 'height : 120vh');

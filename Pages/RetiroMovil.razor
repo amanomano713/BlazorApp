@@ -1,0 +1,194 @@
+﻿@page "/retiromovil"
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@using BlazorApp.Encryptor
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@inject IUserDataQueries UserDataQueries
+@using Blazorise;
+@inject IEncryptor IEncryptor
+<body>
+    <div class="welcome1"></div>
+    <div class="panel-body">
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.Primary" Visible="true">
+                <h3><i class="icon-edit-sign teal"></i> RETIRO </h3>
+                <p>
+                    <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
+                </p>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+            <Blazorise.Alert Color="Color.None" Visible="true">
+                @if (displayErrorRetiro == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Error el monto a retirar no puede ser mayor al saldo disponible... </label>
+                    </div>
+                }
+                <hr>
+                <TemplateSesion></TemplateSesion>
+                <div class="modal" id="modal-id">
+                    <a href="#close" class="modal-overlay" aria-label="Close"></a>
+                    <div class="modal-container">
+                        <div class="modal-header">
+                            <a href="#Close" class="btn btn-clear float-right" aria-label="Close"></a>
+                            <div class="modal-title h5">Retiro</div>
+                        </div>
+                        <div class="modal-body">
+                            <div class="content">
+                                <strong style="color:black;font-size:medium">Wallet:  @wallet</strong>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            Retiro exitoso.
+                        </div>
+                    </div>
+                </div>
+                <EditForm Model="@RetiroModel" OnSubmit="@SubmitRetiro">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group-wallet">
+                                <h1><strong style="color:black;font-size:x-large">Wallet </strong></h1>
+                                <InputMask id="wallet" name="wallet" disabled @bind-Value="@RetiroModel.Wallet" class="form-control-wallet" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <fieldset disabled>
+                                <div class="form-group" style="margin-top:45px">
+                                    <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
+                                    <InputMask id="saldo" name="saldo" disabled @bind-Value="@saldo" class="form-control" />
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    @if (this.Afiliado != null)
+                    {
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group" style="margin-top:10px">
+                                    <h1><strong style="color:black;font-size:x-large">Monto</strong></h1>
+                                    <InputMask id="retiro" name="retiro" @bind-value="@RetiroModel.MontoRetiro" class="form-control" Mask="9999" />
+                                    <ValidationMessage For="@(()=>RetiroModel.MontoRetiro)" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4" style="margin-top:20px">
+                                <button class="btn btn-yellow btn-block" type="submit">
+                                    Retirar <i class="icon-circle-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </EditForm>
+            </Blazorise.Alert>
+        </Blazorise.Container>
+    </div>
+</body>
+@code {
+
+    //Obtener el saldo y servicio de retiro
+
+    bool displayErrorRetiro = false;
+    EditContext? context;
+    bool displayValidationErrorMessages = false;
+    public RetiroDTO RetiroModel = new RetiroDTO();
+    private string saldo = "1000";
+    private string? email;
+    private string _userKey = "key";
+    private string? wallet;
+    private string retiro = string.Empty;
+    private string? Afiliado = null;
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(RetiroModel);
+        base.OnInitialized();
+    }
+
+
+    private async Task SubmitRetiro(EditContext context)
+    {
+        if (context.Validate())
+        {
+            string? Montoaretirar = RetiroModel.MontoRetiro.Replace("_", string.Empty);
+
+            var MontoRetiro = Convert.ToInt64(Montoaretirar);
+
+            var SaldoDispo = Convert.ToInt64(saldo);
+
+            if (MontoRetiro > SaldoDispo)
+            {
+                displayErrorRetiro = true;
+            }
+            else
+            {
+                wallet = RetiroModel.Wallet;
+                RetiroModel.MontoRetiro = Montoaretirar;
+                await CreateRetiro(RetiroModel);
+            }
+
+            displayValidationErrorMessages = false;
+        }
+        else
+        {
+            displayValidationErrorMessages = true;
+        }
+    }
+
+    private async Task CreateRetiro(RetiroDTO retiroDTO)
+    {
+
+        displayValidationErrorMessages = false;
+
+        var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
+
+        cadena = IEncryptor.EnCryption(cadena); ;
+
+        await JS.InvokeVoidAsync("CreateRetiro", cadena);
+
+        displayErrorRetiro = false;
+
+        StateHasChanged();
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+                else
+                {
+                    email = state.User.Identities.FirstOrDefault().Name;
+                }
+            }
+            else
+            {
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    RetiroModel.Id = UserData.Id;
+                    RetiroModel.Wallet = UserData.wallet.Trim();
+                    Afiliado = UserData.Id;
+                    //Se envia el retiro a esta variable
+                    wallet = UserData.wallet.Trim();
+                }
+            }
+            await JS.InvokeVoidAsync("mostrar");
+            StateHasChanged();
+        }
+    }
+}

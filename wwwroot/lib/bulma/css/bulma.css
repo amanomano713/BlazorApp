@@ -10591,12 +10591,10 @@ label.panel-block:hover {
     padding: 18rem 1.5rem;
   }
 }
-
 .footer {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem;
 }
-
 .welcome {
     background-image: url('../Bitcoin.jpg');
     height: 500%;
@@ -10630,4 +10628,32 @@ label.panel-block:hover {
     margin-left: -50px
 }
 
-/*# sourceMappingURL=bulma.css.map */
+@media screen and (min-width: 390px) and (max-width: 844px), print {
+    .form-group {
+        width: 150%;
+        margin-top: 35px;
+        font-weight: 200;
+    }
+    .form-group-wallet {
+        width: 255%;
+        margin-top: -20px;
+   }
+    .form-group-wallet-value {
+        font-weight: 200;
+        width: 255%;
+    }
+    .form-control-wallet {
+        font-weight: 200;
+        width: 255%;
+    }
+}
+
+/*For iPad and iPad pro you have to use*/
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    /*//Put your CSS here for 768px to 1024px width devices(covers all width between 768px to 1024px //*/
+}
+
+@media only screen and (min-width: 200px) and (max-width: 767px) and (orientation : portrait) {
+    /*//Put your CSS here for 200px to 767px width devices (cover all mobile portrait width //*/
+}
+    /*# sourceMappingURL=bulma.css.map */
