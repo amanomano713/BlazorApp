@@ -1,0 +1,119 @@
+﻿@using BlazorApp.Models
+@using Blazorise
+@using Microsoft.AspNetCore.DataProtection
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> userManager
+@inject SignInManager<IdentityUser> signInManager
+@inject NavigationManager navigationManager
+@inject IDataProtectionProvider dataProtectionProvider
+@inject IAccountService AccountService
+@inject IJSRuntime JsRuntime
+
+@if (@SignInmovil == false)
+    {
+    <h1 class="title">Conectate-Desktop</h1>
+}
+else
+{
+    <h1 class="title">Conectate-Móvil</h1>
+}
+<EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
+    <DataAnnotationsValidator />
+    @if (@SignInmovil == false)
+    {
+        <div class="field">
+            <label class="form-label"><span class="h4">Email</span></label>
+            <div class="form-group">
+                <InputText class="col-lg-4" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
+                <ValidationMessage For="@(()=>signInModel.Email)" />
+            </div>
+        </div>
+        <div class="field">
+            <label class="form-label"><span class="h4">Password</span></label>
+            <div class="form-group">
+                <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
+                <ValidationMessage For="@(()=>signInModel.Password)" />
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="field">
+            <label class="form-label"><span class="h4">Email</span></label>
+            <div class="form-control-wallet">
+                <InputText class="col-lg-4" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
+                <ValidationMessage For="@(()=>signInModel.Email)" />
+            </div>
+        </div>
+        <div class="field">
+            <label class="form-label"><span class="h4">Password</span></label>
+            <div class="form-control-wallet">
+                <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
+                <ValidationMessage For="@(()=>signInModel.Password)" />
+            </div>
+        </div>
+    }
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="btn btn-success">OK</button>
+        </div>
+    </div>
+</EditForm>
+@if (showSignInError)
+{
+    <div class="col-lg-5 notification is-danger">
+        Lo sentimos, nombre de usuario o contraseña incorrectos.
+    </div>
+}
+
+
+@code {
+
+    private bool visible = false;
+    private SignInModel signInModel = new SignInModel();
+    private bool showSignInError = false;
+
+    [Parameter]
+    public bool SignInmovil { get; set; }
+
+    private async Task RegisterUser()
+    {
+
+        var user = await userManager.FindByEmailAsync(signInModel.Email);
+
+        if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
+        {
+            showSignInError = false;
+
+            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
+
+            var data = $"{user.Id}|{token}";
+
+            var parsedQuery = System.Web.HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+
+            var returnUrl = parsedQuery["returnUrl"];
+
+            if (!string.IsNullOrWhiteSpace(returnUrl))
+            {
+                data += $"|{returnUrl}";
+            }
+
+            var protector = dataProtectionProvider.CreateProtector("SignIn");
+
+            var pdata = protector.Protect(data);
+
+            //guardo el email en el localStorage
+
+            signInModel.Token = token;
+
+            await AccountService.Login(signInModel);
+
+            navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
+
+        }
+        else
+        {
+            showSignInError = true;
+        }
+    }
+}

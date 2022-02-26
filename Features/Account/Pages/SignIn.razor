@@ -1,11 +1,6 @@
 ﻿@page "/account/signin"
-@using BlazorApp.Models
-@inject UserManager<IdentityUser> userManager
-@inject SignInManager<IdentityUser> signInManager
-@inject NavigationManager navigationManager
-@inject IDataProtectionProvider dataProtectionProvider
-@inject IAccountService AccountService
 @using Blazorise
+@inject IJSRuntime JsRuntime
 
 <div class="container">
     <Jumbotron Background="Background.None" Margin="Margin.Is4.FromBottom">
@@ -20,35 +15,7 @@
                 <Blazorise.Alert Color="Color.None" Visible="true">
                     <ComponentContraseña modalVisible=@visible></ComponentContraseña>
                     <div class="container">
-                        <h1 class="title">Conectate</h1>
-                        <EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
-                            <DataAnnotationsValidator />
-                            <div class="field">
-                                <label class="form-label"><span class="h4">Email</span></label>
-                                <div class="form-group">
-                                    <InputText class="col-lg-4" id="email" type="email" @bind-Value="@signInModel.Email"></InputText>
-                                    <ValidationMessage For="@(()=>signInModel.Email)" />
-                                </div>
-                            </div>
-                            <div class="field">
-                                <label class="form-label"><span class="h4">Password</span></label>
-                                <div class="form-group">
-                                    <InputText class="col-md-3" id="password" type="password" @bind-Value="@signInModel.Password"></InputText>
-                                    <ValidationMessage For="@(()=>signInModel.Password)" />
-                                </div>
-                            </div>
-                            <div class="field">
-                                <div class="control">
-                                    <button type="submit" class="btn btn-success">OK</button>
-                                </div>
-                            </div>
-                        </EditForm>
-                        @if (showSignInError)
-                        {
-                            <div class="col-lg-5 notification is-danger">
-                                Lo sentimos, nombre de usuario o contraseña incorrectos.
-                            </div>
-                        }
+                          <ComponentSignIn SignInmovil=@movil></ComponentSignIn>
                     </div>
                     <div class="container">
                         <p class="h6">¿Aún no tienes cuenta? <a href="/account/register" style="color: #363636">Crear nueva cuenta</a></p>
@@ -63,13 +30,10 @@
     </Jumbotron>
 </div>
 
-
-
 @code {
 
     private bool visible = false;
-    private SignInModel signInModel = new SignInModel();
-    private bool showSignInError = false;
+    public bool movil;
 
     private Task ShowModal()
     {
@@ -85,44 +49,14 @@
         StateHasChanged();
     }
 
-    private async Task RegisterUser()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
-        var user = await userManager.FindByEmailAsync(signInModel.Email);
-
-        if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
+        if (firstRender)
         {
-            showSignInError = false;
-
-            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
-
-            var data = $"{user.Id}|{token}";
-
-            var parsedQuery = System.Web.HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
-
-            var returnUrl = parsedQuery["returnUrl"];
-
-            if (!string.IsNullOrWhiteSpace(returnUrl))
-            {
-                data += $"|{returnUrl}";
-            }
-
-            var protector = dataProtectionProvider.CreateProtector("SignIn");
-
-            var pdata = protector.Protect(data);
-
-            //guardo el email en el localStorage
-
-            signInModel.Token = token;
-
-            await AccountService.Login(signInModel);
-
-            navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
-
+            movil = await JsRuntime.InvokeAsync<bool>("movil");
+            StateHasChanged();
         }
-        else
-        {
-            showSignInError = true;
-        }
+
     }
+
 }
