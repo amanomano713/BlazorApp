@@ -10637,7 +10637,7 @@ label.panel-block:hover {
     .form-group-wallet {
         width: 255%;
         margin-top: -20px;
-   }
+    }
     .form-group-wallet-value {
         font-weight: 200;
         width: 255%;
@@ -10650,6 +10650,7 @@ label.panel-block:hover {
         width: 80%;
         margin-top: 8px;
     }
+    
 }
 
 

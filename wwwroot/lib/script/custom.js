@@ -53,6 +53,14 @@ function movil(pantalla) {
     }
 }
 
+
+function resolucion() {
+
+    var result = + screen.availWidth + " x " + screen.availHeight
+    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
+    return result;
+}
+
 function ajustar01() {
 
     $('div#idsidebar').attr('style', 'height : 120vh');

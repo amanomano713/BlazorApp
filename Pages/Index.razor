@@ -47,6 +47,10 @@
                         <strong style="color:black;font-size:x-large">Código Afiliado </strong>
                         <InputMask name="codigo" disabled @bind-Value="@codigo" class="form-control" />
                     </div>
+                    <div class="form-group" style="margin-top:20px">
+                        <strong style="color:black;font-size:x-large">Resolución </strong>
+                        <InputMask name="codigo" disabled @bind-Value="@resolucion" class="form-control" />
+                    </div>
                 </div>
             </div>
         </Blazorise.Alert>
@@ -63,6 +67,8 @@
     private string packages = "0";
     private string? wallet;
     private string? codigo;
+
+     private string? resolucion;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -106,6 +112,8 @@
             }
             
             await JS.InvokeVoidAsync("mostrar");
+
+            resolucion = await JS.InvokeAsync<string>("resolucion");
 
             StateHasChanged();
         }

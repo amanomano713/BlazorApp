@@ -46,7 +46,7 @@
                 <fieldset disabled>
                     <div class="form-group-wallet-Transfer">
                         <h1><strong style="color:black;font-size:x-large">Disponible </strong></h1>
-                        <InputMask id="saldo" name="saldo" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
+                        <InputMask id="saldo" name="saldo" style="width:160%" disabled @bind-Value="@TransferirModel.Saldo" class="form-control" />
                     </div>
                 </fieldset>
             </div>
@@ -65,7 +65,7 @@
                 <div class="col-md-4">
                     <div class="form-group-wallet-Transfer">
                         <h1><strong style="color:black;font-size:x-large">Monto</strong></h1>
-                        <InputMask id="retiro" name="retiro" @bind-value="@TransferirModel.Transferir" class="form-control" Mask="9999" />
+                        <InputMask id="retiro" name="retiro" style="width:160%" @bind-value="@TransferirModel.Transferir" class="form-control" Mask="9999" />
                         <ValidationMessage For="@(()=>TransferirModel.Transferir)" />
                     </div>
                 </div>
