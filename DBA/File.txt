@@ -45,3 +45,6 @@ _logger.LogInformation($"Information {iteration}");
 _logger.LogWarning($"Warning {iteration}");  
 _logger.LogError($"Error {iteration}");  
 _logger.LogCritical($"Critical {iteration}");  
+
+
+appBlazorBeta.redis.cache.windows.net:6380,password=atCzBEhFxkl4cxSTURYAjRnXvg3GxkP5aAzCaIoGaRQ=,ssl=True,abortConnect=False
