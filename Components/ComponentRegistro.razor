@@ -15,8 +15,10 @@
     <Blazorise.Alert Color="Color.None" Visible="true">
         @if (displayUpdateUserToDB == true)
         {
-            <div class="row bg-success text-white" style="margin-top:10px; height:40px">
-                <label class="p-2">Actualización correcta de datos en la base de datos... </label>
+            <div class="form-group">
+                <div class="row bg-success text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">Actualización correcta en la base de datos. </label>
+                </div>
             </div>
         }
         @if (displayYearValidate == true)
@@ -43,7 +45,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:x-large">Pais </strong>
+                                    <strong style="color:black;font-size:x-large">Pais</strong>
                                 </label>
                                 <SelectList TItem="MySelectModel"
                                         TValue="int"
@@ -58,7 +60,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:x-large">Nacimiento </strong>
+                                    <strong style="color:black;font-size:x-large">Nacimiento</strong>
                                 </label>
                                 <input type="date" class="form-control" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
                             </div>
@@ -66,7 +68,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:x-large">Mobile </strong>
+                                    <strong style="color:black;font-size:x-large">Mobile</strong>
                                 </label>
                                 <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
                                 <ValidationMessage For="@(()=>AccountModel.mobile)" />
@@ -77,7 +79,7 @@
                         <div class="col-md-8">
                             <div class="form-group">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:x-large">Apellidos </strong>
+                                    <strong style="color:black;font-size:x-large">Apellidos</strong>
                                 </label>
                                 <input type="text" class="form-control" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                                 <ValidationMessage For="@(()=>AccountModel.surname)" />
@@ -87,7 +89,7 @@
                             <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">
-                                        <strong style="color:black;font-size:x-large">Correo Electrónico </strong>
+                                        <strong style="color:black;font-size:x-large">Correo Electrónico</strong>
                                     </label>
                                     <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
                                 </div>
@@ -96,7 +98,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">
-                                    <strong style="color:black;font-size:x-large">Wallet BTC </strong>
+                                    <strong style="color:black;font-size:x-large">Wallet BTC</strong>
                                 </label>
                                 <input type="text" class="form-control" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                                 <ValidationMessage For="@(()=>AccountModel.wallet)" />
@@ -133,29 +135,75 @@
                             <label class="control-label">
                                 <strong style="color:black;font-size:x-large">Nombre </strong>
                             </label>
-                            <input type="text" class="form-control-wallet-registro" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                            <input type="text" class="form-control" style="width:200%" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
                             <ValidationMessage For="@(()=>AccountModel.name)" />
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 <strong style="color:black;font-size:x-large">Apellidos </strong>
                             </label>
-                            <input type="text" class="form-control-wallet-registro" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                            <input type="text" class="form-control" style="width:200%" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
                             <ValidationMessage For="@(()=>AccountModel.surname)" />
                         </div>
                         <div class="form-group">
                             <label class="control-label-Email">
                                 <strong style="color:black;font-size:x-large">Correo Electrónico </strong>
                             </label>
-                            <input type="email" disabled class="form-control-wallet-registro" id="email" name="email" value=@email>
+                            <input type="email" style="width:200%" disabled class="form-control" id="email" name="email" value=@email>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 <strong style="color:black;font-size:x-large">Wallet BTC </strong>
                             </label>
-                            <input type="text" class="form-control-wallet-btc" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                            <input type="text" class="form-control" style="width:200%" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
                             <ValidationMessage For="@(()=>AccountModel.wallet)" />
                         </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Pais </strong>
+                            </label>
+                            <SelectList TItem="MySelectModel"
+                                    TValue="int"
+                                    Data="@myData"
+                                    TextField="@((item)=>item.MyTextField)"
+                                    ValueField="@((item)=>item.MyValueField)"
+                                    SelectedValue="@selectedListValue"
+                                    SelectedValueChanged="@MyListValueChangedHandler"
+                                    DefaultItemText="Selecciona el pais" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Nacimiento </strong>
+                            </label>
+                            <input type="date" style="width:150%" class="form-control" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Mobile </strong>
+                            </label>
+                            <input type="text" class="form-control" style="width:200%" id="mobile" name="mobile" @oninput="ValueChanged" @bind-value="@AccountModel.mobile" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." />
+                            <ValidationMessage For="@(()=>AccountModel.mobile)" />
+                        </div>
+                        @if (displayEditUserToDB == false)
+                        {
+                            <div class="col-md-6" style="margin-top:110px">
+                                <div class="form-group">
+                                    <button class="btn btn-yellow btn-block-actualizar" type="submit">
+                                        OK <i class="icon-circle-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        @if (displayEditUserToDB == true)
+                        {
+                            <div class="col-md-6" style="margin-top:100px">
+                                <div class="form-group">
+                                    <button class="btn btn-yellow btn-block-actualizar" type="submit">
+                                        Actualizar <i class="icon-circle-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             }

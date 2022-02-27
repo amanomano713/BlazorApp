@@ -10681,6 +10681,10 @@ label.panel-block:hover {
         width: 255%;
     }
 
+    .btn-block-actualizar {
+        display: block;
+        width: 40%;
+    }
 }
 
 
