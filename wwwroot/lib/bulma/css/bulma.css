@@ -10651,7 +10651,17 @@ label.panel-block:hover {
         width: 80%;
         margin-top: 8px;
     }
-    
+    .form-control-wallet-registro {
+        font-weight: 200;
+        width: 120%
+    }
+    .control-label-Email {
+        width: 120%
+    }
+    .form-control-wallet-btc {
+        font-weight: 200;
+        width: 250%
+    }
 }
 
 

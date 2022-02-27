@@ -1,4 +1,354 @@
-﻿
+﻿@using BlazorInputMask
+@using Blazorise.Components
+@using Microsoft.JSInterop;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject ILocalStorageService _localStorageService
+@inject NavigationManager navigationManager
+@inject IAccountService AccountService
+@inject IUserDataRepository UserDataRepository
+@inject IUserDataQueries UserDataQueries
+@inject IMapper mapper
+@inject IMediator mediator
+@inject IJSRuntime JsRuntime
+@using Blazorise;
+<Blazorise.Container Breakpoint="Breakpoint.Desktop">
+    <Blazorise.Alert Color="Color.None" Visible="true">
+        @if (displayUpdateUserToDB == true)
+        {
+            <div class="row bg-success text-white" style="margin-top:10px; height:40px">
+                <label class="p-2">Actualización correcta de datos en la base de datos... </label>
+            </div>
+        }
+        @if (displayYearValidate == true)
+        {
+            <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                <label class="p-2">El año es incorrecto. </label>
+            </div>
+        }
+        <EditForm Model="@AccountModel" OnSubmit="@SubmitCreate">
+            <DataAnnotationsValidator />
+            @if (@movil == false)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Nombre </strong>
+                                </label>
+                                <input type="text" class="form-control" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                                <ValidationMessage For="@(()=>AccountModel.name)" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Pais </strong>
+                                </label>
+                                <SelectList TItem="MySelectModel"
+                                        TValue="int"
+                                        Data="@myData"
+                                        TextField="@((item)=>item.MyTextField)"
+                                        ValueField="@((item)=>item.MyValueField)"
+                                        SelectedValue="@selectedListValue"
+                                        SelectedValueChanged="@MyListValueChangedHandler"
+                                        DefaultItemText="Selecciona el pais" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Nacimiento </strong>
+                                </label>
+                                <input type="date" class="form-control" id="dateOfbirth" name="dateOfbirth" @oninput="ValueChanged" @bind-value="@AccountModel.dateOfbirth" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Mobile </strong>
+                                </label>
+                                <BlazorInputMask.InputMask @ref="mask" id="mobile" name="mobile" @oninput="ValueChanged" @bind-Value="@AccountModel.mobile" class="form-control" data-mask="(+00)000.000.000" placeholder="Insertar tu Celular o Móvil..." validateOnKeyPress="false" />
+                                <ValidationMessage For="@(()=>AccountModel.mobile)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Apellidos </strong>
+                                </label>
+                                <input type="text" class="form-control" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                                <ValidationMessage For="@(()=>AccountModel.surname)" />
+                            </div>
+                        </div>
+                        <fieldset disabled>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        <strong style="color:black;font-size:x-large">Correo Electrónico </strong>
+                                    </label>
+                                    <input type="email" placeholder="Inserta tu Email" class="form-control" id="email" name="email" value=@email>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    <strong style="color:black;font-size:x-large">Wallet BTC </strong>
+                                </label>
+                                <input type="text" class="form-control" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                                <ValidationMessage For="@(()=>AccountModel.wallet)" />
+                            </div>
+                        </div>
+                        @if (displayEditUserToDB == false)
+                        {
+                            <div class="col-md-6" style="margin-top:110px">
+                                <div class="form-group">
+                                    <button class="btn btn-yellow btn-block" type="submit">
+                                        OK <i class="icon-circle-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        @if (displayEditUserToDB == true)
+                        {
+                            <div class="col-md-6" style="margin-top:100px">
+                                <div class="form-group">
+                                    <button class="btn btn-yellow btn-block" type="submit">
+                                        Actualizar <i class="icon-circle-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Nombre </strong>
+                            </label>
+                            <input type="text" class="form-control-wallet-registro" id="Name" @oninput="ValueChanged" @bind-value="@AccountModel.name" placeholder="Insertar tu nombre..." />
+                            <ValidationMessage For="@(()=>AccountModel.name)" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Apellidos </strong>
+                            </label>
+                            <input type="text" class="form-control-wallet-registro" id="Surname" @oninput="ValueChanged" @bind-value="@AccountModel.surname" placeholder="Insertar tu nombre..." />
+                            <ValidationMessage For="@(()=>AccountModel.surname)" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label-Email">
+                                <strong style="color:black;font-size:x-large">Correo Electrónico </strong>
+                            </label>
+                            <input type="email" disabled class="form-control-wallet-registro" id="email" name="email" value=@email>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">
+                                <strong style="color:black;font-size:x-large">Wallet BTC </strong>
+                            </label>
+                            <input type="text" class="form-control-wallet-btc" id="wallet" name="wallet" @oninput="ValueChanged" @bind-value="@AccountModel.wallet" placeholder="Insertar tu Wallet BTC..." />
+                            <ValidationMessage For="@(()=>AccountModel.wallet)" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </EditForm>
+    </Blazorise.Alert>
+</Blazorise.Container>
+
 @code {
 
+    [Parameter]
+    public bool movil { get; set; }
+
+
+    public class MySelectModel
+    {
+        public int MyValueField { get; set; }
+        public string MyTextField { get; set; }
+    }
+
+    static string[] Countries = { "España", "Portugal", "USA", "Brasil", "Colombia", "Peru", "Chile", "Ecuador", "Argentina", "Venezuela", "Cuba", "India", "Rusia", "Mexico", "Francia", "Italia" };
+    IEnumerable<MySelectModel> myData = Enumerable.Range(1, Countries.Length).Select(x => new MySelectModel { MyTextField = Countries[x - 1], MyValueField = x });
+
+    int selectedListValue { get; set; }
+
+    void MyListValueChangedHandler(int newValue)
+    {
+        selectedListValue = newValue;
+        OnFieldChanged = true;
+        StateHasChanged();
+    }
+
+    bool displayYearValidate = false;
+    int yearValidate = 1942;
+    BlazorInputMask.InputMask? mask { get; set; }
+    public UserDTO AccountModel = new UserDTO();
+    EditContext? context;
+    private string? email;
+    private string _userKey = "key";
+    bool displayValidationErrorMessages = false;
+    DateTime selectedDate = DateTime.Now;
+
+    bool displayEditUserToDB = false;
+    bool displayUpdateUserToDB = false;
+    public UserDTO userData = new UserDTO();
+    bool OnFieldChanged = false;
+
+    private IJSRuntime? _jsRuntime;
+
+    protected override void OnInitialized()
+    {
+        context = new EditContext(AccountModel);
+        base.OnInitialized();
+    }
+
+    private void ValueChanged(ChangeEventArgs args)
+    {
+        OnFieldChanged = true;
+    }
+
+    private async void SubmitCreate(EditContext context)
+    {
+        var year = AccountModel.dateOfbirth.Year;
+
+        if (displayEditUserToDB == true)
+        {
+            if (context.Validate() && OnFieldChanged == true)
+            {
+
+                if (year >= yearValidate)
+                {
+                    AccountModel.city = selectedListValue.ToString();
+
+                    var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
+
+                    var response = await mediator.Send(requestModel);
+
+                    var result = response;
+
+                    displayValidationErrorMessages = false;
+
+                    displayUpdateUserToDB = true;
+                }
+                else
+                {
+                    displayYearValidate = true;
+
+                    displayValidationErrorMessages = false;
+
+                    displayEditUserToDB = true;
+
+                    displayUpdateUserToDB = false;
+                }
+            }
+            else
+            {
+                displayValidationErrorMessages = true;
+
+                displayEditUserToDB = true;
+
+                displayUpdateUserToDB = false;
+            }
+
+        }
+
+        if (displayEditUserToDB == false)
+        {
+            if (context.Validate())
+            {
+                if (year >= yearValidate)
+                {
+                    Guid id = Guid.NewGuid();
+
+                    AccountModel.id = id.ToString();
+
+                    AccountModel.email = email;
+
+                    AccountModel.city = selectedListValue.ToString();
+
+                    var requestModel = mapper.Map<CreateUserDataCommand>(AccountModel);
+
+                    var response = await mediator.Send(requestModel);
+
+                    displayValidationErrorMessages = false;
+
+                    navigationManager.NavigateTo("Index");
+                }
+                else
+                {
+                    displayYearValidate = true;
+
+                    displayValidationErrorMessages = false;
+
+                    displayEditUserToDB = false;
+
+                    displayUpdateUserToDB = false;
+                }
+            }
+            else
+            {
+                displayValidationErrorMessages = true;
+
+                displayEditUserToDB = false;
+
+                displayUpdateUserToDB = false;
+            }
+
+        }
+
+        StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+
+        if (firstRender)
+        {
+
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+                else
+                {
+                    email = state.User.Identities.FirstOrDefault().Name;
+                }
+            }
+            else
+            {
+                UserDTO userData = new UserDTO();
+                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+                if (UserData != null)
+                {
+                    AccountModel.id = UserData.Id;
+                    AccountModel.name = UserData.name.Trim();
+                    AccountModel.dateOfbirth = UserData.dateOfbirth;
+                    AccountModel.email = UserData.email.Trim();
+                    AccountModel.mobile = UserData.mobile.Trim();
+                    AccountModel.wallet = UserData.wallet.Trim();
+                    AccountModel.surname = UserData.surname.Trim();
+                    selectedDate = AccountModel.dateOfbirth;
+                    displayEditUserToDB = true;
+                    selectedListValue = Convert.ToInt32(UserData.city);
+                }
+                email = emailStorage;
+            }
+
+            await JsRuntime.InvokeVoidAsync("ajustar");
+        }
+
+        StateHasChanged();
+    }
 }
