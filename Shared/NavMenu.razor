@@ -16,25 +16,28 @@
     </div>
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                    <span class="oi oi-home" aria-hidden="true"></span> Home
-                </NavLink>
-            </div>
-             @if (this.movil == false)
+            @if (this.movil == false)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </div>
+            }
+            @if (this.movil == false)
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Registro">
-                       <span class="oi oi-person" aria-hidden="true"></span> Registro
-                   </NavLink>
+                        <span class="oi oi-person" aria-hidden="true"></span> Registro
+                    </NavLink>
                 </div>
             }
-             @if (this.movil == true)
+            @if (this.movil == true)
             {
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="RegistroMovil">
-                       <span class="oi oi-person" aria-hidden="true"></span> Registro
-                   </NavLink>
+                        <span class="oi oi-person" aria-hidden="true"></span> Registro
+                    </NavLink>
                 </div>
             }
             @if (this.movil == false)

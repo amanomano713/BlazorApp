@@ -1,10 +1,4 @@
 ﻿
-var token = localStorage.getItem("access_token");
-
-var key = localStorage.getItem("key");
-
-var Bearer = 'Bearer' + token +'|'+ 'key' + key;
-
 function getOrientation() {
     return Math.abs(window.orientation) - 90 == 0 ? "landscape" : "portrait";
 };
@@ -16,7 +10,6 @@ function getMobileHeight() {
 };
 
 function recargar() {
-
     location.reload();
 }
 
@@ -29,7 +22,6 @@ function ocultar() {
 
 function ajustar(pantalla) {
 
-    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
     if (screen.width > 560) {
         if (pantalla == "Subastas") {
             $('div#idsidebar').attr('style', 'height : 150vh');
@@ -45,7 +37,6 @@ function ajustar(pantalla) {
 
 function movil(pantalla) {
 
-    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
     if (screen.width > 560) {
         return false;
     } else {
@@ -57,14 +48,12 @@ function movil(pantalla) {
 function resolucion() {
 
     var result = + screen.availWidth + " x " + screen.availHeight
-    //alert("La resolución de tu pantalla es: " + screen.width + " x " + screen.height)
     return result;
 }
 
 function ajustar01() {
 
     $('div#idsidebar').attr('style', 'height : 120vh');
-
 }
 
 function mostrar() {
@@ -84,13 +73,10 @@ async function CreatePuja(cadena) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             if (data.result == 1) {
-               /* $('div#modal-id').removeClass('modal').addClass('modal active')*/
-            } else if (data.result == 2) {
-               /* $('div#modal-id').removeClass('modal active').addClass('modal')*/
+           } else if (data.result == 2) {
                 $('div#modalSesion-id').removeClass('modal').addClass('modal active')
             }
             else {
-               /* $('div#modal-id').removeClass('modal active').addClass('modal')*/
                 $('div#modalSesion-id').removeClass('modal active').addClass('modal')
             }
         }
@@ -98,12 +84,6 @@ async function CreatePuja(cadena) {
 }
 
 async function CreateRetiro(cadena) {
-
-/*    var token = localStorage.getItem("access_token");*/
-
-/*    alert(localStorage.getItem("access_token"));*/
-
-/*    var Bearer = 'Bearer ' + token;*/
 
     $.ajax({
         url: '/account/createretiro',
@@ -131,8 +111,6 @@ async function CreateRetiro(cadena) {
 
 async function CreatePackages(cadena) {
 
-    /*alert(cadena);*/
-
     $.ajax({
         url: '/account/createpackages',
         headers: { 'Authorization': Bearer },
@@ -158,8 +136,6 @@ async function CreatePackages(cadena) {
 
 
 async function CreateTransfer(cadena) {
-
- /*   alert(cadena);*/
 
     $.ajax({
         url: '/account/createtransfer',
