@@ -8,6 +8,8 @@
 @inject IUserDataQueries UserDataQueries
 @inject IAccountService _IAccountService
 @inject IJSRuntime JsRuntime
+@using BlazorApp.Cache
+@inject ICacheBase cache
 
 <Container>
     <SourceContent>
@@ -37,7 +39,13 @@
         if (firstRender)
         {
             var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-            if (string.IsNullOrEmpty(emailStorage))
+            var key = KeyCache.GenCacheKey("User");
+            var result = cache.Get<User>(key);
+            if (result != null)
+            {
+                emailStorage = result.Email.ToList().FirstOrDefault();
+            }
+            else
             {
                 var state = await authenticationStateProvider.GetAuthenticationStateAsync();
                 if (!state.User.Identity.IsAuthenticated)
@@ -46,22 +54,19 @@
                 }
                 else
                 {
-                    email = state.User.Identities.FirstOrDefault().Name;
+                    emailStorage = state.User.Identities.FirstOrDefault().Name;
                 }
             }
-            else
+
+            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+            if (UserData != null)
             {
-                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-                if (UserData != null)
-                {
-                    //movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
-                    movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
-                }
+                //movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
+                movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
+
+                await JsRuntime.InvokeVoidAsync("mostrar");
+                StateHasChanged();
             }
-             await JsRuntime.InvokeVoidAsync("mostrar");
-            StateHasChanged();
         }
     }
-
-
 }

@@ -118,20 +118,10 @@ else
             }
             else
             {
-                var existe = false;
+                cache.Remove(key);
+                
+                CacheUser(signInModel.Email, key);
 
-                foreach (string item in result.Email)
-                {
-                    if (item == signInModel.Email)
-                    {
-                        existe = true;
-                    }
-                }
-                if (existe == false)
-                {
-                    result.Email.Add(signInModel.Email.ToString());
-                    cache.Set<User>(result, key);
-                }
             }
 
             await AccountService.Login(signInModel);

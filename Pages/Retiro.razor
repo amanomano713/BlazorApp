@@ -8,6 +8,9 @@
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
 @inject IEncryptor IEncryptor
+@using BlazorApp.Cache
+@inject ICacheBase cache
+
 <body>
     <div class="welcome1"></div>
     <div class="panel-body">
@@ -162,31 +165,40 @@
     {
         if (firstRender)
         {
+
             var emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
-                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!state.User.Identity.IsAuthenticated)
+                var key = KeyCache.GenCacheKey("User");
+                var result = cache.Get<User>(key);
+                if (result != null)
                 {
-                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    emailStorage = result.Email.ToList().FirstOrDefault();
                 }
                 else
                 {
-                    email = state.User.Identities.FirstOrDefault().Name;
+                    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    if (!state.User.Identity.IsAuthenticated)
+                    {
+                        navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    }
+                    else
+                    {
+                        email = state.User.Identities.FirstOrDefault().Name;
+                    }
                 }
             }
-            else
+
+            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+            if (UserData != null)
             {
-                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-                if (UserData != null)
-                {
-                    RetiroModel.Id = UserData.Id;
-                    RetiroModel.Wallet = UserData.wallet.Trim();
-                    Afiliado = UserData.Id;
-                    //Se envia el retiro a esta variable
-                    wallet = UserData.wallet.Trim();
-                }
+                RetiroModel.Id = UserData.Id;
+                RetiroModel.Wallet = UserData.wallet.Trim();
+                Afiliado = UserData.Id;
+                //Se envia el retiro a esta variable
+                wallet = UserData.wallet.Trim();
             }
+
             await JS.InvokeVoidAsync("mostrar");
             StateHasChanged();
         }

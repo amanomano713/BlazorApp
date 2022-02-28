@@ -8,6 +8,8 @@
 @using BlazorApp.Encryptor;
 @inject IAfiliadoDataQueries AfiliadoDataQueries
 @inject IEncryptor IEncryptor
+@using BlazorApp.Cache
+@inject ICacheBase cache
 
 @if (displayErrorTransfer == true)
 {
@@ -28,7 +30,7 @@
     </div>
 }
 
-  <hr>
+<hr>
 @if (movil == true)
 {
     <EditForm Model="@TransferirModel" OnSubmit="@SubmitTransferir">
@@ -328,26 +330,34 @@ else
             var emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
-                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!state.User.Identity.IsAuthenticated)
+                var key = KeyCache.GenCacheKey("User");
+                var result = cache.Get<User>(key);
+                if (result != null)
                 {
-                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    emailStorage = result.Email.ToList().FirstOrDefault();
                 }
                 else
                 {
-                    email = state.User.Identities.FirstOrDefault().Name;
+                    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    if (!state.User.Identity.IsAuthenticated)
+                    {
+                        navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    }
+                    else
+                    {
+                        email = state.User.Identities.FirstOrDefault().Name;
+                    }
                 }
+
             }
-            else
+
+            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+            if (UserData != null)
             {
-                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-                if (UserData != null)
-                {
-                    TransferirModel.Id = UserData.Id;
-                    TransferirModel.Wallet = UserData.wallet.Trim();
-                    TransferirModel.Saldo = "300";
-                    Afiliado = UserData.Id;
-                }
+                TransferirModel.Id = UserData.Id;
+                TransferirModel.Wallet = UserData.wallet.Trim();
+                TransferirModel.Saldo = "300";
+                Afiliado = UserData.Id;
             }
 
             await JS.InvokeVoidAsync("mostrar");

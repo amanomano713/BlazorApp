@@ -8,6 +8,9 @@
 @inject IEncryptor IEncryptor
 @inject IUserDataQueries UserDataQueries
 @using Blazorise
+@using BlazorApp.Cache
+@inject ICacheBase cache
+
 <body>
     <div class="paquete"></div>
     <div class="panel-body">
@@ -138,16 +141,24 @@
             var emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
-                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!state.User.Identity.IsAuthenticated)
+                var key = KeyCache.GenCacheKey("User");
+                var result = cache.Get<User>(key);
+                if (result != null)
                 {
-                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    emailStorage = result.Email.ToList().FirstOrDefault();
                 }
-            }
-            else
-            {
-                email = emailStorage;
-
+                else
+                {
+                    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    if (!state.User.Identity.IsAuthenticated)
+                    {
+                        navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    }
+                    else
+                    {
+                        email = state.User.Identities.FirstOrDefault().Name;
+                    }
+                }
             }
             await JsRuntime.InvokeVoidAsync("mostrar");
             StateHasChanged();
