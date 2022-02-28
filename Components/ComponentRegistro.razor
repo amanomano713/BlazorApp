@@ -1,6 +1,6 @@
 ﻿@using BlazorInputMask
 @using Blazorise.Components
-@using Microsoft.JSInterop;
+@using Microsoft.JSInterop
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ILocalStorageService _localStorageService
 @inject NavigationManager navigationManager
@@ -10,7 +10,10 @@
 @inject IMapper mapper
 @inject IMediator mediator
 @inject IJSRuntime JsRuntime
-@using Blazorise;
+@using Blazorise
+@using BlazorApp.Cache
+@inject ICacheBase cache
+
 <Blazorise.Container Breakpoint="Breakpoint.Desktop">
     <Blazorise.Alert Color="Color.None" Visible="true">
         @if (displayUpdateUserToDB == true)
@@ -361,39 +364,45 @@
 
         if (firstRender)
         {
-
             if (string.IsNullOrEmpty(emailStorage))
             {
-                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!state.User.Identity.IsAuthenticated)
+                var key = KeyCache.GenCacheKey("User");
+                var result = cache.Get<User>(key);
+                if (result != null)
                 {
-                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    emailStorage = result.Email.ToList().FirstOrDefault();
                 }
                 else
                 {
-                    email = state.User.Identities.FirstOrDefault().Name;
+                    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    if (!state.User.Identity.IsAuthenticated)
+                    {
+                        navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    }
+                    else
+                    {
+                        emailStorage = state.User.Identities.FirstOrDefault().Name;
+                    }
                 }
-            }
-            else
-            {
-                UserDTO userData = new UserDTO();
-                var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
-                if (UserData != null)
-                {
-                    AccountModel.id = UserData.Id;
-                    AccountModel.name = UserData.name.Trim();
-                    AccountModel.dateOfbirth = UserData.dateOfbirth;
-                    AccountModel.email = UserData.email.Trim();
-                    AccountModel.mobile = UserData.mobile.Trim();
-                    AccountModel.wallet = UserData.wallet.Trim();
-                    AccountModel.surname = UserData.surname.Trim();
-                    selectedDate = AccountModel.dateOfbirth;
-                    displayEditUserToDB = true;
-                    selectedListValue = Convert.ToInt32(UserData.city);
-                }
-                email = emailStorage;
             }
 
+            UserDTO userData = new UserDTO();
+            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+            if (UserData != null)
+            {
+                AccountModel.id          = UserData.Id;
+                AccountModel.name        = UserData.name.Trim();
+                AccountModel.dateOfbirth = UserData.dateOfbirth;
+                AccountModel.email       = UserData.email.Trim();
+                AccountModel.mobile      = UserData.mobile.Trim();
+                AccountModel.wallet      = UserData.wallet.Trim();
+                AccountModel.surname     = UserData.surname.Trim();
+                selectedDate             = AccountModel.dateOfbirth;
+                displayEditUserToDB      = true;
+                selectedListValue        = Convert.ToInt32(UserData.city);
+            }
+
+            email = emailStorage;
             await JsRuntime.InvokeVoidAsync("ajustar");
         }
 

@@ -1,4 +1,10 @@
 ﻿
+var token = localStorage.getItem("access_token");
+
+var key = localStorage.getItem("key");
+
+var Bearer = 'Bearer' + token + '|' + 'key' + key;
+
 function getOrientation() {
     return Math.abs(window.orientation) - 90 == 0 ? "landscape" : "portrait";
 };

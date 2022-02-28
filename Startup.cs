@@ -21,6 +21,8 @@ using BlazorApp.DataAcess.EF;
 using System.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
+using BlazorApp.Cache;
+using EurofirmsGroup.Caching.Redis;
 
 namespace BlazorApp
 {
@@ -155,6 +157,11 @@ namespace BlazorApp
                     .AllowAnyHeader();
             }));
 
+            services.AddSingleton<ICacheService>(sp => new CacheService(_configuration));
+
+            services.AddMemoryCache();
+
+            services.AddSingleton<ICacheBase, CacheMemoryHelper>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {

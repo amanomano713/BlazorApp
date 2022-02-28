@@ -2,15 +2,17 @@
 @using Blazorise
 @using Microsoft.AspNetCore.DataProtection
 @using Microsoft.AspNetCore.Identity
+@using BlazorApp.Cache
 @inject UserManager<IdentityUser> userManager
 @inject SignInManager<IdentityUser> signInManager
 @inject NavigationManager navigationManager
 @inject IDataProtectionProvider dataProtectionProvider
 @inject IAccountService AccountService
 @inject IJSRuntime JsRuntime
+@inject ICacheBase cache
 
 @if (@SignInmovil == false)
-    {
+{
     <h1 class="title">Conectate-Desktop</h1>
 }
 else
@@ -78,7 +80,6 @@ else
 
     private async Task RegisterUser()
     {
-
         var user = await userManager.FindByEmailAsync(signInModel.Email);
 
         if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
@@ -106,6 +107,33 @@ else
 
             signInModel.Token = token;
 
+            //Cache Redis
+            var key = KeyCache.GenCacheKey("User");
+
+            var result = cache.Get<User>(key);
+
+            if (result == null)
+            {
+                CacheUser(signInModel.Email, key);
+            }
+            else
+            {
+                var existe = false;
+
+                foreach (string item in result.Email)
+                {
+                    if (item == signInModel.Email)
+                    {
+                        existe = true;
+                    }
+                }
+                if (existe == false)
+                {
+                    result.Email.Add(signInModel.Email.ToString());
+                    cache.Set<User>(result, key);
+                }
+            }
+
             await AccountService.Login(signInModel);
 
             navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
@@ -115,5 +143,18 @@ else
         {
             showSignInError = true;
         }
+    }
+
+    private void CacheUser(string? correo, string? key)
+    {
+        List<string> valuesList = new List<string>();
+
+        valuesList.Add(correo);
+
+        User _user = new User();
+
+        _user.Email = valuesList;
+
+        cache.Set<User>(_user, key);
     }
 }

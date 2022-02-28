@@ -24,7 +24,7 @@
                     <div class="field">
                         <label class="form-label"><span class="h4">Correo Electrónico</span></label>
                         <div class="form-group">
-                            <InputText disabled  class="col-lg-8" id="email" type="text" @bind-Value="@email"></InputText>
+                            <InputText disabled class="col-lg-8" id="email" type="text" @bind-Value="@email"></InputText>
                         </div>
                     </div>
                     <div class="field">
@@ -45,14 +45,14 @@
                         <div class="control">
                             <button type="submit" class="btn btn-success">OK</button>
                         </div>
-                    </div>                  
-                </EditForm>
-                 <hr />
-                    <div class="field">
-                        <div class="control">
-                            <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
-                        </div>
                     </div>
+                </EditForm>
+                <hr />
+                <div class="field">
+                    <div class="control">
+                        <Button Color="Color.Secondary" Clicked="@HideModal">Cerrar</Button>
+                    </div>
+                </div>
             </div>
         </ModalBody>
     </ModalContent>
@@ -69,7 +69,7 @@
 
     private string _userKey = "key";
 
-    private string email ;
+    private string email;
 
     private bool cancelClosing = true;
 
@@ -82,7 +82,6 @@
 
     protected override void OnInitialized()
     {
-
         context = new EditContext(registerAccountModel);
         base.OnInitialized();
     }
@@ -91,9 +90,8 @@
     {
         if (firstRender)
         {
-            email = await _localStorageService.GetItem<String>(_userKey);              
+            email = await _localStorageService.GetItem<string>(_userKey);
         }
-
     }
 
     private async Task<bool> Save_Password(EditContext context)
@@ -102,38 +100,44 @@
 
         if (context.Validate())
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            var emailStorage = await _localStorageService.GetItem<string>(_userKey);
+
             if (!string.IsNullOrEmpty(emailStorage))
             {
                 try
                 {
                     var user = await userManager.FindByEmailAsync(emailStorage);
 
-                    string newpassword = registerAccountModel.Password;
-
-                    await userManager.RemovePasswordAsync(user);
-
-                    var result = await userManager.AddPasswordAsync(user, newpassword);
-
-                    if (result.Succeeded)
+                    if (user != null)
                     {
-                        valorRetorno = true;
+                        string newpassword = registerAccountModel.Password;
 
-                        modalVisible = false;
+                        await userManager.RemovePasswordAsync(user);
 
-                        await JsRuntime.InvokeVoidAsync("recargar");
+                        var result = await userManager.AddPasswordAsync(user, newpassword);
+
+                        if (result.Succeeded)
+                        {
+                            valorRetorno = true;
+
+                            modalVisible = false;
+
+                            await JsRuntime.InvokeVoidAsync("recargar");
+                        }
+                        else
+                        {
+                            valorRetorno = false;
+                        }
                     }
                     else
                     {
-                        valorRetorno = false;
+                       valorRetorno = false; 
                     }
-
                 }
                 catch (Exception ex)
                 {
                     valorRetorno = false;
                 }
-
             }
         }
 
@@ -146,7 +150,7 @@
         e.Cancel = cancelClosing;
         if (!cancelClosing)
         {
-           await JsRuntime.InvokeVoidAsync("recargar");            
+            await JsRuntime.InvokeVoidAsync("recargar");
         }
 
     }
