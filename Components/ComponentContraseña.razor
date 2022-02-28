@@ -10,6 +10,8 @@
 @inject ILocalStorageService _localStorageService
 @inject IUserDataQueries UserDataQueries
 @inject UserManager<IdentityUser> userManager
+@using BlazorApp.Cache
+@inject ICacheBase cache
 
 <Modal @bind-Visible="@modalVisible" Closing="@OnModalClosing">
     <ModalContent Centered="true">
