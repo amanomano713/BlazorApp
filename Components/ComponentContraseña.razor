@@ -19,6 +19,12 @@
             <ModalTitle>Cambio de contraseña</ModalTitle>
         </ModalHeader>
         <ModalBody>
+            @if (@valorRetorno == true)
+            {
+                <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">@error</label>
+                </div>
+            }
             <div class="container">
                 <EditForm Model="@registerAccountModel" OnValidSubmit="@Save_Password">
                     <DataAnnotationsValidator />
@@ -71,9 +77,13 @@
 
     private string _userKey = "key";
 
-    private string email;
+    private string? email;
+
+    private string? error;
 
     private bool cancelClosing = true;
+
+    private bool valorRetorno = false;
 
     private void HideModal()
     {
@@ -107,11 +117,13 @@
                 email = await _localStorageService.GetItem<string>(_userKey);
             }
         }
+
+         StateHasChanged();
     }
 
     private async Task<bool> Save_Password(EditContext context)
     {
-        var valorRetorno = false;
+        valorRetorno = false;
 
         if (context.Validate())
         {
@@ -141,17 +153,19 @@
                         }
                         else
                         {
-                            valorRetorno = false;
+                            error = result.Errors.ToList().FirstOrDefault().Description;
+                            valorRetorno = true;
                         }
                     }
                     else
                     {
-                        valorRetorno = false;
+                        valorRetorno = true;
                     }
                 }
                 catch (Exception ex)
                 {
-                    valorRetorno = false;
+                    error = ex.InnerException.Message;
+                    valorRetorno = true;
                 }
             }
         }

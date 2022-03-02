@@ -4,6 +4,8 @@
 @inject ILocalStorageService _localStorageService
 @inject IUserDataQueries UserDataQueries
 @inject IJSRuntime JsRuntime
+@using BlazorApp.Cache
+@inject ICacheBase cache
 
 @if (activate == true)
 {
@@ -148,10 +150,32 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-
         if (firstRender)
         {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+
+            if (string.IsNullOrEmpty(emailStorage))
+            {
+                var key = KeyCache.GenCacheKey("User");
+                var result = cache.Get<User>(key);
+                if (result != null)
+                {
+                    emailStorage = result.Email.ToList().FirstOrDefault();
+                }
+                else
+                {
+                    var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                    if (!state.User.Identity.IsAuthenticated)
+                    {
+                        navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                    }
+                    else
+                    {
+                        emailStorage = state.User.Identities.FirstOrDefault().Name;
+                    }
+                }
+            }
+
             UserDTO userData = new UserDTO();
             var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
             if (UserData != null)
@@ -162,6 +186,7 @@
             {
                 register = false;
             }
+
         }
         StateHasChanged();
     }
