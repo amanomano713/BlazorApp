@@ -1,7 +1,8 @@
 ﻿@using Blazorise
 @inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime;
 
-<Modal @bind-Visible="@modalVisible"  Closing="@OnModalClosingCarousel">
+<Modal @bind-Visible="@modalVisible" Closing="@OnModalClosingCarousel">
     <ModalContent Size="ModalSize.Large" Centered="true">
         <ModalHeader>
             <ModalTitle>@modalDescripcion</ModalTitle>
@@ -26,7 +27,7 @@
 </Modal>
 
 @code {
-   
+
     private string selectedSlide = "2";
 
     private bool cancelClosingCarousel = true;
@@ -48,19 +49,40 @@
     public bool modalVisible { get; set; }
 
     [Parameter]
-    public string? modalDescripcion  { get; set; }
-    
+    public string? modalDescripcion { get; set; }
+
+    private bool movil = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (cancelClosingCarousel == false)
+        {
+            movil = await JsRuntime.InvokeAsync<bool>("movil");
+            if (movil == true)
+            {
+                navigationManager.NavigateTo("/registromovil", forceLoad: true);
+            }
+            else
+            {
+                navigationManager.NavigateTo("/registro", forceLoad: true);
+            }
+        }
+
+    }
+
     private Task OnModalClosingCarousel(ModalClosingEventArgs e)
     {
         e.Cancel = cancelClosingCarousel;
         return Task.CompletedTask;
+
     }
+    
 
     private void HideModalCarousel()
     {
         modalVisible = false;
         cancelClosingCarousel = false;
-        navigationManager.NavigateTo("/registro", forceLoad: true);
     }
 
 }

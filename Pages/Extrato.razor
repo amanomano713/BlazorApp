@@ -1,5 +1,6 @@
 ﻿@page "/extrato";
 @using Blazorise
+@inject IJSRuntime JS
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
@@ -12,12 +13,22 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <hr>
-        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Primary" Visible="true">
-                <ComponentExtrato></ComponentExtrato>
-            </Blazorise.Alert>
-        </Blazorise.Container>
+        @if(movil==false){
+            <Blazorise.Container Breakpoint="Breakpoint.Desktop">
+                <Blazorise.Alert Color="Color.Primary" Visible="true">
+                    <ComponentExtrato></ComponentExtrato>
+                </Blazorise.Alert>
+            </Blazorise.Container>
+        }
     </div>
 </body>
 
-
+@code
+{   
+    private bool movil = false;
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+         movil = await JS.InvokeAsync<bool>("movil");
+    }
+}

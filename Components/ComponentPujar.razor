@@ -152,6 +152,8 @@
 
     private bool visible = false;
 
+    private bool movil = false;
+
     private string IdPuja;
 
     private PujarModel pujarModel = new PujarModel();
@@ -189,7 +191,16 @@
     {
         if (ModalClosePujas == true)
         {
-            navigationManager.NavigateTo("/registro", forceLoad: true);
+            movil = await JsRuntime.InvokeAsync<bool>("movil");
+            if (movil==true)
+            {
+                navigationManager.NavigateTo("/registromovil", forceLoad: true);
+            }
+            else
+            {
+                 navigationManager.NavigateTo("/registro", forceLoad: true);
+            }
+
         }
     }
 
@@ -213,7 +224,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        pujarModel.MontoPujar = "0;";
+        pujarModel.MontoPujar = "0";
 
         hubConnection = new HubConnectionBuilder()
             .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))

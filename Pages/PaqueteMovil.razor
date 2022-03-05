@@ -113,6 +113,8 @@
 
     public string? paquete;
 
+    private bool movil = false;
+
     private async Task CreatePackaqes(string? _idCod)
     {
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
@@ -161,7 +163,14 @@
                 }
             }
             await JsRuntime.InvokeVoidAsync("mostrar");
+            movil = await JsRuntime.InvokeAsync<bool>("movil");
+            if (movil == false)
+            {
+                navigationManager.NavigateTo("/paquete", forceLoad: true);
+            }
             StateHasChanged();
         }
+
+
     }
 }
