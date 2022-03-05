@@ -105,6 +105,8 @@
     private string retiro = string.Empty;
     private string? Afiliado = null;
 
+    private bool movil = false;
+
     protected override void OnInitialized()
     {
         context = new EditContext(RetiroModel);
@@ -188,6 +190,11 @@
                 }
             }
             await JS.InvokeVoidAsync("mostrar");
+            movil = await JS.InvokeAsync<bool>("movil");
+            if (movil == false)
+            {
+                navigationManager.NavigateTo("/retiro", forceLoad: true);
+            }
             StateHasChanged();
         }
     }

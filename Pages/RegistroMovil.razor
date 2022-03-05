@@ -1,5 +1,8 @@
 ﻿@page "/registromovil"
 @using Blazorise;
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
+
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
@@ -14,4 +17,18 @@
         <ComponentRegistro movil=true></ComponentRegistro>
     </div>
 </body>
+@code {
 
+    private bool movil = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        movil = await JsRuntime.InvokeAsync<bool>("movil");
+        if (movil == false)
+        {
+            navigationManager.NavigateTo("/registro", forceLoad: true);
+        }
+    }
+
+}

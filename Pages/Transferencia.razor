@@ -1,5 +1,7 @@
 ﻿@page "/transferencia"
 @using Blazorise;
+@inject NavigationManager navigationManager
+@inject IJSRuntime JsRuntime
 <body>
     <div class="welcome1"></div>
     <div class="panel-body">
@@ -22,3 +24,18 @@
         </Blazorise.Container>
     </div>
 </body>
+@code {
+
+    private bool movil = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        movil = await JsRuntime.InvokeAsync<bool>("movil");
+        if (movil == true)
+        {
+            navigationManager.NavigateTo("/transferenciamovil", forceLoad: true);
+        }
+    }
+
+}
