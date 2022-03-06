@@ -192,14 +192,17 @@
         if (ModalClosePujas == true)
         {
             movil = await JsRuntime.InvokeAsync<bool>("movil");
-            if (movil==true)
-            {
-                navigationManager.NavigateTo("/registromovil", forceLoad: true);
-            }
-            else
-            {
-                 navigationManager.NavigateTo("/registro", forceLoad: true);
-            }
+
+            navigationManager.NavigateTo("/inmuebles", forceLoad: true);
+
+            //if (movil==true)
+            //{
+            //    navigationManager.NavigateTo("/registromovil", forceLoad: true);
+            //}
+            //else
+            //{
+            //     navigationManager.NavigateTo("/registro", forceLoad: true);
+            //}
 
         }
     }

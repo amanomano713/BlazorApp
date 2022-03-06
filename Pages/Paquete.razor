@@ -19,7 +19,8 @@
                 <h3><i class="icon-edit-sign teal"></i>BITCOIN-Desktop</h3>
                 <p>
                     <strong style="color:black;font-size:medium">
-                       Siempre sabrás exactamente a dónde va tu dinero, sin costes ocultos ni comisiones inesperadas.</strong>
+                        Siempre sabrás exactamente a dónde va tu dinero, sin costes ocultos ni comisiones inesperadas.
+                    </strong>
                 </p>
             </Blazorise.Alert>
         </Blazorise.Container>
@@ -45,7 +46,7 @@
         <div class="col-md-2">
             <div class="card">
                 <div class="card-image">
-                    <img src="img/imagen.jpg"  class="img-responsive">
+                    <img src="img/imagen.jpg" class="img-responsive">
                 </div>
                 <div class="card-header">
                     <div class="card-title h2">BTC</div>
@@ -54,7 +55,7 @@
                     Inversión 10$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq01" @onclick="async () => await CreatePackaqes(this._idCod,1)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -70,7 +71,7 @@
                     Inversión 20$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod20)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq02" @onclick="async () => await CreatePackaqes(this._idCod20,2)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -86,7 +87,7 @@
                     Inversión 50$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod50)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq03" @onclick="async () => await CreatePackaqes(this._idCod50,3)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -102,12 +103,11 @@
                     Inversión 100$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod100)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq04" @onclick="async () => await CreatePackaqes(this._idCod100,4)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
     </div>
-
     <hr>
     <div class="row col-md-12">
         <div class="col-md-2">
@@ -122,7 +122,7 @@
                     Inversión 200$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod200)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq05" @onclick="async () => await CreatePackaqes(this._idCod200,5)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -135,10 +135,10 @@
                     <div class="card-title h2">BTC</div>
                 </div>
                 <div class="card-body">
-                     Inversión 500$
+                    Inversión 500$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod500)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq06" @onclick="async () => await CreatePackaqes(this._idCod500,6)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -151,10 +151,10 @@
                     <div class="card-title h2">BTC</div>
                 </div>
                 <div class="card-body">
-                     Inversión 1000$
+                    Inversión 1000$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod1000)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq07" @onclick="async () => await CreatePackaqes(this._idCod1000,7)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -170,7 +170,7 @@
                     Inversión 1500$
                 </div>
                 <div class="card-footer">
-                    <button @onclick="async () => await CreatePackaqes(this._idCod1500)" class="btn btn-primary">Comprar</button>
+                    <Button Color="Color.Primary" Loading="@isLoadingPaq08" @onclick="async () => await CreatePackaqes(this._idCod1500,8)" class="btn btn-primary">Comprar</Button>
                 </div>
             </div>
         </div>
@@ -198,8 +198,48 @@
 
     private bool movil = false;
 
-    private async Task CreatePackaqes(string? _idCod)
+    private bool isLoading;
+
+    private bool isLoadingPaq01;
+    private bool isLoadingPaq02;
+    private bool isLoadingPaq03;
+    private bool isLoadingPaq04;
+    private bool isLoadingPaq05;
+    private bool isLoadingPaq06;
+    private bool isLoadingPaq07;
+    private bool isLoadingPaq08;
+
+    private async Task CreatePackaqes(string? _idCod, int Loading)
     {
+
+        switch (Loading)
+        {
+            case 1:
+                isLoadingPaq01 = true;
+                break;
+            case 2:
+                isLoadingPaq02 = true;
+                break;
+            case 3:
+                isLoadingPaq03 = true;
+                break;
+            case 4:
+                isLoadingPaq04 = true;
+                break;
+            case 5:
+                isLoadingPaq05 = true;
+                break;
+            case 6:
+                isLoadingPaq06 = true;
+                break;
+            case 7:
+                isLoadingPaq07 = true;
+                break;
+            case 8:
+                isLoadingPaq08 = true;
+                break;
+        }
+
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
         UserDTO userData = new UserDTO();
         var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
@@ -223,8 +263,8 @@
     {
         if (firstRender)
         {
-           var emailStorage = await _localStorageService.GetItem<String>(_userKey);
-           if (string.IsNullOrEmpty(emailStorage))
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");
                 var result = cache.Get<User>(key);
