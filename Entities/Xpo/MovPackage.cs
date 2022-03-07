@@ -71,5 +71,26 @@ namespace BlazorApp.Entities.Xpo
             set { SetPropertyValue<float>(nameof(Porcentaje), ref fPorcentaje, value); }
         }
 
+        float fMontoPackage;
+        [Nullable(false)]
+        public float MontoPackage
+        {
+            get { return fMontoPackage; }
+            set { SetPropertyValue<float>(nameof(MontoPackage), ref fMontoPackage, value); }
+        }
+        float fMontoRetiro;
+        [Nullable(false)]
+        public float MontoRetiro
+        {
+            get { return fMontoRetiro; }
+            set { SetPropertyValue<float>(nameof(MontoRetiro), ref fMontoRetiro, value); }
+        }
+        float fMontoTransferido;
+        [Nullable(false)]
+        public float MontoTransferido
+        {
+            get { return fMontoTransferido; }
+            set { SetPropertyValue<float>(nameof(MontoTransferido), ref fMontoTransferido, value); }
+        }
     }
 }
