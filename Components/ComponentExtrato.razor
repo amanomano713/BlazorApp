@@ -25,7 +25,7 @@
             <MatTableRow>
                   <td><strong>@context.CodPackage</strong></td>
                   <td><strong>@string.Format("${0:f2}", @context.MontoPackage)</strong></td>
-                  <td><strong>@string.Format("{0:d}",@context.DateCreated)</strong></td>
+                  <td><strong>@string.Format("{0:d}",@context.DateCreated.ToUniversalTime())</strong></td>
                   <td><strong>@string.Format("${0:f2}", @context.MontoRetiro)</strong></td>
                   <td><strong>@string.Format("${0:f2}", @context.MontoTransferido)</strong></td>
 @*                <td><strong>@string.Format("${0:f2}", @context.Interes)</strong></td>
