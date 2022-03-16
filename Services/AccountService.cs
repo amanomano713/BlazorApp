@@ -48,7 +48,6 @@ namespace BlazorApp.Services
         public Task<List<MovPackage>> Get(string IdAfiliado)
         {
             int numberOfObjectsPerPage = 50;
-            int pageNumber = 1;
             var queryResultPage = new List<MovPackage>();
             var _count = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado).ToList();
             if (_count.Count() >= numberOfObjectsPerPage)
@@ -69,6 +68,7 @@ namespace BlazorApp.Services
 
     public Task<bool> CreateMovPackage()
     {
+        //prueba de actualizar
         MovPackage mov = new MovPackage(_Session);
         mov.IdPackage = 1;
         mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";

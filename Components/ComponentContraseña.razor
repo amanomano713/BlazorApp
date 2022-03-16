@@ -25,6 +25,12 @@
                     <label class="p-2">@error</label>
                 </div>
             }
+            @if (@valorRetorno == false)
+            {
+                <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                    <label class="p-2">joder</label>
+                </div>
+            }
             <div class="container">
                 <EditForm Model="@registerAccountModel" OnValidSubmit="@Save_Password">
                     <DataAnnotationsValidator />

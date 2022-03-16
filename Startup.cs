@@ -94,13 +94,13 @@ namespace BlazorApp
                 options.UseLazyLoadingProxies(false)
                    .UseSqlServer(connection), ServiceLifetime.Transient);
 
-            ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
+            //ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
 
-            services.AddApplicationInsightsTelemetry(options =>
-            {
-                options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
-                options.EnableAdaptiveSampling = false;
-            });
+            //services.AddApplicationInsightsTelemetry(options =>
+            //{
+            //    options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
+            //    options.EnableAdaptiveSampling = false;
+            //});
 
             services.AddAuthorization(options =>
             {
@@ -169,15 +169,15 @@ namespace BlazorApp
             
             app.UseResponseCompression();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            //else
+            //{
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
-            }
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
