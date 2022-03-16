@@ -66,7 +66,7 @@
             if (UserData != null)
             {
                 //movPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
-                movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
+                //movPackages = await _IAccountService.Get(UserData.Id).ConfigureAwait(false);
 
                 await JsRuntime.InvokeVoidAsync("mostrar");
                 StateHasChanged();

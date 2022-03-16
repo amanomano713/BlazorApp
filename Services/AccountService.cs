@@ -12,13 +12,13 @@ namespace BlazorApp.Services
         SignInModel User { get; }
         Task Login(SignInModel model);
         Task<string> GetItem();
-        Task<List<MovPackage>> Get(string IdAfiliado);
-        Task<bool> CreateMovPackage();
+        //Task<List<MovPackage>> Get(string IdAfiliado);
+        //Task<bool> CreateMovPackage();
     }
 
     public class AccountService : IAccountService
     {
-        private UnitOfWork _Session;
+        //private UnitOfWork _Session;
         private readonly IMapper _mapper;
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
@@ -33,54 +33,56 @@ namespace BlazorApp.Services
             IMapper mapper,
             NavigationManager navigationManager,
             ILocalStorageService localStorageService,
-            IEncryptor IEncryptor,
-            UnitOfWork Session
+            IEncryptor IEncryptor
+            //UnitOfWork Session
         )
         {
             _mapper = mapper;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
             _IEncryptor = IEncryptor;
-            _Session = Session;
+            //_Session = Session;
 
         }
 
-        public Task<List<MovPackage>> Get(string IdAfiliado)
-        {
-            int numberOfObjectsPerPage = 50;
-            var queryResultPage = new List<MovPackage>();
-            var _count = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado).ToList();
-            if (_count.Count() >= numberOfObjectsPerPage)
-            {
+        
 
-                queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
-                           .OrderByDescending(x => x.Id)
-                               .ToList().GetRange(0, 50);
-            }
-            else
-            {
-                queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
-                    .OrderByDescending(x => x.Id).ToList();
-            }
+        //public Task<List<MovPackage>> Get(string IdAfiliado)
+        //{
+        //    int numberOfObjectsPerPage = 50;
+        //    var queryResultPage = new List<MovPackage>();
+        //    var _count = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado).ToList();
+        //    if (_count.Count() >= numberOfObjectsPerPage)
+        //    {
 
-            return Task.FromResult(queryResultPage);
-        }
+        //        queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
+        //                   .OrderByDescending(x => x.Id)
+        //                       .ToList().GetRange(0, 50);
+        //    }
+        //    else
+        //    {
+        //        queryResultPage = _Session.Query<MovPackage>().ToList().Where(x => x.IdAfiliado == IdAfiliado)
+        //            .OrderByDescending(x => x.Id).ToList();
+        //    }
 
-    public Task<bool> CreateMovPackage()
-    {
-        //prueba de actualizar
-        MovPackage mov = new MovPackage(_Session);
-        mov.IdPackage = 1;
-        mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
-        mov.Interes = 1;
-        mov.Porcentaje = 10;
-        mov.CodPackage = "Pack10";
-        mov.DateCreated = DateTime.Now;
+        //    return Task.FromResult(queryResultPage);
+        //}
 
-        _Session.CommitChanges();
+    //public Task<bool> CreateMovPackage()
+    //{
+    //    //prueba de actualizar
+    //    MovPackage mov = new MovPackage(_Session);
+    //    mov.IdPackage = 1;
+    //    mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
+    //    mov.Interes = 1;
+    //    mov.Porcentaje = 10;
+    //    mov.CodPackage = "Pack10";
+    //    mov.DateCreated = DateTime.Now;
 
-        return Task.FromResult(true);
-    }
+    //    _Session.CommitChanges();
+
+    //    return Task.FromResult(true);
+    //}
 
     public async Task Login(SignInModel model)
     {

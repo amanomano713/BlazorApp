@@ -1,4 +1,4 @@
-using MassTransit;
+//using MassTransit;
 using AutoMapper;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
@@ -12,13 +12,13 @@ using System.Reflection;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using NLog.Config;
-using Microsoft.Azure.ServiceBus;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+//using NLog.Config;
+//using Microsoft.Azure.ServiceBus;
+//using Microsoft.Extensions.Configuration;
+//using Microsoft.Extensions.DependencyInjection;
 using DevExpress.Xpo.DB;
 using BlazorApp.DataAcess.EF;
-using System.Configuration;
+//using System.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
 using BlazorApp.Cache;
@@ -84,10 +84,10 @@ namespace BlazorApp
             var connection = _configuration["ConnectionStrings:DefaultConnection"];
 
             //XPO
-            services.AddXpoDefaultUnitOfWork(true, (DataLayerOptionsBuilder options) =>
-            options.UseConnectionString(_configuration["ConnectionStrings:DefaultConnection"])
-                .UseAutoCreationOption(AutoCreateOption.DatabaseAndSchema) // debug only
-                    .UseEntityTypes(ConnectionHelper.GetPersistentTypes()));
+            //services.AddXpoDefaultUnitOfWork(true, (DataLayerOptionsBuilder options) =>
+            //options.UseConnectionString(_configuration["ConnectionStrings:DefaultConnection"])
+            //    .UseAutoCreationOption(AutoCreateOption.DatabaseAndSchema) // debug only
+            //        .UseEntityTypes(ConnectionHelper.GetPersistentTypes()));
 
             //Connection DB
             services.AddDbContext<Context>(options =>
@@ -167,7 +167,7 @@ namespace BlazorApp
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
             
-            app.UseResponseCompression();
+            //app.UseResponseCompression();
 
             //if (env.IsDevelopment())
             //{
@@ -175,8 +175,8 @@ namespace BlazorApp
             //}
             //else
             //{
-                app.UseExceptionHandler("/Error");
-                app.UseHsts();
+              app.UseExceptionHandler("/Error");
+              app.UseHsts();
             //}
 
             app.UseHttpsRedirection();
