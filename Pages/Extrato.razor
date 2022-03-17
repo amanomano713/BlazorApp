@@ -84,7 +84,7 @@
             var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
             if (UserData != null)
             {
-                var ListmovPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
+                var ListmovPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id);
                 movPackages = ListmovPackages.ToList();
                 await JsRuntime.InvokeVoidAsync("mostrar");
                 movil = await JsRuntime.InvokeAsync<bool>("movil");
