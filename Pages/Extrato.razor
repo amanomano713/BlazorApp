@@ -1,11 +1,20 @@
 ﻿@page "/extrato";
-@using Blazorise
-@inject IJSRuntime JS
+@using BlazorApp.Pages
+@using Microsoft.AspNetCore.Components
+@using MatBlazor
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject NavigationManager navigationManager
+@inject ILocalStorageService _localStorageService
+@inject IMovPackageDataQueries _movpackagedataqueries
+@inject IUserDataQueries UserDataQueries
+@inject IJSRuntime JsRuntime
+@using BlazorApp.Cache
+@inject ICacheBase cache
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
-        <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-            <Blazorise.Alert Color="Color.Primary" Visible="true">
+        <Blazorise.Container Breakpoint="Blazorise.Breakpoint.Desktop">
+            <Blazorise.Alert Color="Blazorise.Color.Primary" Visible="true">
                 <h3><i class="icon-edit-sign teal"></i> OPERACIONES</h3>
                 <p>
                     <strong style="color:black;font-size:medium">Crea una cuenta para administrar todo lo que haces con ClipOne, desde tus preferencias de compra hasta tu actividad en ClipOne</strong>
@@ -13,22 +22,74 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <hr>
-        @if(movil==false){
-            <Blazorise.Container Breakpoint="Breakpoint.Desktop">
-                <Blazorise.Alert Color="Color.Primary" Visible="true">
-                    <ComponentExtrato></ComponentExtrato>
+            <Blazorise.Container Breakpoint="Blazorise.Breakpoint.Desktop">
+                <Blazorise.Alert Color="Blazorise.Color.Primary" Visible="true">
+                    @*<ComponentExtrato></ComponentExtrato>*@
+                    <Container>
+                        <SourceContent>
+                            <MatTable Items="@movPackages" class="mat-elevation-z5">
+                                <MatTableHeader>
+                                    <th><strong>Operación</strong></th>
+                                    <th><strong>Fecha</strong></th>
+                                    <th><strong>Monto</strong></th>
+                                    <th><strong>Retiro</strong></th>
+                                    <th><strong>Transferencia</strong></th>
+                                </MatTableHeader>
+                                <MatTableRow>
+                                    <td><strong>@context.CodPackage</strong></td>
+                                    <td><strong>@string.Format("{0:d}",@context.DateCreated.ToUniversalTime())</strong></td>
+                                   <td><strong>@string.Format("${0:f2}", @context.MontoPackage)</strong></td>
+                                    <td><strong>@string.Format("${0:f2}", @context.MontoRetiro)</strong></td>
+                                    <td><strong>@string.Format("${0:f2}", @context.MontoTransferido)</strong></td>
+                                </MatTableRow>
+                            </MatTable>
+                        </SourceContent>
+                    </Container>
                 </Blazorise.Alert>
             </Blazorise.Container>
-        }
     </div>
 </body>
 
-@code
-{   
+@code {
+
     private bool movil = false;
-    
+    private string? email;
+    private string _userKey = "key";
+    public List<MovPackageDTO> movPackages = new List<MovPackageDTO>();
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-         movil = await JS.InvokeAsync<bool>("movil");
+        if (firstRender)
+        {
+            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            var key = KeyCache.GenCacheKey("User");
+            var result = cache.Get<User>(key);
+            if (result != null)
+            {
+                 emailStorage = result.Email.ToList().FirstOrDefault();
+            }
+            else
+            {
+                var state = await authenticationStateProvider.GetAuthenticationStateAsync();
+                if (!state.User.Identity.IsAuthenticated)
+                {
+                    navigationManager.NavigateTo("/account/signin?returnUrl=" + System.Net.WebUtility.UrlEncode(new Uri(navigationManager.Uri).PathAndQuery));
+                }
+                else
+                {
+                    emailStorage = state.User.Identities.FirstOrDefault().Name;
+                }
+            }
+
+            var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
+            if (UserData != null)
+            {
+                var ListmovPackages = await _movpackagedataqueries.GetAfiliadoDataAsync(UserData.Id).ConfigureAwait(false);
+                movPackages = ListmovPackages.ToList();
+                await JsRuntime.InvokeVoidAsync("mostrar");
+                movil = await JsRuntime.InvokeAsync<bool>("movil");
+                StateHasChanged();
+            }
+        }
     }
 }

@@ -15,20 +15,17 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
             _connectionString = configuration["ConnectionStrings:DefaultConnection"];
             //_connectionString = configuration["DefaultConnection"]; 
         }
-        public async Task<IEnumerable<MovPackage>> GetAfiliadoDataAsync(string id)
+        public async Task<IEnumerable<MovPackageDTO>> GetAfiliadoDataAsync(string id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var result = await connection.QueryAsync<MovPackage>(
-                   @"Select dbo.Packages.IdAfiliado 
-                           ,dbo.Packages.CodPackage
-                           ,dbo.MovPackage.DateCreated
-                           ,dbo.Packages.Monto
-                           ,dbo.MovPackage.Interes
-                           FROM dbo.Packages INNER JOIN  dbo.MovPackage ON dbo.Packages.Id = dbo.MovPackage.IdPackage 
-                               Where dbo.Packages.IdAfiliado = @id order by 3 DESC"
+                var result = await connection.QueryAsync<MovPackageDTO>(
+                   @"Select TOP 50 dbo.MovPackage.CodPackage,dbo.MovPackage.MontoPackage,dbo.MovPackage.DateCreated,
+                            dbo.MovPackage.MontoRetiro,dbo.MovPackage.MontoTransferido 
+                            FROM dbo.MovPackage
+                               Where dbo.MovPackage.IdAfiliado = @id order by 3 DESC"
                    , new { id = id }
                 );
 

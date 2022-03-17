@@ -34,7 +34,7 @@ namespace BlazorApp.Services
             NavigationManager navigationManager,
             ILocalStorageService localStorageService,
             IEncryptor IEncryptor
-            //UnitOfWork Session
+        //UnitOfWork Session
         )
         {
             _mapper = mapper;
@@ -45,7 +45,7 @@ namespace BlazorApp.Services
 
         }
 
-        
+
 
         //public Task<List<MovPackage>> Get(string IdAfiliado)
         //{
@@ -68,40 +68,39 @@ namespace BlazorApp.Services
         //    return Task.FromResult(queryResultPage);
         //}
 
-    //public Task<bool> CreateMovPackage()
-    //{
-    //    //prueba de actualizar
-    //    MovPackage mov = new MovPackage(_Session);
-    //    mov.IdPackage = 1;
-    //    mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
-    //    mov.Interes = 1;
-    //    mov.Porcentaje = 10;
-    //    mov.CodPackage = "Pack10";
-    //    mov.DateCreated = DateTime.Now;
+        //public Task<bool> CreateMovPackage()
+        //{
+        //    //prueba de actualizar
+        //    MovPackage mov = new MovPackage(_Session);
+        //    mov.IdPackage = 1;
+        //    mov.IdAfiliado = "26731bbd-4320-45be-912f-3ad1b98902a0";
+        //    mov.Interes = 1;
+        //    mov.Porcentaje = 10;
+        //    mov.CodPackage = "Pack10";
+        //    mov.DateCreated = DateTime.Now;
 
-    //    _Session.CommitChanges();
+        //    _Session.CommitChanges();
 
-    //    return Task.FromResult(true);
-    //}
+        //    return Task.FromResult(true);
+        //}
 
-    public async Task Login(SignInModel model)
-    {
-
-        string? UserEmail = model.Email;
-
-        var email = await _localStorageService.GetItem<string>(_userKey);
-
-        if (!string.IsNullOrEmpty(email))
+        public async Task Login(SignInModel model)
         {
 
-            if (email.Contains("@"))
+            string? UserEmail = model.Email;
+
+            var email = await _localStorageService.GetItem<string>(_userKey);
+
+            if (!string.IsNullOrEmpty(email))
             {
-                await _localStorageService.SetItemToken(_access, model.Token);
-                await _localStorageService.SetItem(_userKey, UserEmail);
-                return;
-            }
-            else
-            {
+
+                if (email.Contains("@"))
+                {
+                    await _localStorageService.SetItemToken(_access, model.Token);
+                    await _localStorageService.SetItem(_userKey, UserEmail);
+                    return;
+                }
+
                 var result = _IEncryptor.Decryption(email);
 
                 if (UserEmail != result)
@@ -110,21 +109,20 @@ namespace BlazorApp.Services
                     await _localStorageService.SetItem(_userKey, UserEmail);
                 };
             }
+            else
+            {
+                await _localStorageService.SetItem(_userKey, UserEmail);
+                await _localStorageService.SetItemToken(_access, model.Token);
+            }
+
         }
-        else
+
+        public async Task<string> GetItem()
         {
-            await _localStorageService.SetItem(_userKey, UserEmail);
-            await _localStorageService.SetItemToken(_access, model.Token);
+            var result = await _localStorageService.GetItem<string>(_userKey);
+
+            return result;
         }
 
     }
-
-    public async Task<string> GetItem()
-    {
-        var result = await _localStorageService.GetItem<string>(_userKey);
-
-        return result;
-    }
-
-}
 }

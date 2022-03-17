@@ -4,7 +4,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Abstractions
 {
     public interface IMovPackageDataQueries
     {
-        public Task<IEnumerable<MovPackage>> GetAfiliadoDataAsync(string id);
+        public Task<IEnumerable<MovPackageDTO>> GetAfiliadoDataAsync(string id);
 
     }
 }
