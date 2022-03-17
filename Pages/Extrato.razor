@@ -10,6 +10,7 @@
 @inject IJSRuntime JsRuntime
 @using BlazorApp.Cache
 @inject ICacheBase cache
+
 <body>
     <div class="welcome"></div>
     <div class="panel-body">
@@ -22,31 +23,33 @@
             </Blazorise.Alert>
         </Blazorise.Container>
         <hr>
-            <Blazorise.Container Breakpoint="Blazorise.Breakpoint.Desktop">
-                <Blazorise.Alert Color="Blazorise.Color.Primary" Visible="true">
-                    @*<ComponentExtrato></ComponentExtrato>*@
-                    <Container>
-                        <SourceContent>
-                            <MatTable Items="@movPackages" class="mat-elevation-z5">
-                                <MatTableHeader>
-                                    <th><strong>Operación</strong></th>
-                                    <th><strong>Fecha</strong></th>
-                                    <th><strong>Monto</strong></th>
-                                    <th><strong>Retiro</strong></th>
-                                    <th><strong>Transferencia</strong></th>
-                                </MatTableHeader>
-                                <MatTableRow>
-                                    <td><strong>@context.CodPackage</strong></td>
-                                    <td><strong>@string.Format("{0:d}",@context.DateCreated.ToUniversalTime())</strong></td>
-                                   <td><strong>@string.Format("${0:f2}", @context.MontoPackage)</strong></td>
-                                    <td><strong>@string.Format("${0:f2}", @context.MontoRetiro)</strong></td>
-                                    <td><strong>@string.Format("${0:f2}", @context.MontoTransferido)</strong></td>
-                                </MatTableRow>
-                            </MatTable>
-                        </SourceContent>
-                    </Container>
-                </Blazorise.Alert>
-            </Blazorise.Container>
+        <Blazorise.Container Breakpoint="Blazorise.Breakpoint.Desktop">
+            <Blazorise.Alert Color="Blazorise.Color.Primary" Visible="true">
+                @*<ComponentExtrato></ComponentExtrato>*@
+                <Container>
+                    <SourceContent>
+                        <MatTable Items="@movPackages" class="mat-elevation-z5">
+                            <MatTableHeader>
+                                <th><strong>Operación</strong></th>
+                                <th><strong>Fecha</strong></th>
+                                <th><strong>Afiliado</strong></th>
+                                <th><strong>Monto</strong></th>
+                                <th><strong>Retiro</strong></th>
+                                <th><strong>Monto</strong></th>
+                            </MatTableHeader>
+                            <MatTableRow>
+                                <td><strong>@context.CodPackage</strong></td>
+                                <td><strong>@string.Format("{0:d}",@context.DateCreated.ToUniversalTime())</strong></td>
+                                <td style="width:60%"><strong>@context.IdAfiliadoDestino</strong></td>
+                                <td><strong>@string.Format("${0:f2}", @context.MontoPackage)</strong></td>
+                                <td><strong>@string.Format("${0:f2}", @context.MontoRetiro)</strong></td>
+                                <td><strong>@string.Format("${0:f2}", @context.MontoTransferido)</strong></td>
+                            </MatTableRow>
+                        </MatTable>
+                    </SourceContent>
+                </Container>
+            </Blazorise.Alert>
+        </Blazorise.Container>
     </div>
 </body>
 
@@ -66,7 +69,7 @@
             var result = cache.Get<User>(key);
             if (result != null)
             {
-                 emailStorage = result.Email.ToList().FirstOrDefault();
+                emailStorage = result.Email.ToList().FirstOrDefault();
             }
             else
             {

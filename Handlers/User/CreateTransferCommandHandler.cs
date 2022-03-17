@@ -30,7 +30,7 @@ namespace BlazorApp.Handlers.User
 
             var movPackage = new MovPackage
             {
-                IdAfiliado = request.Afiliado,
+                IdAfiliado = request.Id,
                 DateCreated = DateTime.Now,
                 MontoTransferido = request.Monto,
                 IdPackage = 0,
@@ -38,7 +38,8 @@ namespace BlazorApp.Handlers.User
                 Porcentaje = 0,
                 MontoPackage = 0,
                 Interes = 0,    
-                MontoRetiro = 0
+                MontoRetiro = 0,
+                IdAfiliadoDestino = request.Afiliado
             };
 
             await using (var transaction = await _context.Database.BeginTransactionAsync())
