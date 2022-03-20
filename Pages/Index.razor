@@ -10,7 +10,7 @@
 @inject IJSRuntime JS
 @using BlazorApp.Cache
 @inject ICacheBase cache
-
+@inject IHttpClientFactory _httpClientFactory
 <body>
     <div class="welcome"></div>
     <div class="panel-bod">
@@ -58,6 +58,10 @@
                             <strong style="color:black;font-size:x-large">Resolución </strong>
                             <InputMask name="codigo" style="width:30%" disabled @bind-Value="@resolucion" class="form-control" />
                         </div>
+                         <div class="form-group" style="margin-top:20px">
+                            <strong style="color:black;font-size:x-large">IP </strong>
+                            <InputMask name="codigo" style="width:30%" disabled @bind-Value="@ip" class="form-control" />
+                        </div>
                     </div>
                 </div>
             </Blazorise.Alert>
@@ -78,19 +82,26 @@
     private string? codigo;
 
     private string? email;
-
     private bool movil = false;
-
     private string? resolucion;
+
+    private string? ip;
+
+    private static HttpClient Client = new HttpClient();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Client.GetFromJsonAsync<Rootobject>("https://api.ipify.org/?format=json");
+
+        ip = result.ip;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-       
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
 
         if (firstRender)
         {
-
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");
@@ -113,7 +124,6 @@
                 }
             }
 
-
             UserDTO userData = new UserDTO();
             var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
             if (UserData != null)
@@ -128,7 +138,6 @@
                 }
             }
 
-
             await JS.InvokeVoidAsync("mostrar");
 
             movil = await JS.InvokeAsync<bool>("movil");
@@ -139,5 +148,3 @@
         }
     }
 }
-
-

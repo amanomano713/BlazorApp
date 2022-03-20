@@ -15,6 +15,7 @@ function getMobileHeight() {
     return getOrientation() == "landscape" ? screen.availWidth : screen.availHeight;
 };
 
+
 function recargar() {
     location.reload();
 }
