@@ -22,5 +22,6 @@ namespace BlazorApp.Entities.User
         public float MontoPackage { get; set; }
         public float MontoRetiro { get; set; }
         public float MontoTransferido { get; set; }
+        public string? IdAfiliadoDestino { get; set; }
     }
 }

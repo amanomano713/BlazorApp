@@ -13,5 +13,8 @@ namespace BlazorApp.Handlers.Commands
         public string? Afiliado { get; set; }
         [DataMember]
         public float Monto { get; set; }
+
+        [DataMember]
+        public string? AfiliadoDestino { get; set; }
     }
 }

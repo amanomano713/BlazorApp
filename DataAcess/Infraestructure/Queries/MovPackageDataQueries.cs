@@ -23,7 +23,7 @@ namespace BlazorApp.DataAcess.Infraestructure.Queries
 
                 var result = await connection.QueryAsync<MovPackageDTO>(
                    @"Select TOP 50 dbo.MovPackage.CodPackage,dbo.MovPackage.MontoPackage,dbo.MovPackage.DateCreated,
-                            dbo.MovPackage.MontoRetiro,dbo.MovPackage.MontoTransferido 
+                            dbo.MovPackage.MontoRetiro,dbo.MovPackage.MontoTransferido,dbo.MovPackage.IdAfiliadoDestino 
                             FROM dbo.MovPackage
                                Where dbo.MovPackage.IdAfiliado = @id order by 3 DESC"
                    , new { id = id }
