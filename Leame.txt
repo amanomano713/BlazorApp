@@ -1,2 +1,7 @@
-﻿ Add-Migration MyMigration -context Context
- update-database -Context YourContext
+﻿Add-Migration MyMigration -context Context
+ 
+Update-database -Context YourContext
+
+API:     http://localhost:45124/API/v1/Users/UserInfo/arodrigues2010@hotmail.com
+
+AWS-Api: http://54.163.16.234/API/v1/Users/UserInfo/arodrigues2010@hotmail.com
