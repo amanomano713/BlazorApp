@@ -5,7 +5,6 @@
 @inject ILocalStorageService _localStorageService
 @inject NavigationManager navigationManager
 @inject IAccountService AccountService
-@inject IUserDataRepository UserDataRepository
 @inject IUserDataQueries UserDataQueries
 @inject IMapper mapper
 @inject IMediator mediator
@@ -13,6 +12,7 @@
 @using Blazorise
 @using BlazorApp.Cache
 @inject ICacheBase cache
+@inject IHttpClientFactory _httpClientFactory;
 
 <Blazorise.Container Breakpoint="Breakpoint.Desktop">
     <Blazorise.Alert Color="Color.None" Visible="true">
@@ -255,6 +255,8 @@
 
     private IJSRuntime? _jsRuntime;
 
+    private string _configHttpClient = "Api.Users";
+
     protected override void OnInitialized()
     {
         context = new EditContext(AccountModel);
@@ -279,15 +281,14 @@
                 {
                     AccountModel.city = selectedListValue.ToString();
 
-                    var requestModel = mapper.Map<UpdateUserDataCommand>(AccountModel);
+                    var result = await UpdateUserAsync(AccountModel).ConfigureAwait(false);
 
-                    var response = await mediator.Send(requestModel);
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        displayValidationErrorMessages = false;
 
-                    var result = response;
-
-                    displayValidationErrorMessages = false;
-
-                    displayUpdateUserToDB = true;
+                        displayUpdateUserToDB = true;
+                    }
                 }
                 else
                 {
@@ -325,13 +326,14 @@
 
                     AccountModel.city = selectedListValue.ToString();
 
-                    var requestModel = mapper.Map<CreateUserDataCommand>(AccountModel);
+                    var result = await UpdateUserAsync(AccountModel).ConfigureAwait(false);
 
-                    var response = await mediator.Send(requestModel);
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        displayValidationErrorMessages = false;
 
-                    displayValidationErrorMessages = false;
-
-                    navigationManager.NavigateTo("Index");
+                        navigationManager.NavigateTo("Index");
+                    }
                 }
                 else
                 {
@@ -352,10 +354,14 @@
 
                 displayUpdateUserToDB = false;
             }
-
         }
+    }
 
-        StateHasChanged();
+    public async Task<HttpResponseMessage> UpdateUserAsync(UserDTO AccountModel)
+    {
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(AccountModel), System.Text.Encoding.UTF8, "application/json");
+        return await httpClient.PatchAsync($"UpdateUser", content);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -390,16 +396,16 @@
             var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
             if (UserData != null)
             {
-                AccountModel.id          = UserData.Id;
-                AccountModel.name        = UserData.name.Trim();
+                AccountModel.id = UserData.Id;
+                AccountModel.name = UserData.name.Trim();
                 AccountModel.dateOfbirth = UserData.dateOfbirth;
-                AccountModel.email       = UserData.email.Trim();
-                AccountModel.mobile      = UserData.mobile.Trim();
-                AccountModel.wallet      = UserData.wallet.Trim();
-                AccountModel.surname     = UserData.surname.Trim();
-                selectedDate             = AccountModel.dateOfbirth;
-                displayEditUserToDB      = true;
-                selectedListValue        = Convert.ToInt32(UserData.city);
+                AccountModel.email = UserData.email.Trim();
+                AccountModel.mobile = UserData.mobile.Trim();
+                AccountModel.wallet = UserData.wallet.Trim();
+                AccountModel.surname = UserData.surname.Trim();
+                selectedDate = AccountModel.dateOfbirth;
+                displayEditUserToDB = true;
+                selectedListValue = Convert.ToInt32(UserData.city);
             }
 
             email = emailStorage;

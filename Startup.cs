@@ -12,13 +12,6 @@ using System.Reflection;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-//using NLog.Config;
-//using Microsoft.Azure.ServiceBus;
-//using Microsoft.Extensions.Configuration;
-//using Microsoft.Extensions.DependencyInjection;
-using DevExpress.Xpo.DB;
-using BlazorApp.DataAcess.EF;
-//using System.Configuration;
 using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
 using BlazorApp.Cache;
@@ -83,51 +76,17 @@ namespace BlazorApp
 
             var connection = _configuration["ConnectionStrings:DefaultConnection"];
 
-            //XPO
-            //services.AddXpoDefaultUnitOfWork(true, (DataLayerOptionsBuilder options) =>
-            //options.UseConnectionString(_configuration["ConnectionStrings:DefaultConnection"])
-            //    .UseAutoCreationOption(AutoCreateOption.DatabaseAndSchema) // debug only
-            //        .UseEntityTypes(ConnectionHelper.GetPersistentTypes()));
-
             //Connection DB
             services.AddDbContext<Context>(options =>
                 options.UseLazyLoadingProxies(false)
                    .UseSqlServer(connection), ServiceLifetime.Transient);
 
-            //ConfigurationItemFactory.Default.Targets.RegisterDefinition("ApplicationInsightsTarget", typeof(Microsoft.ApplicationInsights.NLogTarget.ApplicationInsightsTarget));
-
-            //services.AddApplicationInsightsTelemetry(options =>
-            //{
-            //    options.InstrumentationKey = _configuration["ApplicationInsights:InstrumentationKey"];
-            //    options.EnableAdaptiveSampling = false;
-            //});
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdmin", c => c.RequireRole("Admin"));
             });
 
-            // create the bus using Azure Service bus
-            //var azureServiceBus = Bus.Factory.CreateUsingAzureServiceBus(busFactoryConfig =>
-            //{
-            //    busFactoryConfig.Host(_configuration["Masstransit:AzureServiceBusConnectionString"], hostConfig =>
-            //    {
-            //        // This is optional, but you can specify the protocol to use.
-            //        hostConfig.TransportType = TransportType.AmqpWebSockets;
-            //    });
-            //});
-
-            // Add MassTransit
-            //services.AddMassTransit(config =>
-            //{
-            //    config.AddBus(provider => azureServiceBus);
-            //});
-
-            //services.AddSingleton<IPublishEndpoint>(azureServiceBus);
-            //services.AddSingleton<ISendEndpointProvider>(azureServiceBus);
-            //services.AddSingleton<IBus>(azureServiceBus);
-
-            services.AddHttpClient();
             services.AddRazorPages();
             services.AddControllers();
             services.AddServerSideBlazor();
@@ -149,37 +108,34 @@ namespace BlazorApp
             //Infraestructure services
             services.AddInfraestrutureServices(_configuration);
 
-            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
-            {
-                builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-            }));
+            //services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            //{
+            //    builder
+            //        .AllowAnyOrigin()
+            //        .AllowAnyMethod()
+            //        .AllowAnyHeader();
+            //}));
 
             services.AddSingleton<ICacheService>(sp => new CacheService(_configuration));
 
             services.AddMemoryCache();
 
             services.AddSingleton<ICacheBase, CacheMemoryHelper>();
+
+            services.AddHttpClient("Api.Users", connec =>
+            {
+                connec.BaseAddress = new Uri("http://184.72.175.182/API/v1/Users/");
+                connec.DefaultRequestHeaders.Add("Accept", "application/json");
+                connec.DefaultRequestHeaders.Add("Accept-Language", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
+            });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
             
-            //app.UseResponseCompression();
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
 
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //}
-            //else
-            //{
-              app.UseExceptionHandler("/Error");
-              app.UseHsts();
-            //}
-
-            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

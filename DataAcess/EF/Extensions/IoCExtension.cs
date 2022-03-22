@@ -17,7 +17,6 @@ namespace BlazorApp.DataAcess.EF.Extensions
         {
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddScoped<IUserDataRepository, UserDataRepository>();
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserDataQueries, UserDataQueries>();
