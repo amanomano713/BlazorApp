@@ -124,7 +124,7 @@ namespace BlazorApp
 
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://184.72.175.182/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://3.85.61.95/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
             });
