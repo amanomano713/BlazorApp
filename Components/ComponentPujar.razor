@@ -164,7 +164,7 @@
     {
         Montopuja = pujarModel.MontoPujar.Replace("_", string.Empty);
 
-        if (Montopuja != "0" && string.IsNullOrEmpty(Montopuja) == false)
+        if (Convert.ToInt32(Montopuja) > 0 && string.IsNullOrEmpty(Montopuja) == false)
         {
             if (hubConnection is not null)
             {
