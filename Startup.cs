@@ -65,11 +65,11 @@ namespace BlazorApp
 
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 4;
+                options.Password.RequiredLength = 6;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
@@ -122,16 +122,17 @@ namespace BlazorApp
 
             services.AddSingleton<ICacheBase, CacheMemoryHelper>();
 
+            //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://3.85.61.95/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://3.82.196.249/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
             });
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
+            //EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
             
             app.UseExceptionHandler("/Error");
             app.UseHsts();
@@ -142,7 +143,6 @@ namespace BlazorApp
 
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {
