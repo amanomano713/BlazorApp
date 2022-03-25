@@ -16,8 +16,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
 using BlazorApp.Cache;
 using EurofirmsGroup.Caching.Redis;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
+
 
 namespace BlazorApp
 {
