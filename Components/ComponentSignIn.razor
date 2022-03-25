@@ -10,6 +10,22 @@
 @inject IAccountService AccountService
 @inject IJSRuntime JsRuntime
 @inject ICacheBase cache
+@inject IHttpClientFactory _httpClientFactory
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using System.Text
+@using Newtonsoft.Json
+@using System.Collections.Generic
+@using System.ComponentModel
+@using System.Threading;
+@using System.Net.Http
+@using System.Net.Http.Headers
+@using System.Threading.Tasks;
+
 
 @if (@SignInmovil == false)
 {
@@ -19,7 +35,7 @@ else
 {
     <h1 class="title">Conectate-Móvil</h1>
 }
-<EditForm Model="@signInModel" OnValidSubmit="@RegisterUser">
+<EditForm Model="@signInModel" OnValidSubmit="@LoginUser">
     <DataAnnotationsValidator />
     @if (@SignInmovil == false)
     {
@@ -68,70 +84,78 @@ else
     </div>
 }
 
-
 @code {
 
     private bool visible = false;
     private SignInModel signInModel = new SignInModel();
     private bool showSignInError = false;
-
+    private string _configHttpClient = "Api.Users";
+    private string _configHttpClientAuthenticate = "Api.authenticate";
     [Parameter]
     public bool SignInmovil { get; set; }
 
-    private async Task RegisterUser()
+    private async Task LoginUser()
     {
-        var user = await userManager.FindByEmailAsync(signInModel.Email);
+        var response = await GetAsync(signInModel.Email).ConfigureAwait(false);
 
-        if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
+        if (response.StatusCode != System.Net.HttpStatusCode.OK)
         {
-            showSignInError = false;
-
-            var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
-
-            var data = $"{user.Id}|{token}";
-
-            var parsedQuery = System.Web.HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
-
-            var returnUrl = parsedQuery["returnUrl"];
-
-            if (!string.IsNullOrWhiteSpace(returnUrl))
-            {
-                data += $"|{returnUrl}";
-            }
-
-            var protector = dataProtectionProvider.CreateProtector("SignIn");
-
-            var pdata = protector.Protect(data);
-
-            //guardo el email en el localStorage
-
-            signInModel.Token = token;
-
-            //Cache Redis
-            var key = KeyCache.GenCacheKey("User");
-
-            var result = cache.Get<User>(key);
-
-            if (result == null)
-            {
-                CacheUser(signInModel.Email, key);
-            }
-            else
-            {
-                cache.Remove(key);
-                
-                CacheUser(signInModel.Email, key);
-
-            }
-
-            await AccountService.Login(signInModel);
-
-            navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
-
+            showSignInError = true;
         }
         else
         {
-            showSignInError = true;
+            var user = await userManager.FindByEmailAsync(signInModel.Email);
+
+            if (user != null && await userManager.CheckPasswordAsync(user, signInModel.Password))
+            {
+
+                showSignInError = false;
+
+                var token = await userManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, "SignIn");
+
+                var data = $"{user.Id}|{token}";
+
+                var parsedQuery = System.Web.HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+
+                var returnUrl = parsedQuery["returnUrl"];
+
+                if (!string.IsNullOrWhiteSpace(returnUrl))
+                {
+                    data += $"|{returnUrl}";
+                }
+
+                var protector = dataProtectionProvider.CreateProtector("SignIn");
+
+                var pdata = protector.Protect(data);
+
+                //guardo el email en el localStorage
+
+                signInModel.Token = token;
+
+                //Cache Redis
+                var key = KeyCache.GenCacheKey("User");
+
+                var result = cache.Get<User>(key);
+
+                if (result == null)
+                {
+                    CacheUser(signInModel.Email, key);
+                }
+                else
+                {
+                    cache.Remove(key);
+                    CacheUser(signInModel.Email, key);
+                }
+
+                LoginRequest loginRequest = new LoginRequest
+                    {
+                        Username = signInModel.Email
+                    };
+
+                await AccountService.Login(signInModel).ConfigureAwait(false);
+
+                navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
+            }
         }
     }
 
@@ -146,5 +170,37 @@ else
         _user.Email = valuesList;
 
         cache.Set<User>(_user, key);
+    }
+
+    private async Task<HttpResponseMessage> GetAsync(string email)
+    {
+
+        LoginRequest loginRequest = new LoginRequest
+            {
+                Username = email
+            };
+
+        HttpResponseMessage responseToken = await GeneratorToken(loginRequest).ConfigureAwait(false);
+        
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        
+        resultToken = resultToken.Replace("\"", "");
+
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+        
+        return await httpClient.GetAsync($"UserInfo/{email}");
+    }
+
+    private async Task<HttpResponseMessage> GeneratorToken(LoginRequest loginRequest)
+    {
+        var client = _httpClientFactory.CreateClient(_configHttpClientAuthenticate);
+
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(loginRequest), System.Text.Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync($"authenticate", content);
+
+        return response;
     }
 }

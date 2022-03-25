@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
 using BlazorApp.Cache;
 using EurofirmsGroup.Caching.Redis;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 namespace BlazorApp
 {
@@ -125,17 +127,35 @@ namespace BlazorApp
             //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://3.82.196.249/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://18.208.128.197/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
-                connec.DefaultRequestHeaders.Add("Accept-Language", System.Threading.Thread.CurrentThread.CurrentUICulture.Name);
+                connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
+
+            services.AddHttpClient("Api.authenticate", connec =>
+            {
+                connec.BaseAddress = new Uri("http://18.208.128.197/");
+                connec.DefaultRequestHeaders.Add("Accept", "application/json");
+                connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
+            });
+
+            services.AddHttpContextAccessor();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
-            
-            app.UseExceptionHandler("/Error");
-            app.UseHsts();
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseHsts();
+            }
 
             app.UseStaticFiles();
 
@@ -152,6 +172,8 @@ namespace BlazorApp
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+
         }
 
         private ILogger<Startup> GetLogger(ILoggerFactory loggerFactory)

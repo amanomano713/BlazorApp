@@ -54,6 +54,7 @@ namespace BlazorApp.Services
         {
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
         }
+    
     }
 }
 

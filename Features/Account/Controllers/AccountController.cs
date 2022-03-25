@@ -256,6 +256,7 @@ namespace BlazorApp.Features.Accounts.Controllers
         public async Task<IActionResult> SignInActual(string cadena)
         {
 
+
             var data = _dataProtector.Unprotect(cadena);
 
             var parts = data.Split('|');

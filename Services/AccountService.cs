@@ -12,6 +12,7 @@ namespace BlazorApp.Services
         SignInModel User { get; }
         Task Login(SignInModel model);
         Task<string> GetItem();
+
         //Task<List<MovPackage>> Get(string IdAfiliado);
         //Task<bool> CreateMovPackage();
     }
@@ -117,6 +118,9 @@ namespace BlazorApp.Services
 
         }
 
+
+        
+
         public async Task<string> GetItem()
         {
             var result = await _localStorageService.GetItem<string>(_userKey);
@@ -124,5 +128,6 @@ namespace BlazorApp.Services
             return result;
         }
 
+        
     }
 }
