@@ -180,7 +180,7 @@ else
                 Username = email
             };
 
-        HttpResponseMessage responseToken = await GeneratorToken(loginRequest).ConfigureAwait(false);
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
         
         var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         
@@ -191,16 +191,5 @@ else
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
         
         return await httpClient.GetAsync($"UserInfo/{email}");
-    }
-
-    private async Task<HttpResponseMessage> GeneratorToken(LoginRequest loginRequest)
-    {
-        var client = _httpClientFactory.CreateClient(_configHttpClientAuthenticate);
-
-        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(loginRequest), System.Text.Encoding.UTF8, "application/json");
-
-        var response = await client.PostAsync($"authenticate", content);
-
-        return response;
     }
 }

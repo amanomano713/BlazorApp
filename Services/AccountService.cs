@@ -12,6 +12,7 @@ namespace BlazorApp.Services
         SignInModel User { get; }
         Task Login(SignInModel model);
         Task<string> GetItem();
+        Task<HttpResponseMessage> GeneratorToken(LoginRequest loginRequest);
 
         //Task<List<MovPackage>> Get(string IdAfiliado);
         //Task<bool> CreateMovPackage();
@@ -26,25 +27,27 @@ namespace BlazorApp.Services
         private string _userKey = "key";
         private string _access = "access_token";
         private readonly IEncryptor _IEncryptor;
-
+        private readonly IHttpClientFactory _httpClientFactory;
         public SignInModel User { get; private set; }
-
+        private string _configHttpClient = "Api.Users";
+        private string _configHttpClientAuthenticate = "Api.authenticate";
 
         public AccountService(
             IMapper mapper,
             NavigationManager navigationManager,
             ILocalStorageService localStorageService,
-            IEncryptor IEncryptor
-        //UnitOfWork Session
+            IEncryptor IEncryptor,
+            IHttpClientFactory httpClientFactory
+
         )
         {
             _mapper = mapper;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
             _IEncryptor = IEncryptor;
-            //_Session = Session;
+            _httpClientFactory = httpClientFactory;
 
-        }
+    }
 
 
 
@@ -117,10 +120,6 @@ namespace BlazorApp.Services
             }
 
         }
-
-
-        
-
         public async Task<string> GetItem()
         {
             var result = await _localStorageService.GetItem<string>(_userKey);
@@ -128,6 +127,17 @@ namespace BlazorApp.Services
             return result;
         }
 
-        
+        public async Task<HttpResponseMessage> GeneratorToken(LoginRequest loginRequest)
+        {
+            var client = _httpClientFactory.CreateClient(_configHttpClientAuthenticate);
+
+            var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(loginRequest), System.Text.Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"authenticate", content);
+
+            return response;
+        }
+
+
     }
 }

@@ -1,9 +1,11 @@
 ﻿@page "/account/register"
 @inject UserManager<IdentityUser> userManager
 @inject NavigationManager navigationManager
-@inject IHttpClientFactory _httpClientFactory;
+@inject IHttpClientFactory _httpClientFactory
 @using Blazorise
 @using System.Net
+@using System.Net.Http.Headers
+@inject IAccountService AccountService
 <body>
     <div class="welcome"></div>
     <Jumbotron Background="Background.None" Margin="Margin.Is4.FromBottom">
@@ -83,14 +85,43 @@
 
     public async Task<HttpResponseMessage> GetAsync(string email)
     {
+        LoginRequest loginRequest = new LoginRequest
+            {
+                Username = email
+            };
+
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+        
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        
+        resultToken = resultToken.Replace("\"", "");
+
         var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
         return await httpClient.GetAsync($"UserInfo/{email}");
     }
 
     public async Task<HttpResponseMessage> CreateUserAsync(RegisterAccountModel registerAccountModel)
     {
+         LoginRequest loginRequest = new LoginRequest
+            {
+                Username = registerAccountModel.Email
+            };
+
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+        
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        
+        resultToken = resultToken.Replace("\"", "");
+
         var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        
         var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(registerAccountModel), System.Text.Encoding.UTF8, "application/json");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
         return await httpClient.PatchAsync($"CreateUser", content);
     }
 
