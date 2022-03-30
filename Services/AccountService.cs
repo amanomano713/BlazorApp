@@ -1,8 +1,6 @@
 using AutoMapper;
 using BlazorApp.Encryptor;
-using BlazorApp.Entities.Xpo;
 using BlazorApp.Models;
-using DevExpress.Xpo;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorApp.Services

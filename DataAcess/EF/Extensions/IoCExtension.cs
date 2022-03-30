@@ -5,7 +5,6 @@ using BlazorApp.Encryptor;
 using BlazorApp.Features.Identity;
 using BlazorApp.Messages;
 using BlazorApp.Services;
-using MassTransit;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,7 +25,7 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
             services.AddScoped<IEncryptor, Encryption>();
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
-            services.AddScoped<IMessagesProcessor, MessagesProcessor>();
+            //services.AddScoped<IMessagesProcessor, MessagesProcessor>();
             services.AddScoped<IMovPackageDataQueries, MovPackageDataQueries>();
             services.AddScoped<IPujaRepository, PujaRepository>();
         }
