@@ -257,15 +257,14 @@ namespace BlazorApp.Features.Accounts.Controllers
         {
 
 
-            //var data = _dataProtector.Unprotect(cadena);
+            var data = _dataProtector.Unprotect(cadena);
 
-            var parts = cadena.Split('|');
+            var parts = data.Split('|');
 
             var identityUser = await _userManager.FindByIdAsync(parts[0]);
 
-            //var isTokenValid = await _userManager.VerifyUserTokenAsync(identityUser, TokenOptions.DefaultProvider, "SignIn", parts[1]);
+            var isTokenValid = await _userManager.VerifyUserTokenAsync(identityUser, TokenOptions.DefaultProvider, "SignIn", parts[1]);
 
-            var isTokenValid = true;
             if (isTokenValid)
             {
                 await _signInManager.SignInAsync(identityUser, true);

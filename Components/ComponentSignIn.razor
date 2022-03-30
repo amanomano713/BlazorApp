@@ -1,10 +1,12 @@
 ﻿@using BlazorApp.Models
 @using Blazorise
+@using Microsoft.AspNetCore.DataProtection
 @using Microsoft.AspNetCore.Identity
 @using BlazorApp.Cache
 @inject UserManager<IdentityUser> userManager
 @inject SignInManager<IdentityUser> signInManager
 @inject NavigationManager navigationManager
+@inject IDataProtectionProvider dataProtectionProvider
 @inject IAccountService AccountService
 @inject IJSRuntime JsRuntime
 @inject ICacheBase cache
@@ -122,9 +124,9 @@ else
                     data += $"|{returnUrl}";
                 }
 
-                //var protector = dataProtectionProvider.CreateProtector("SignIn");
+                var protector = dataProtectionProvider.CreateProtector("SignIn");
 
-                //var pdata = protector.Protect(data);
+                var pdata = protector.Protect(data);
 
                 //guardo el email en el localStorage
 
@@ -152,7 +154,7 @@ else
 
                 await AccountService.Login(signInModel).ConfigureAwait(false);
 
-                navigationManager.NavigateTo("/account/signinactual?cadena=" + data, forceLoad: true);
+                navigationManager.NavigateTo("/account/signinactual?cadena=" + pdata, forceLoad: true);
             }
         }
     }
