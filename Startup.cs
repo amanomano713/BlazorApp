@@ -126,14 +126,14 @@ namespace BlazorApp
             //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://18.208.128.197/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1FCT3HV9MC4WE-612570439.us-east-1.elb.amazonaws.com/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.authenticate", connec =>
             {
-                connec.BaseAddress = new Uri("http://18.208.128.197/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1FCT3HV9MC4WE-612570439.us-east-1.elb.amazonaws.com/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
