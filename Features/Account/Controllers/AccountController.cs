@@ -21,14 +21,13 @@ namespace BlazorApp.Features.Accounts.Controllers
         private readonly IMediator _mediator;
         private readonly ILocalStorageService _localStorageService;
         private readonly IEncryptor _IEncryptor;
-        private readonly IMessagesProcessor _messagesProcessor;
+
         public AccountController(IDataProtectionProvider dataProtectionProvider,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IMapper mapper, IMediator mediator,
             ILocalStorageService localStorageService,
-            IEncryptor IEncryptor,
-            IMessagesProcessor messagesProcessor)
+            IEncryptor IEncryptor)
         {
             _dataProtector = dataProtectionProvider.CreateProtector("SignIn");
             _userManager = userManager;
@@ -37,7 +36,6 @@ namespace BlazorApp.Features.Accounts.Controllers
             _mediator = mediator;
             _localStorageService = localStorageService;
             _IEncryptor = IEncryptor;
-            _messagesProcessor = messagesProcessor;
         }
 
         /// <summary>
