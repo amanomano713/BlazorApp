@@ -133,7 +133,7 @@ namespace BlazorApp
 
             services.AddHttpClient("Api.authenticate", connec =>
             {
-                connec.BaseAddress = new Uri("http://18.208.128.197/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-AXDTJMZ4B8SD-558231051.eu-west-2.elb.amazonaws.com/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
