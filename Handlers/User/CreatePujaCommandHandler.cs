@@ -27,25 +27,11 @@ namespace BlazorApp.Handlers.User
         {
             var Puja = _mapper.Map<Puja>(request);
 
-            //var movPackage = new MovPackage
-            //{
-            //    IdAfiliado = request.Id,
-            //    DateCreated = DateTime.Now,
-            //    MontoTransferido = 0,
-            //    IdPackage = 0,
-            //    CodPackage = "Retiro",
-            //    Porcentaje = 0,
-            //    MontoPackage = 0,
-            //    Interes = 0,
-            //    MontoRetiro = request.Monto
-            //};
-
             await using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
                     _context.Puja.Add(Puja);
-                   //_context.MovPackage.Add(movPackage);
                     await _context.SaveEntitiesAsync(cancellationToken);
                     await transaction.CommitAsync();
                 }
@@ -54,17 +40,8 @@ namespace BlazorApp.Handlers.User
                     await transaction.RollbackAsync();
                     throw new MyGOfitException(ExceptionType.Unknown, ExceptionRepository.NotFound, ExceptionEntity.Unknown, $"transfer not found");
                 }
-
             }
-            //_PujaDataRepository.Add(Puja);
-
-            //if (Puja == null)
-            //{
-            //    throw new MyGOfitException(ExceptionType.Unknown, ExceptionRepository.NotFound, ExceptionEntity.Unknown, $"packages not found");
-            //}
-
-            //await _PujaDataRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
+            
             _logger.LogInformation("Create Puja this is a information message...");
 
             return Puja;
