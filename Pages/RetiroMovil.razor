@@ -7,7 +7,10 @@
 @inject IJSRuntime JS
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
-@inject IEncryptor IEncryptor
+@using System.Net
+@using System.Net.Http.Headers
+@inject IAccountService AccountService
+@inject IHttpClientFactory _httpClientFactory
 <body>
     <div class="welcome1"></div>
     <div class="panel-body">
@@ -104,7 +107,9 @@
     private string? wallet;
     private string retiro = string.Empty;
     private string? Afiliado = null;
-
+    bool displayErrorCreateRetiro = false;
+    private string _configHttpClient = "Api.Cash";
+    private string? emailStorage;
     private bool movil = false;
 
     protected override void OnInitialized()
@@ -143,21 +148,51 @@
         }
     }
 
-    private async Task CreateRetiro(RetiroDTO retiroDTO)
+     private async Task CreateRetiro(RetiroDTO retiroDTO)
     {
+        WithdrawalDTO withdrawalDTO = new WithdrawalDTO
+        {
+            Id     = retiroDTO.Id,
+            Monto  =  Convert.ToInt64(retiroDTO.MontoRetiro),
+            Wallet = retiroDTO.Wallet
+        };
+
 
         displayValidationErrorMessages = false;
 
-        var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
+        var result = await CreateWithdrawalAsync(withdrawalDTO).ConfigureAwait(false);
 
-        cadena = IEncryptor.EnCryption(cadena); ;
+        if(result.StatusCode == HttpStatusCode.OK)
+        {
+            displayErrorRetiro = false;
+            navigationManager.NavigateTo("/Retiro", forceLoad: true);
+        }
+        else
+        {
+            displayErrorCreateRetiro = true;
+        }
+    }
 
-        await JS.InvokeVoidAsync("CreateRetiro", cadena);
+    public async Task<HttpResponseMessage> CreateWithdrawalAsync(WithdrawalDTO withdrawalDTO)
+    {
+         LoginRequest loginRequest = new LoginRequest
+            {
+                Username = emailStorage
+            };
 
-        displayErrorRetiro = false;
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+        
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        
+        resultToken = resultToken.Replace("\"", "");
 
-        StateHasChanged();
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(withdrawalDTO), System.Text.Encoding.UTF8, "application/json");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
 
+        return await httpClient.PatchAsync($"CreateWithdrawal", content);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

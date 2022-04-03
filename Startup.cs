@@ -138,6 +138,13 @@ namespace BlazorApp
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
+            services.AddHttpClient("Api.Cash", connec =>
+            {
+                connec.BaseAddress = new Uri("http://localhost:34268/API/v1/Cash/");
+                connec.DefaultRequestHeaders.Add("Accept", "application/json");
+                connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
+            });
+
             services.AddHttpContextAccessor();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

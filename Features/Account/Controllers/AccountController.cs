@@ -107,46 +107,46 @@ namespace BlazorApp.Features.Accounts.Controllers
 
 
 
-        [HttpPost("account/createretiro")]
-        public async Task<IActionResult> CreateRetiro(string param1)
-        {
+        //[HttpPost("account/createretiro")]
+        //public async Task<IActionResult> CreateRetiro(string param1)
+        //{
 
-            var val = await validatetoken();
+        //    var val = await validatetoken();
 
-            var Ok = 0;
+        //    var Ok = 0;
 
-            if (val == true)
-            {
-                var data = _IEncryptor.Decryption(param1);
+        //    if (val == true)
+        //    {
+        //        var data = _IEncryptor.Decryption(param1);
 
-                var parts = data.Split('|');
+        //        var parts = data.Split('|');
 
-                var Withdrawal = System.Convert.ToInt64(parts[2]);
+        //        var Withdrawal = System.Convert.ToInt64(parts[2]);
 
-                var withdrawalDTO = new WithdrawalDTO
-                {
-                    Id = parts[0],
-                    Wallet = parts[1],
-                    Monto = Withdrawal
-                };
+        //        var withdrawalDTO = new WithdrawalDTO
+        //        {
+        //            Id = parts[0],
+        //            Wallet = parts[1],
+        //            Monto = Withdrawal
+        //        };
 
-                var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
+        //        var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
 
-                var response = await _mediator.Send(requestModel);
+        //        var response = await _mediator.Send(requestModel);
 
-                if (response != null)
-                {
-                    Ok = 1;
-                }
+        //        if (response != null)
+        //        {
+        //            Ok = 1;
+        //        }
 
-            }
-            else
-            {
-                Ok = 2;
-            }
+        //    }
+        //    else
+        //    {
+        //        Ok = 2;
+        //    }
 
-            return this.Json(new { result = Ok });
-        }
+        //    return this.Json(new { result = Ok });
+        //}
 
 
         [HttpPost("account/createtransfer")]

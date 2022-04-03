@@ -7,10 +7,12 @@
 @inject IJSRuntime JS
 @inject IUserDataQueries UserDataQueries
 @using Blazorise;
-@inject IEncryptor IEncryptor
 @using BlazorApp.Cache
 @inject ICacheBase cache
-
+@using System.Net
+@using System.Net.Http.Headers
+@inject IAccountService AccountService
+@inject IHttpClientFactory _httpClientFactory
 <body>
     <div class="welcome1"></div>
     <div class="panel-body">
@@ -28,6 +30,12 @@
                 {
                     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
                         <label class="p-2">Error el monto a retirar no puede ser mayor al saldo disponible... </label>
+                    </div>
+                }
+                @if (displayErrorCreateRetiro == true)
+                {
+                    <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
+                        <label class="p-2">Error procesando retiro. </label>
                     </div>
                 }
                 <hr>
@@ -94,21 +102,21 @@
     </div>
 </body>
 @code {
-
     //Obtener el saldo y servicio de retiro
-
+    bool displayErrorCreateRetiro = false;
     bool displayErrorRetiro = false;
     EditContext? context;
     bool displayValidationErrorMessages = false;
     public RetiroDTO RetiroModel = new RetiroDTO();
     private string saldo = "1000";
-    private string? email;
+    private string? emailStorage;
     private string _userKey = "key";
     private string? wallet;
     private string retiro = string.Empty;
     private string? Afiliado = null;
 
-     private bool movil = false;
+    private string _configHttpClient = "Api.Cash";
+    private bool movil = false;
 
     protected override void OnInitialized()
     {
@@ -148,27 +156,58 @@
 
     private async Task CreateRetiro(RetiroDTO retiroDTO)
     {
+        WithdrawalDTO withdrawalDTO = new WithdrawalDTO
+        {
+            Id     = retiroDTO.Id,
+            Monto  =  Convert.ToInt64(retiroDTO.MontoRetiro),
+            Wallet = retiroDTO.Wallet
+        };
+
 
         displayValidationErrorMessages = false;
 
-        var cadena = retiroDTO.Id + "|" + retiroDTO.Wallet + "|" + retiroDTO.MontoRetiro;
+        var result = await CreateWithdrawalAsync(withdrawalDTO).ConfigureAwait(false);
 
-        cadena = IEncryptor.EnCryption(cadena); ;
-
-        await JS.InvokeVoidAsync("CreateRetiro", cadena);
-
-        displayErrorRetiro = false;
-
-        StateHasChanged();
-
+        if(result.StatusCode == HttpStatusCode.OK)
+        {
+            displayErrorRetiro = false;
+            navigationManager.NavigateTo("/Retiro", forceLoad: true);
+        }
+        else
+        {
+            displayErrorCreateRetiro = true;
+        }
     }
+
+    public async Task<HttpResponseMessage> CreateWithdrawalAsync(WithdrawalDTO withdrawalDTO)
+    {
+         LoginRequest loginRequest = new LoginRequest
+            {
+                Username = emailStorage
+            };
+
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+        
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        
+        resultToken = resultToken.Replace("\"", "");
+
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+        
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(withdrawalDTO), System.Text.Encoding.UTF8, "application/json");
+        
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
+        return await httpClient.PatchAsync($"CreateWithdrawal", content);
+    }
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
 
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");
@@ -186,7 +225,7 @@
                     }
                     else
                     {
-                        email = state.User.Identities.FirstOrDefault().Name;
+                        emailStorage = state.User.Identities.FirstOrDefault().Name;
                     }
                 }
             }
@@ -194,9 +233,9 @@
             var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
             if (UserData != null)
             {
-                RetiroModel.Id = UserData.Id;
+                RetiroModel.Id     = UserData.Id;
                 RetiroModel.Wallet = UserData.wallet.Trim();
-                Afiliado = UserData.Id;
+                Afiliado           = UserData.Id;
                 //Se envia el retiro a esta variable
                 wallet = UserData.wallet.Trim();
             }
