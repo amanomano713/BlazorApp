@@ -176,9 +176,9 @@
     public async Task<HttpResponseMessage> CreateWithdrawalAsync(WithdrawalDTO withdrawalDTO)
     {
          LoginRequest loginRequest = new LoginRequest
-            {
-                Username = emailStorage
-            };
+         {
+            Username = emailStorage
+         };
 
         HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
         

@@ -1,4 +1,4 @@
-//using MassTransit;
+
 using AutoMapper;
 using BlazorApp.Data.EF;
 using BlazorApp.DataAcess;
@@ -178,8 +178,6 @@ namespace BlazorApp
                 endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapFallbackToPage("/_Host");
             });
-
-
         }
 
         private ILogger<Startup> GetLogger(ILoggerFactory loggerFactory)

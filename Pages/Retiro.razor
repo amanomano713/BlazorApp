@@ -179,7 +179,7 @@
         }
     }
 
-    public async Task<HttpResponseMessage> CreateWithdrawalAsync(WithdrawalDTO withdrawalDTO)
+    private async Task<HttpResponseMessage> CreateWithdrawalAsync(WithdrawalDTO withdrawalDTO)
     {
          LoginRequest loginRequest = new LoginRequest
             {

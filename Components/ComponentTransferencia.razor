@@ -10,24 +10,31 @@
 @inject IEncryptor IEncryptor
 @using BlazorApp.Cache
 @inject ICacheBase cache
+@inject IAccountService AccountService
+@inject IHttpClientFactory _httpClientFactory
+@using System.Net
+@using System.Net.Http.Headers
 
 @if (displayErrorTransfer == true)
 {
     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
         <label class="p-2">Error el Monto a transferir no puede ser mayor al saldo disponible... </label>
     </div>
+    <hr>
 }
 @if (displayErrorAfiliado == true)
 {
     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
         <label class="p-2">Error Afiliado no existe en la base de datos... </label>
     </div>
+    <hr>
 }
 @if (displayErrorNoValida == true)
 {
     <div class="row bg-warning text-white" style="margin-top:10px; height:40px">
         <label class="p-2">Error Transferencia No valida... </label>
     </div>
+    <hr>
 }
 @if (movil == true)
 {
@@ -198,6 +205,10 @@ else
     private string? Montotransferencia;
     private float MontoTransfer;
 
+    private string _configHttpClient = "Api.Cash";
+
+    private string? emailStorage;
+
     [Parameter]
     public bool movil { get; set; }
 
@@ -255,7 +266,7 @@ else
 
     private async void SubmitTransferir(EditContext context)
     {
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        emailStorage = await _localStorageService.GetItem<String>(_userKey);
         UserDTO userData = new UserDTO();
 
         if (context.Validate())
@@ -278,14 +289,30 @@ else
                     else
                     {
                         var transferData = new TransfDTO
-                            {
-                                Id = UserData.Id,
-                                Afiliado = Afiliado,
-                                AfiliadoDestino = TransferirModel.Afiliado,
-                                Monto = resultMonto.ToString()
-                            };
+                        {
+                            Id       = UserData.Id,
+                            Afiliado = Afiliado,
+                            AfiliadoDestino = TransferirModel.Afiliado,
+                            Monto = resultMonto.ToString()
+                        };
 
-                        await CreateTransfer(transferData);
+                        var result = await CreateTransferAsync(transferData);
+
+                        if (result.StatusCode != HttpStatusCode.OK)
+                        {
+                            displayErrorNoValida = true;
+                        }
+                        else
+                        {
+                            if(movil == true)
+                            {
+                                navigationManager.NavigateTo("/TransferenciaMovil", forceLoad: true);
+                            }
+                            else
+                            {
+                                navigationManager.NavigateTo("/Transferencia", forceLoad: true);
+                            }
+                        }
                     }
                 }
             }
@@ -305,28 +332,33 @@ else
         StateHasChanged();
     }
 
-    private async Task CreateTransfer(TransfDTO transfData)
+    private async Task<HttpResponseMessage> CreateTransferAsync(TransfDTO transfData)
     {
-        displayValidationErrorMessages = false;
+        LoginRequest loginRequest = new LoginRequest
+        {
+            Username = emailStorage
+        };
 
-        var cadena = transfData.Id + "|" + transfData.Afiliado + "|" + transfData.Monto;
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
 
-        var result = IEncryptor.EnCryption(cadena);
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
 
-        await JS.InvokeVoidAsync("CreateTransfer", result);
+        resultToken = resultToken.Replace("\"", "");
 
-        displayErrorTransfer = false;
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
 
-        displayErrorAfiliado = false;
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(transfData), System.Text.Encoding.UTF8, "application/json");
 
-        StateHasChanged();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
+        return await httpClient.PatchAsync($"CreateTransfer", content);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");
@@ -344,7 +376,7 @@ else
                     }
                     else
                     {
-                        email = state.User.Identities.FirstOrDefault().Name;
+                        emailStorage = state.User.Identities.FirstOrDefault().Name;
                     }
                 }
             }
