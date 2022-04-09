@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BlazorApp.Encryptor;
 using BlazorApp.Handlers.Commands;
-using BlazorApp.Messages;
 using BlazorApp.Models;
 using BlazorApp.Services;
 using MediatR;
@@ -60,8 +59,6 @@ namespace BlazorApp.Features.Accounts.Controllers
             return isTokenValid;
         }
 
-
-
         [HttpPost("account/createpuja")]
         public async Task<IActionResult> CreatePuja(string param1)
         {
@@ -89,89 +86,6 @@ namespace BlazorApp.Features.Accounts.Controllers
                 };
 
                 var requestModel = _mapper.Map<CreatePujaCommand>(pujaDTO);
-
-                var response = await _mediator.Send(requestModel);
-
-                if (response != null)
-                {
-                    Ok = 1;
-                }
-            }
-            else
-            {
-                Ok = 2;
-            }
-
-            return this.Json(new { result = Ok });
-        }
-
-
-
-        //[HttpPost("account/createretiro")]
-        //public async Task<IActionResult> CreateRetiro(string param1)
-        //{
-
-        //    var val = await validatetoken();
-
-        //    var Ok = 0;
-
-        //    if (val == true)
-        //    {
-        //        var data = _IEncryptor.Decryption(param1);
-
-        //        var parts = data.Split('|');
-
-        //        var Withdrawal = System.Convert.ToInt64(parts[2]);
-
-        //        var withdrawalDTO = new WithdrawalDTO
-        //        {
-        //            Id = parts[0],
-        //            Wallet = parts[1],
-        //            Monto = Withdrawal
-        //        };
-
-        //        var requestModel = _mapper.Map<CreateWithdrawalCommand>(withdrawalDTO);
-
-        //        var response = await _mediator.Send(requestModel);
-
-        //        if (response != null)
-        //        {
-        //            Ok = 1;
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        Ok = 2;
-        //    }
-
-        //    return this.Json(new { result = Ok });
-        //}
-
-
-        [HttpPost("account/createtransfer")]
-        public async Task<IActionResult> CreateTransfer(string param1)
-        {
-
-            var val = await validatetoken();
-
-            var Ok = 0;
-
-            if (val == true)
-            {
-
-                var data = _IEncryptor.Decryption(param1);
-
-                var parts = data.Split('|');
-
-                var transferDTO = new TransferDTO
-                {
-                    Id = parts[0],
-                    Afiliado = parts[1],
-                    Monto = System.Convert.ToInt32(parts[2])
-                };
-
-                var requestModel = _mapper.Map<CreateTransferCommand>(transferDTO);
 
                 var response = await _mediator.Send(requestModel);
 

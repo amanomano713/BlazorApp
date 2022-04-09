@@ -21,12 +21,9 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserDataQueries, UserDataQueries>();
             services.AddScoped<IPackagesRepository, PackagesRepository>();
-            services.AddScoped<ITransferRepository, TransferRepository>();
-            services.AddScoped<IWithdrawalRepository, WithdrawalRepository>();
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
             services.AddScoped<IEncryptor, Encryption>();
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();
-            services.AddScoped<IMessagesProcessor, MessagesProcessor>();
             services.AddScoped<IMovPackageDataQueries, MovPackageDataQueries>();
             services.AddScoped<IPujaRepository, PujaRepository>();
         }

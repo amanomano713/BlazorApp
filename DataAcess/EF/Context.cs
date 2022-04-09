@@ -32,8 +32,6 @@ namespace BlazorApp.Data.EF
         {
             builder.ApplyConfiguration(new UserDataMappings());
             builder.ApplyConfiguration(new PackagesMappings());
-            builder.ApplyConfiguration(new TransferMappings());
-            builder.ApplyConfiguration(new WithdrawalMappings());
             builder.ApplyConfiguration(new MovPackageMappings());
             builder.ApplyConfiguration(new PujaMappings());
 
@@ -42,8 +40,6 @@ namespace BlazorApp.Data.EF
 
         public DbSet<UserData> UserData { get; set; }
         public DbSet<Packages> Packages { get; set; }
-        public DbSet<Transfer> Transfer { get; set; }
-        public DbSet<Withdrawal> Withdrawal { get; set; }
         public DbSet<MovPackage> MovPackage { get; set; }
         public DbSet<Puja> Puja { get; set; }
 
