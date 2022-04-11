@@ -5,7 +5,7 @@ namespace BlazorApp.DataAcess.EF
     public static class ConnectionHelper
     {
         static Type[] persistentTypes = new Type[] {
-            typeof(MovPackage)
+            typeof(ConceptoMovPackage)
         };
         public static Type[] GetPersistentTypes()
         {

@@ -5,14 +5,14 @@ namespace BlazorApp.Entities.Xpo
 
     //No quitar XPLiteObject and Persistent
     [Persistent("MovPackage")]
-    public class MovPackage : XPLiteObject
+    public class ConceptoMovPackage : XPLiteObject
     {
 
 #pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
-        public MovPackage(Session session) : base(session) { }
+        public ConceptoMovPackage(Session session) : base(session) { }
 #pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
 #pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
-        public MovPackage() : base(XpoDefault.Session) { }
+        public ConceptoMovPackage() : base(XpoDefault.Session) { }
 #pragma warning restore CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
 
         int fId;
