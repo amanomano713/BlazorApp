@@ -13,12 +13,6 @@ namespace BlazorApp.DataAcess.Mapper
             CreateMap<UserData, UserDTO>();
             CreateMap<UserDTO, UserData>();
 
-            CreateMap<CreatePackagesCommand, PackageDTO>();
-            CreateMap<PackageDTO, CreatePackagesCommand>();
-
-            CreateMap<CreatePackagesCommand, Packages>();
-            CreateMap<Packages, CreatePackagesCommand>();
-
             CreateMap<CreatePujaCommand, PujaDTO>();
             CreateMap<PujaDTO, CreatePujaCommand>();
 

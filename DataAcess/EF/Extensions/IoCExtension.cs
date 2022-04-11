@@ -20,7 +20,6 @@ namespace BlazorApp.DataAcess.EF.Extensions
             services.AddScoped<ILocalStorageService, LocalStorageService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUserDataQueries, UserDataQueries>();
-            services.AddScoped<IPackagesRepository, PackagesRepository>();
             services.AddScoped<IAfiliadoDataQueries, AfiliadoDataQueries>();
             services.AddScoped<IEncryptor, Encryption>();
             services.AddScoped<IPackageMontoDataQueries, PackageMontoDataQueries>();

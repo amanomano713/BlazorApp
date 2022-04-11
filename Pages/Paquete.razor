@@ -9,7 +9,12 @@
 @inject IUserDataQueries UserDataQueries
 @using Blazorise
 @using BlazorApp.Cache
+@using System.Net
+@using System.Net.Http.Headers
 @inject ICacheBase cache
+@inject IAccountService AccountService
+@inject IHttpClientFactory _httpClientFactory
+@inject AuthenticationStateProvider authenticationStateProvider
 
 <body>
     <div class="paquete"></div>
@@ -185,12 +190,12 @@
     private string? IdAfiliado;
     private bool result;
 
-    private string? _idCod = "Pack10";
-    private string? _idCod20 = "Pack20";
-    private string? _idCod50 = "Pack50";
-    private string? _idCod100 = "Pack100";
-    private string? _idCod200 = "Pack200";
-    private string? _idCod500 = "Pack500";
+    private string? _idCod     = "Pack10";
+    private string? _idCod20   = "Pack20";
+    private string? _idCod50   = "Pack50";
+    private string? _idCod100  = "Pack100";
+    private string? _idCod200  = "Pack200";
+    private string? _idCod500  = "Pack500";
     private string? _idCod1000 = "Pack1000";
     private string? _idCod1500 = "Pack1500";
 
@@ -208,6 +213,10 @@
     private bool isLoadingPaq06;
     private bool isLoadingPaq07;
     private bool isLoadingPaq08;
+
+    private string? emailStorage;
+
+    private string _configHttpClient = "Api.Cash";
 
     private async Task CreatePackaqes(string? _idCod, int Loading)
     {
@@ -240,7 +249,7 @@
                 break;
         }
 
-        var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+        emailStorage = await _localStorageService.GetItem<String>(_userKey);
         UserDTO userData = new UserDTO();
         var UserData = await UserDataQueries.GetUserDataAsync(emailStorage);
         if (UserData != null)
@@ -248,22 +257,67 @@
             IdAfiliado = UserData.Id;
         }
 
-        paquete = _idCod;
+        var packageMontos = new List<PackageMontoDTO>()
+        {
+              new PackageMontoDTO() { CodPackage = "Pack10",   Monto = 10},
+              new PackageMontoDTO() { CodPackage = "Pack20",   Monto = 20},
+              new PackageMontoDTO() { CodPackage = "Pack50",   Monto = 50},
+              new PackageMontoDTO() { CodPackage = "Pack100",  Monto = 100},
+              new PackageMontoDTO() { CodPackage = "Pack200",  Monto = 200},
+              new PackageMontoDTO() { CodPackage = "Pack500",  Monto = 500},
+              new PackageMontoDTO() { CodPackage = "Pack1000", Monto = 1000},
+              new PackageMontoDTO() { CodPackage = "Pack1500", Monto = 1500},
+        };
 
-        var cadena = IdAfiliado + "|" + _idCod;
+        var monto = packageMontos.FirstOrDefault(x => x.CodPackage == _idCod);
 
-        var result = IEncryptor.EnCryption(cadena);
+        var packageDTO = new PackageDTO
+         {
+             IdAfiliado = IdAfiliado,
+             CodPackage = _idCod,
+             Monto      = monto.Monto
+         };
 
-        await JsRuntime.InvokeVoidAsync("CreatePackages", result);
+        var result = await CreatePaqueteAsync(packageDTO).ConfigureAwait(false);
 
-        StateHasChanged();
+        if (result.StatusCode == HttpStatusCode.OK)
+        {
+            navigationManager.NavigateTo("/paquete", forceLoad: true);
+        }
+        else
+        {
+
+        }
+
+    }
+
+    private async Task<HttpResponseMessage> CreatePaqueteAsync(PackageDTO packageDTO)
+    {
+        LoginRequest loginRequest = new LoginRequest
+        {
+            Username = emailStorage
+        };
+
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        resultToken = resultToken.Replace("\"", "");
+
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(packageDTO), System.Text.Encoding.UTF8, "application/json");
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
+        return await httpClient.PatchAsync($"CreatePackage", content);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");

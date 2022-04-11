@@ -9,7 +9,12 @@
 @inject IUserDataQueries UserDataQueries
 @using Blazorise
 @using BlazorApp.Cache
+@using System.Net
+@using System.Net.Http.Headers
 @inject ICacheBase cache
+@inject IAccountService AccountService
+@inject IHttpClientFactory _httpClientFactory
+@inject AuthenticationStateProvider authenticationStateProvider
 
 <body>
     <div class="paquete"></div>
@@ -115,6 +120,10 @@
 
     private bool movil = false;
 
+    private string? emailStorage;
+
+    private string _configHttpClient = "Api.Cash";
+
     private async Task CreatePackaqes(string? _idCod)
     {
         var emailStorage = await _localStorageService.GetItem<String>(_userKey);
@@ -125,22 +134,66 @@
             IdAfiliado = UserData.Id;
         }
 
-        paquete = _idCod;
+        var packageMontos = new List<PackageMontoDTO>()
+        {
+              new PackageMontoDTO() { CodPackage = "Pack10",   Monto = 10},
+              new PackageMontoDTO() { CodPackage = "Pack20",   Monto = 20},
+              new PackageMontoDTO() { CodPackage = "Pack50",   Monto = 50},
+              new PackageMontoDTO() { CodPackage = "Pack100",  Monto = 100},
+              new PackageMontoDTO() { CodPackage = "Pack200",  Monto = 200},
+              new PackageMontoDTO() { CodPackage = "Pack500",  Monto = 500},
+              new PackageMontoDTO() { CodPackage = "Pack1000", Monto = 1000},
+              new PackageMontoDTO() { CodPackage = "Pack1500", Monto = 1500},
+        };
 
-        var cadena = IdAfiliado + "|" + _idCod;
+        var monto = packageMontos.FirstOrDefault(x => x.CodPackage == _idCod);
 
-        var result = IEncryptor.EnCryption(cadena);
+        var packageDTO = new PackageDTO
+         {
+             IdAfiliado = IdAfiliado,
+             CodPackage = _idCod,
+             Monto      = monto.Monto
+         };
 
-        await JsRuntime.InvokeVoidAsync("CreatePackages", result);
+        var result = await CreatePaqueteAsync(packageDTO).ConfigureAwait(false);
 
-        StateHasChanged();
+        if (result.StatusCode == HttpStatusCode.OK)
+        {
+            navigationManager.NavigateTo("/paquetemovil", forceLoad: true);
+        }
+        else
+        {
+
+        }
+    }
+
+    private async Task<HttpResponseMessage> CreatePaqueteAsync(PackageDTO packageDTO)
+    {
+        LoginRequest loginRequest = new LoginRequest
+        {
+            Username = emailStorage
+        };
+
+        HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
+
+        var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        resultToken = resultToken.Replace("\"", "");
+
+        var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
+
+        var content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(packageDTO), System.Text.Encoding.UTF8, "application/json");
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
+
+        return await httpClient.PatchAsync($"CreatePackage", content);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var key = KeyCache.GenCacheKey("User");
@@ -170,7 +223,5 @@
             }
             StateHasChanged();
         }
-
-
     }
 }

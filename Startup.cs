@@ -140,7 +140,8 @@ namespace BlazorApp
 
             services.AddHttpClient("Api.Cash", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-10H6C16FMA69J-287542267.eu-west-2.elb.amazonaws.com/API/v1/Cash/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-10H6C16FMA69J-287542267.eu-west-2.elb.amazonaws.com/API/v1/Cash/");                
+                //connec.BaseAddress = new Uri("http://localhost:34268/API/v1/Cash/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });

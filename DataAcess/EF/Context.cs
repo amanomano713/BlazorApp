@@ -31,16 +31,12 @@ namespace BlazorApp.Data.EF
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UserDataMappings());
-            builder.ApplyConfiguration(new PackagesMappings());
-            builder.ApplyConfiguration(new MovPackageMappings());
             builder.ApplyConfiguration(new PujaMappings());
 
             base.OnModelCreating(builder);
         }
 
         public DbSet<UserData> UserData { get; set; }
-        public DbSet<Packages> Packages { get; set; }
-        public DbSet<MovPackage> MovPackage { get; set; }
         public DbSet<Puja> Puja { get; set; }
 
 

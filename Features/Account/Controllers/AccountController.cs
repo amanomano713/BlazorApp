@@ -102,67 +102,67 @@ namespace BlazorApp.Features.Accounts.Controllers
             return this.Json(new { result = Ok });
         }
 
-        [HttpPost("account/createpackages")]
-        public async Task<IActionResult> Createpackages(string parameter1)
-        {
-            var val = await validatetoken();
+//        [HttpPost("account/createpackages")]
+//        public async Task<IActionResult> Createpackages(string parameter1)
+//        {
+//            var val = await validatetoken();
 
-            var Ok = 0;
+//            var Ok = 0;
 
-            if (val == true)
-            {
+//            if (val == true)
+//            {
 
-                var data = _IEncryptor.Decryption(parameter1);
+//                var data = _IEncryptor.Decryption(parameter1);
 
-                var parts = data.Split('|');
+//                var parts = data.Split('|');
 
-                var packageMontos = new List<PackageMontoDTO>()
-                {
-                    new PackageMontoDTO() { CodPackage = "Pack10", Monto = 10},
-                    new PackageMontoDTO() { CodPackage = "Pack20", Monto = 20},
-                    new PackageMontoDTO() { CodPackage = "Pack50", Monto = 50},
-                    new PackageMontoDTO() { CodPackage = "Pack100", Monto = 100},
-                    new PackageMontoDTO() { CodPackage = "Pack200", Monto = 200},
-                    new PackageMontoDTO() { CodPackage = "Pack500", Monto = 500},
-                    new PackageMontoDTO() { CodPackage = "Pack1000", Monto = 1000},
-                    new PackageMontoDTO() { CodPackage = "Pack1500", Monto = 1500},
-                };
+//                var packageMontos = new List<PackageMontoDTO>()
+//                {
+//                    new PackageMontoDTO() { CodPackage = "Pack10", Monto = 10},
+//                    new PackageMontoDTO() { CodPackage = "Pack20", Monto = 20},
+//                    new PackageMontoDTO() { CodPackage = "Pack50", Monto = 50},
+//                    new PackageMontoDTO() { CodPackage = "Pack100", Monto = 100},
+//                    new PackageMontoDTO() { CodPackage = "Pack200", Monto = 200},
+//                    new PackageMontoDTO() { CodPackage = "Pack500", Monto = 500},
+//                    new PackageMontoDTO() { CodPackage = "Pack1000", Monto = 1000},
+//                    new PackageMontoDTO() { CodPackage = "Pack1500", Monto = 1500},
+//                };
 
-#pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
-                var monto = packageMontos.FirstOrDefault(x => x.CodPackage == parts[1]).Monto;
-#pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
+//#pragma warning disable CS8602 // Desreferencia de una referencia posiblemente NULL.
+//                var monto = packageMontos.FirstOrDefault(x => x.CodPackage == parts[1]).Monto;
+//#pragma warning restore CS8602 // Desreferencia de una referencia posiblemente NULL.
 
-                var packageDTO = new PackageDTO
-                {
-                    IdAfiliado = parts[0],
-                    CodPackage = parts[1],
-                    Monto = monto
-                };
+//                var packageDTO = new PackageDTO
+//                {
+//                    IdAfiliado = parts[0],
+//                    CodPackage = parts[1],
+//                    Monto = monto
+//                };
 
-                try
-                {
+//                try
+//                {
 
-                    var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
+//                    var requestModel = _mapper.Map<CreatePackagesCommand>(packageDTO);
 
-                    var response = await _mediator.Send(requestModel);
+//                    var response = await _mediator.Send(requestModel);
 
-                    if (response != null)
-                    {
-                        Ok = 1;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Ok = 3;
-                }
-            }
-            else
-            {
-                Ok = 2;
-            }
+//                    if (response != null)
+//                    {
+//                        Ok = 1;
+//                    }
+//                }
+//                catch (Exception e)
+//                {
+//                    Ok = 3;
+//                }
+//            }
+//            else
+//            {
+//                Ok = 2;
+//            }
 
-            return this.Json(new { result = Ok });
-        }
+//            return this.Json(new { result = Ok });
+//        }
 
         [HttpGet("account/signinactual")]
         public async Task<IActionResult> SignInActual(string cadena)
