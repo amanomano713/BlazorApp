@@ -199,7 +199,7 @@
     {
         if (firstRender)
         {
-            var emailStorage = await _localStorageService.GetItem<String>(_userKey);
+            emailStorage = await _localStorageService.GetItem<String>(_userKey);
             if (string.IsNullOrEmpty(emailStorage))
             {
                 var state = await authenticationStateProvider.GetAuthenticationStateAsync();
