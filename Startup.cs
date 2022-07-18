@@ -126,21 +126,21 @@ namespace BlazorApp
             //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-AXDTJMZ4B8SD-558231051.eu-west-2.elb.amazonaws.com/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.authenticate", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-AXDTJMZ4B8SD-558231051.eu-west-2.elb.amazonaws.com/");
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.Cash", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-10H6C16FMA69J-287542267.eu-west-2.elb.amazonaws.com/API/v1/Cash/");                
+                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1QUJ2ZEL1UAEY-325765955.eu-west-1.elb.amazonaws.com/API/v1/Cash/");                
                 //connec.BaseAddress = new Uri("http://localhost:34268/API/v1/Cash/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
