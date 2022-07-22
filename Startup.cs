@@ -126,16 +126,17 @@ namespace BlazorApp
             //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/API/v1/Users/");
+                //connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://13.40.217.169/API/v1/Users/");
                 //connec.BaseAddress = new Uri("http://localhost:5020/API/v1/Users/");
-                connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.authenticate", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/");
+                //connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1A5CI23L6MYM3-391791809.eu-west-2.elb.amazonaws.com/");
+                connec.BaseAddress = new Uri("http://13.40.217.169/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
@@ -154,7 +155,7 @@ namespace BlazorApp
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            //EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
+            EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
 
             if (env.IsDevelopment())
             {
@@ -204,10 +205,10 @@ namespace BlazorApp
         private static void EnsureTestUsers(DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             //create bda identity
-            //using (var db = new ApplicationDbContext(identityDbContextOptions))
-            //{
-            //    db.Database.EnsureCreated();
-            //}
+            using (var db = new ApplicationDbContext(identityDbContextOptions))
+            {
+                db.Database.EnsureCreated();
+            }
         }
     }
 }

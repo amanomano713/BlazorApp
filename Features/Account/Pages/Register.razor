@@ -91,16 +91,18 @@
             };
 
         HttpResponseMessage responseToken = await AccountService.GeneratorToken(loginRequest).ConfigureAwait(false);
-        
+
         var resultToken = responseToken.Content.ReadAsStringAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        
+
         resultToken = resultToken.Replace("\"", "");
 
         var httpClient = _httpClientFactory.CreateClient(_configHttpClient);
-        
+
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", resultToken);
 
-        return await httpClient.GetAsync($"UserInfo/{email}");
+        var result = await httpClient.GetAsync($"UserInfo/{email}");
+
+        return result;
     }
 
     public async Task<HttpResponseMessage> CreateUserAsync(RegisterAccountModel registerAccountModel)
