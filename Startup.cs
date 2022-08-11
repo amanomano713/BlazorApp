@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using BlazorApp.Hubs;
 using BlazorApp.Cache;
 using EurofirmsGroup.Caching.Redis;
-
+using Microsoft.AspNetCore.Http.Connections;
 
 namespace BlazorApp
 {
@@ -126,24 +126,27 @@ namespace BlazorApp
             //Microservice
             services.AddHttpClient("Api.Users", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-85BM9SQ2R1AI-634078434.eu-west-2.elb.amazonaws.com/API/v1/Users/");
+                //connec.BaseAddress = new Uri("http://EC2Co-EcsEl-85BM9SQ2R1AI-634078434.eu-west-2.elb.amazonaws.com/API/v1/Users/");
                 //connec.BaseAddress = new Uri("http://localhost:5020/API/v1/Users/");
+                connec.BaseAddress = new Uri("http://20.237.99.29:8080/API/v1/Users/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.authenticate", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-85BM9SQ2R1AI-634078434.eu-west-2.elb.amazonaws.com/");
+                //connec.BaseAddress = new Uri("http://EC2Co-EcsEl-85BM9SQ2R1AI-634078434.eu-west-2.elb.amazonaws.com/");
                 //connec.BaseAddress = new Uri("http://13.40.217.169/");
+                connec.BaseAddress = new Uri("http://20.237.99.29:8080/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
 
             services.AddHttpClient("Api.Cash", connec =>
             {
-                connec.BaseAddress = new Uri("http://EC2Co-EcsEl-85BM9SQ2R1AI-634078434.eu-west-2.elb.amazonaws.com/API/v1/Cash/");                
+                //connec.BaseAddress = new Uri("http://EC2Co-EcsEl-1PFP676LV412A-928973147.eu-west-2.elb.amazonaws.com/API/v1/Cash/");                
                 //connec.BaseAddress = new Uri("http://localhost:34268/API/v1/Cash/");
+                connec.BaseAddress = new Uri("http://20.241.147.245:8080/API/v1/Cash/");
                 connec.DefaultRequestHeaders.Add("Accept", "application/json");
                 connec.DefaultRequestHeaders.Add("Accept-Language", Thread.CurrentThread.CurrentUICulture.Name);
             });
@@ -154,7 +157,7 @@ namespace BlazorApp
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContextOptions<ApplicationDbContext> identityDbContextOptions, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
+            //EnsureTestUsers(identityDbContextOptions, userManager, roleManager);
 
             if (env.IsDevelopment())
             {
@@ -178,7 +181,10 @@ namespace BlazorApp
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
-                endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<ChatHub>("/chathub", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+                });
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
